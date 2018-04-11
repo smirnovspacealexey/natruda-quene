@@ -2,7 +2,8 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.welcomer, name='welcomer'),
+    url(r'^$', views.welcomer, name='welcomer'),    
+    url(r'^reload_menu', views.get_1c_menu, name='reload_menu'),    
     url(r'^menu', views.menu, name='menu'),
     url(r'^cook_pause', views.cook_pause, name="cook_pause"),
     url(r'^order/print/(?P<order_id>[0-9]+)/$', views.print_order, name="order_print"),

@@ -13,12 +13,13 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth import logout, login, views as auth_views
 from django.db.models import Max, Min, Count, Avg, F
 from hashlib import md5
-from shawarma.settings import TIME_ZONE, LISTNER_URL, LISTNER_PORT, PRINTER_URL, SERVER_1C_PORT, SERVER_1C_URL
+from shawarma.settings import TIME_ZONE, LISTNER_URL, LISTNER_PORT, PRINTER_URL, SERVER_1C_PORT, SERVER_1C_IP, GETLIST_URL, SERVER_1C_USER, SERVER_1C_PASS
 from raven.contrib.django.raven_compat.models import client
 import requests
 import datetime
 import logging
 import json
+import sys
 import os
 import subprocess
 
@@ -2493,7 +2494,7 @@ def prepare_json_check(order):
 
 def get_1c_menu(request):
     try:
-        result = requests.post('http://' + SERVER_1C_URL + ':' + SERVER_1C_PORT, auth=('user', 'pass'))
+        result = requests.get('http://' + SERVER_1C_IP + ':' + SERVER_1C_PORT + GETLIST_URL, auth=(SERVER_1C_USER.encode('utf8'), SERVER_1C_PASS))
     except ConnectionError:
         data = {
             'success': False,
@@ -2506,21 +2507,27 @@ def get_1c_menu(request):
             'success': False,
             'message': 'Something wrong happened while sending to 1C!'
         }
+        print("Unexpected error:", sys.exc_info()[0])
         client.captureException()
+        raise
         return JsonResponse(data)
 
-    data = result.POST.get('', None)
-    data = {}
-    undistributed_category = MenuCategory.objects.get(title="Undistributed")
+    json_data = result.json()
+    data = json_data
+    undistributed_category = MenuCategory.objects.get(eng_title="Undistributed")
+    can_be_prepared = StaffCategory.objects.get(title="Operator")
     for item in data["Goods"]:
-        menu_item = Menu.objects.get(guid_1c=item["GUID"])
-        if menu_item is None:
-            menu_item.price = item["Price"]
-            menu_item.save()
+        menu_item = Menu.objects.filter(guid_1c=item["GUID"])
+        if len(menu_item) > 0:
+            menu_item[0].price = item["Price"]
+            menu_item[0].save()
         else:
+
             menu_item = Menu(guid_1c=item["GUID"], price=item["Price"], title=item["Name"],
-                             category=undistributed_category)
+                             category=undistributed_category,avg_preparation_time=datetime.timedelta(minutes=1), can_be_prepared_by=can_be_prepared)
             menu_item.save()
+
+    return HttpResponse()
 
 
 def send_order_to_1c(order):

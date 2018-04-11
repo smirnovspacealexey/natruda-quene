@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 import raven
 import psycopg2.extensions
-from .my_settings import login, password, db_name, allowed_hosts, debug_flag, listner_url, listner_port, printer_url, raven_dsn, server_1c_port, server_1c_url, secret_key
+from .my_settings import login, password, db_name, allowed_hosts, debug_flag, listner_url, listner_port, printer_url, raven_dsn, secret_key, server_1c_ip, server_1c_port, getlist_url, server_1c_user, server_1c_pass
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -76,7 +76,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'shawarma.wsgi.application'
-
 
 LOGGING = {
     'version': 1,
@@ -214,7 +213,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = False
+USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -226,15 +225,21 @@ LISTNER_URL = listner_url
 
 LISTNER_PORT = listner_port
 
-SERVER_1C_URL = server_1c_url
+SERVER_1C_IP = server_1c_ip
 
 SERVER_1C_PORT = server_1c_port
 
+GETLIST_URL = getlist_url
+
 PRINTER_URL = printer_url
+
+SERVER_1C_USER = server_1c_user
+
+SERVER_1C_PASS = server_1c_pass
 
 LOGIN_REDIRECT_URL = '/shaw_queue/'
 
-STATIC_ROOT = '/home/admintrud/shawarma/shawarma_rep/static_content/static/'
+STATIC_ROOT = '/home/admintrud/shawarma3/static_content/static/'
 
 
 RAVEN_CONFIG = {
