@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from . import views
-# test
+
 urlpatterns = [
     url(r'^$', views.welcomer, name='welcomer'),
     url(r'^reload_menu', views.get_1c_menu, name='reload_menu'),
