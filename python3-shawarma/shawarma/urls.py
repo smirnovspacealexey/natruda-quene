@@ -16,10 +16,19 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     url(r'^shaw_queue/', include('shaw_queue.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^accounts/login/$', auth_views.login, {'template_name': 'login.html'}, name='login'),
-    url(r'^accounts/logout/$', auth_views.logout, {'template_name': 'logged_out.html', 'next_page': '/shaw_queue/'}, name='logout')
+    url(r'^accounts/login/$', auth_views.LoginView.as_view(), {'template_name': 'login.html'}, name='login'),
+    url(r'^accounts/logout/$', auth_views.LogoutView.as_view(),
+        {'template_name': 'logged_out.html', 'next_page': '/shaw_queue/'}, name='logout')
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += staticfiles_urlpatterns()

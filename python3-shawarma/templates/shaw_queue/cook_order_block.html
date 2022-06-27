@@ -2,23 +2,44 @@
     <div class="order-block shadowed">
         <div class="cook-order-block-header" onclick="SelectOrder({{ cooks_order.order.id }})">
             <div class="cook-order-number
+{% if cooks_order.order.is_preorder %}
+                              {% if cooks_order.order.content_completed %}
+                                preorder_ready
+                            {% else %}
+                                alert-background
+                            {% endif %}
+{% else %}
                 {% if cooks_order.order.content_completed %}
                     ready
-                {% elif cooks_order.order.is_grilling %}
-                    grilling
-                {% endif %}"
+                {% else %}
+                    {% if cooks_order.order.start_shawarma_preparation and not cooks_order.order.start_shawarma_cooking %}
+                        start_preparation
+                    {% elif cooks_order.order.is_grilling %}
+                        grilling
+                    {% endif %}
+                {% endif %}
+            {% endif %}"
                  onclick="SelectOrder({{ cooks_order.order.id }})">
-                № {{ cooks_order.order.daily_number }}
+                № {{ cooks_order.display_number }}
             </div>
             <div class="cook-order-cook-part
+                {% if cooks_order.order.is_preorder %}
+                               alert-background
+{% else %}
                 {% if cooks_order.order.content_completed %}
                     ready
-                {% elif cooks_order.order.is_grilling %}
-                    grilling
-                {% endif %}"
+                {% else %}
+                    {% if cooks_order.order.start_shawarma_preparation and not cooks_order.order.start_shawarma_cooking %}
+                        start_preparation
+                    {% elif cooks_order.order.is_grilling %}
+                        grilling
+                    {% endif %}
+                {% endif %}
+            {% endif %}"
                  onclick="SelectOrder({{ cooks_order.order.id }})">
                 ({{ cooks_order.cook_content_count }})
             </div>
         </div>
+        <div class="cook-order-block__button">&#10004</div>
     </div>
 </div>

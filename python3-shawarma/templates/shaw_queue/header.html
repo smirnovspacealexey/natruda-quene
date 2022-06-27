@@ -5,17 +5,31 @@
 
 <div class="header-div-container fixed">
     <div class="header-div">
-        {% if staff_category.title == 'Cashier' %}
+        {% if staff_category.title == 'Cashier' or staff_category.title == 'DeliveryAdmin' %}
             <a href="{% url 'menu' %}">
                 <div class="header-buttons" id="menu">
                         Меню
                 </div>
             </a>
         {% endif %}
-        {% if staff_category.title == 'Cashier' or staff_category.title == 'Operator' %}
+        {% if staff_category.title == 'Cashier' or staff_category.title == 'Operator' or staff_category.title == 'DeliveryOperator' or staff_category.title == 'DeliveryAdmin' %}
             <a href="{% url 'current_queue' %}">
                 <div class="header-buttons" id="current-queue">
                         Очередь заказов
+                </div>
+            </a>
+        {% endif %}
+        {% if staff_category.title == 'DeliveryOperator' or staff_category.title == 'DeliveryAdmin' %}
+            <a href="{% url 'delivery_interface' %}">
+                <div class="header-buttons" id="current-queue">
+                        Доставка
+                </div>
+            </a>
+        {% endif %}
+        {% if staff_category.title == 'Cashier' %}
+            <a href="{% url 'cooks_content_info' %}">
+                <div class="header-buttons" id="cooks-content-info">
+                        Счетчик шаурмы
                 </div>
             </a>
         {% endif %}
@@ -23,11 +37,6 @@
             <a href="{% url 'production_queue' %}">
                 <div class="header-buttons" id="production">
                         Производство
-                </div>
-            </a>
-            <a href="{% url 'order_history' %}">
-                <div class="header-buttons" id="order-history">
-                        История заказов
                 </div>
             </a>
         {% endif %}
@@ -42,6 +51,44 @@
             <a href="{% url 'shashlychnik_interface' %}">
                 <div class="header-buttons" id="shashlychnik_interface">
                         Интерфейс Шашлычника
+                </div>
+            </a>
+        {% endif %}
+        {% if staff_category.title == 'Administration' %}
+            <a href="{% url 'pause_statistics' %}">
+                <div class="header-buttons" id="pause_statistics_interface">
+                        Паузы
+                </div>
+            </a>
+        {% endif %}
+        {% if staff_category.title == 'Administration' %}
+            <a href="{% url 'statistics' %}">
+                <div class="header-buttons" id="statistics_interface">
+                        Шаурма
+                </div>
+            </a>
+            <a href="{% url 'order_history' %}">
+                <div class="header-buttons" id="order-history">
+                        История заказов
+                </div>
+            </a>
+        {% endif %}
+        {% if staff_category.title == 'Administration' %}
+            <a href="{% url 'opinion_statistics' %}">
+                <div class="header-buttons" id="opinion_statistics_interface">
+                        Отзывы
+                </div>
+            </a>
+        {% endif %}
+        {% if staff_category.title == 'Administration' %}
+            <a href="{% url 'records_statistics' %}">
+                <div class="header-buttons" id="records_statistics_interface">
+                        Записи
+                </div>
+            </a>
+            <a href="{% url 'not_paid_statistics' %}">
+                <div class="header-buttons" id="not_paid_statistics_interface">
+                        Неоплаченные
                 </div>
             </a>
         {% endif %}

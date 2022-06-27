@@ -2,6 +2,7 @@
  * Created by paul on 23.07.17.
  */
 $(document).ready(function () {
+    interface_button.addClass('header-active');
     jQuery.datetimepicker.setLocale('ru');
     $('#datetimepicker1').datetimepicker();
     $('#datetimepicker2').datetimepicker();
@@ -30,7 +31,7 @@ function UpdateStatistics() {
 
             }
         }
-    ).fail(function () {
+    ).fail(function (xhr, status, error) {
         alert('У вас нет прав!');
     });
 }

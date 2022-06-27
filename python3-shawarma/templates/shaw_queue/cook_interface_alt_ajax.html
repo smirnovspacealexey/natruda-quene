@@ -1,4 +1,4 @@
-<div class="cook-daily-number"> Заказ №{{ free_order.daily_number }} </div>
+<div class="cook-daily-number"> Заказ №{{ display_number }} </div>
 {% for content_item in order_content %}
     <div class="cook-item-container">
         <div class="cook-order-item
@@ -27,7 +27,7 @@
     </div>
 {% endfor %}
 {% if order_content %}
-    <div class="cook-complete-all-button" onclick="FinishAllContent({{ free_order.id }})">
+    <div class="cook-complete-all-button"  {% if free_order.start_shawarma_cooking %}style="background-color: #6e6e6e"{% else %}onclick="FinishAllContent({{ free_order.id }})"{% endif %}>
         Завершить всё
     </div>
 {% endif %}
