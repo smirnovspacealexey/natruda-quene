@@ -3,13 +3,28 @@
         <div class="open-order-display">
             Жарим
         </div>
-    {% for open_order in display_open_orders %}
-        <div class="open-order-display">
-            {{ open_order.daily_number }}
-        </div>
-    {% empty %}
-    {% endfor %}
+        {% for open_order in display_open_orders %}
+            <div class="open-order-display">
+                {{ open_order.daily_number }}
+            </div>
+        {% empty %}
+        {% endfor %}
     </div>
+    {% if vertical %}
+        <div class="open-orders-container">
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            {% for open_order in display_open_orders2 %}
+                <div class="open-order-display">
+                    {{ open_order.daily_number }}
+                </div>
+            {% empty %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <div class="ready-orders-container">
         <div class="open-order-display">
             Готовы
@@ -19,9 +34,26 @@
             <span class="ready-order-display-number">
                 {{ ready_order.daily_number }}
             </span>
-            {# {{ ready_order.servery }}#}
-        </div>
-    {% empty %}
-    {% endfor %}
+                {# {{ ready_order.servery }}#}
+            </div>
+        {% empty %}
+        {% endfor %}
     </div>
+    {% if vertical %}
+        <div class="ready-orders-container">
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            {% for ready_order in display_ready_orders2 %}
+                <div class="ready-order-display">
+            <span class="ready-order-display-number">
+                {{ ready_order.daily_number }}
+            </span>
+                    {# {{ ready_order.servery }}#}
+                </div>
+            {% empty %}
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>

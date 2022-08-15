@@ -24,7 +24,9 @@ from unidecode import unidecode
 from hashlib import md5
 from shawarma.settings import TIME_ZONE, LISTNER_URL, LISTNER_PORT, PRINTER_URL, SERVER_1C_PORT, SERVER_1C_IP, \
     GETLIST_URL, SERVER_1C_USER, SERVER_1C_PASS, ORDER_URL, FORCE_TO_LISTNER, DEBUG_SERVERY, RETURN_URL, \
-    CAROUSEL_IMG_DIR, CAROUSEL_IMG_URL, SMTP_LOGIN, SMTP_PASSWORD, SMTP_FROM_ADDR, SMTP_TO_ADDR, TIME_ZONE, DADATA_TOKEN
+    CAROUSEL_IMG_DIR, CAROUSEL_IMG_URL, SMTP_LOGIN, SMTP_PASSWORD, SMTP_FROM_ADDR, SMTP_TO_ADDR, TIME_ZONE, \
+    DADATA_TOKEN, \
+    LOCAL_TEST
 from raven.contrib.django.raven_compat.models import client
 from random import sample
 from itertools import chain
@@ -1158,7 +1160,7 @@ def evaluate(request):
         return JsonResponse(data)
 
 
-def buyer_queue(request):
+def buyer_queue(request, vertical=False):
     is_voicing = int(request.GET.get('is_voicing', 0))
     device_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
     if DEBUG_SERVERY:
@@ -1204,24 +1206,52 @@ def buyer_queue(request):
             # return JsonResponse(data)
     else:
         return JsonResponse(result)
+
+    display_open_orders = [{'servery': order.servery.display_title, 'daily_number': order.daily_number % 100} for
+                           order in
+                           open_orders]
+
+    display_ready_orders = [{'servery': order.servery.display_title, 'daily_number': order.daily_number % 100} for
+                            order in
+                            ready_orders]
+
     context = {
+        'vertical': vertical,
         'open_orders': [{'servery': order.servery, 'daily_number': order.daily_number} for order in open_orders],
         'ready_orders': [{'servery': order.servery, 'daily_number': order.daily_number} for order in
                          ready_orders],
-        'display_open_orders': [{'servery': order.servery.display_title, 'daily_number': order.daily_number % 100} for
-                                order in
-                                open_orders],
-        'display_ready_orders': [{'servery': order.servery.display_title, 'daily_number': order.daily_number % 100} for
-                                 order in
-                                 ready_orders],
         'carousel_images': carousel_images,
         'is_voicing': True if is_voicing == 1 else False
     }
+
+    if vertical:
+        length = len(display_ready_orders)
+        middle_index = length // 2
+        display_ready_orders2 = display_ready_orders[middle_index:]
+        display_ready_orders = display_ready_orders[:middle_index]
+
+        length = len(display_open_orders)
+        middle_index = length // 2
+        display_open_orders2 = display_open_orders[middle_index:]
+        display_open_orders = display_open_orders[:middle_index]
+
+        context.update({'display_open_orders': display_open_orders,
+                        'display_open_orders2': display_open_orders2,
+                        'display_ready_orders': display_ready_orders,
+                        'display_ready_orders2': display_ready_orders2,  })
+    else:
+        context.update({'display_open_orders': display_open_orders,
+                        'display_ready_orders': display_ready_orders,})
+
     template = loader.get_template('shaw_queue/buyer_queue.html')
     return HttpResponse(template.render(context, request))
 
 
-def buyer_queue_ajax(request):
+def buyer_queue_vertical(request):
+    return buyer_queue(request, vertical=True)
+
+
+def buyer_queue_ajax(request, vertical=False):
     is_voicing = request.GET.get('is_voicing', 0)
     device_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
     if DEBUG_SERVERY:
@@ -1258,17 +1288,41 @@ def buyer_queue_ajax(request):
     else:
         return JsonResponse(result)
 
+    display_open_orders = [{'servery': order.servery.display_title, 'daily_number': order.daily_number % 100} for
+                           order in
+                           open_orders]
+
+    display_ready_orders = [{'servery': order.servery.display_title, 'daily_number': order.daily_number % 100} for
+                            order in
+                            ready_orders]
+
     context = {
+        'vertical': vertical,
         'open_orders': [{'servery': order.servery, 'daily_number': order.daily_number} for order in open_orders],
         'ready_orders': [{'servery': order.servery, 'daily_number': order.daily_number} for order in
                          ready_orders],
-        'display_open_orders': [{'servery': order.servery.display_title, 'daily_number': order.daily_number % 100} for
-                                order in
-                                open_orders],
-        'display_ready_orders': [{'servery': order.servery.display_title, 'daily_number': order.daily_number % 100} for
-                                 order in
-                                 ready_orders]
+
     }
+
+    if vertical:
+        length = len(display_ready_orders)
+        middle_index = length // 2
+        display_ready_orders2 = display_ready_orders[middle_index:]
+        display_ready_orders = display_ready_orders[:middle_index]
+
+        length = len(display_open_orders)
+        middle_index = length // 2
+        display_open_orders2 = display_open_orders[middle_index:]
+        display_open_orders = display_open_orders[:middle_index]
+
+        context.update({'display_open_orders': display_open_orders,
+                        'display_open_orders2': display_open_orders2,
+                        'display_ready_orders': display_ready_orders,
+                        'display_ready_orders2': display_ready_orders2, })
+    else:
+        context.update({'display_open_orders': display_open_orders,
+                        'display_ready_orders': display_ready_orders,})
+
     template = loader.get_template('shaw_queue/buyer_queue_ajax.html')
     data = {
         'html': template.render(context, request),
@@ -1281,6 +1335,10 @@ def buyer_queue_ajax(request):
     #     order.is_voiced = True
     #     order.save()
     return JsonResponse(data)
+
+
+def buyer_queue_vertical_ajax(request):
+    return buyer_queue_ajax(request, vertical=True)
 
 
 def order_display(request):
@@ -1683,6 +1741,10 @@ def current_queue_ajax(request):
 
             open_orders = filter_orders(current_day_orders, shawarma_filter, shashlyk_filter, paid_filter,
                                         not_paid_filter, serveries_dict)
+
+            if LOCAL_TEST:
+                open_orders = Order.objects.all()
+                print(open_orders)
         except:
             data = {
                 'success': False,
@@ -1700,6 +1762,8 @@ def current_queue_ajax(request):
 
             ready_orders = filter_orders(ready_orders, shawarma_filter, shashlyk_filter, paid_filter,
                                          not_paid_filter, serveries_dict)
+            if LOCAL_TEST:
+                ready_orders = Order.objects.all()
         except:
             data = {
                 'success': False,
@@ -6102,6 +6166,8 @@ def order_1c_payment(request):
 
 
 def define_service_point(ip: str) -> dict:
+    if LOCAL_TEST:  # del me
+        return {'success': True, 'service_point': ServicePoint.objects.first()}
     ip_blocks = ip.split('.')
     subnet_number = ip_blocks[2]
     try:
