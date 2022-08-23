@@ -344,6 +344,14 @@ div.open-orders-container, div.ready-orders-container {
     border-left: solid 2px #D8D8D8;
 }
 
+div.open-orders-container-vertical, div.ready-orders-container-vertical {
+    width: 25%;
+    height: 100%;
+    float: left;
+    border-right: solid 2px #D8D8D8;
+    border-left: solid 2px #D8D8D8;
+}
+
 div.carousel-container {
     float: left;
     height: 100%;
@@ -352,7 +360,7 @@ div.carousel-container {
 
 div.open-order-display, div.ready-order-display {
     text-align: center;
-    font-size: 50px;
+    font-size: 65px;
     float: left;
     width: 100%;
     line-height: 1.4;
@@ -366,7 +374,7 @@ span.ready-order-display-number {
 }
 
 div.open-order-display {
-    color: #020215;
+    color: #ffffff;
 }
 
 div.ready-order-display {

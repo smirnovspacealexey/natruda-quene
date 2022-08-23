@@ -1,5 +1,5 @@
 <div id="page-content">
-    <div class="open-orders-container">
+    <div class="open-orders-container{% if vertical %}-vertical{% endif %}">
         <div class="open-order-display">
             Жарим
         </div>
@@ -11,7 +11,8 @@
         {% endfor %}
     </div>
     {% if vertical %}
-        <div class="open-orders-container">
+        <div class="open-orders-container-vertical">
+            <br/>
             <br/>
             <br/>
             <br/>
@@ -25,7 +26,7 @@
         </div>
     {% endif %}
 
-    <div class="ready-orders-container">
+    <div class="ready-orders-container{% if vertical %}-vertical{% endif %}">
         <div class="open-order-display">
             Готовы
         </div>
@@ -40,7 +41,8 @@
         {% endfor %}
     </div>
     {% if vertical %}
-        <div class="ready-orders-container">
+        <div class="ready-orders-container-vertical">
+            <br/>
             <br/>
             <br/>
             <br/>

@@ -11,6 +11,11 @@
         var is_voicing_page = false;
     {% endif %}
 </script>
+<style>
+    body{
+        background-color: #000000;
+    }
+</style>
 <input hidden id="urls" data-refresh-url="{% if vertical %}{% url 'buyer_queue_vertical_ajax' %}{% else %}{% url 'buyer_queue_ajax' %}{% endif %}" data-unvoice-url="{% url 'unvoice_order' %}">
 {% include 'shaw_queue/buyer_queue_ajax.html' %}
 
