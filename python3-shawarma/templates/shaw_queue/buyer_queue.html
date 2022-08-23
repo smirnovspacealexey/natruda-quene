@@ -10,11 +10,25 @@
     {% else %}
         var is_voicing_page = false;
     {% endif %}
+
+    let black_color = false
+    document.addEventListener("click", function () {
+        let new_style = ''
+
+        if (!black_color) {
+            new_style = 'body{background-color: #000000;} div.open-order-display {color: #ffffff;}'
+        }
+        black_color = !black_color
+        document.getElementById("quene-style").innerHTML = new_style
+    });
 </script>
-<style>
-    body{
-        background-color: #000000;
-    }
+<style id="quene-style">
+    {#body{#}
+    {#    background-color: #000000;#}
+    {# }#}
+    {#div.open-order-display {#}
+    {#    color: #ffffff;#}
+    {# }#}
 </style>
 <input hidden id="urls" data-refresh-url="{% if vertical %}{% url 'buyer_queue_vertical_ajax' %}{% else %}{% url 'buyer_queue_ajax' %}{% endif %}" data-unvoice-url="{% url 'unvoice_order' %}">
 {% include 'shaw_queue/buyer_queue_ajax.html' %}
