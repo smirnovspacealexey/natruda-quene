@@ -1160,7 +1160,7 @@ def evaluate(request):
         return JsonResponse(data)
 
 
-def buyer_queue(request, vertical=False):
+def buyer_queue(request, vertical=False, black=False):
     is_voicing = int(request.GET.get('is_voicing', 0))
     device_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
     if DEBUG_SERVERY:
@@ -1214,9 +1214,11 @@ def buyer_queue(request, vertical=False):
     display_ready_orders = [{'servery': order.servery.display_title, 'daily_number': order.daily_number % 100} for
                             order in
                             ready_orders]
-
+    print('black')
+    print(black)
     context = {
         'vertical': vertical,
+        'black': black,
         'open_orders': [{'servery': order.servery, 'daily_number': order.daily_number} for order in open_orders],
         'ready_orders': [{'servery': order.servery, 'daily_number': order.daily_number} for order in
                          ready_orders],
@@ -1249,6 +1251,14 @@ def buyer_queue(request, vertical=False):
 
 def buyer_queue_vertical(request):
     return buyer_queue(request, vertical=True)
+
+
+def buyer_queue_black_vertical(request):
+    return buyer_queue(request, vertical=True, black=True)
+
+
+def buyer_queue_black(request):
+    return buyer_queue(request, black=True)
 
 
 def buyer_queue_ajax(request, vertical=False):
