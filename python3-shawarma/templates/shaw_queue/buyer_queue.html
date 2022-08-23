@@ -22,14 +22,7 @@
         document.getElementById("quene-style").innerHTML = new_style
     });
 </script>
-<style id="quene-style">
-    {#body{#}
-    {#    background-color: #000000;#}
-    {# }#}
-    {#div.open-order-display {#}
-    {#    color: #ffffff;#}
-    {# }#}
-</style>
+<style id="quene-style"></style>
 <input hidden id="urls" data-refresh-url="{% if vertical %}{% url 'buyer_queue_vertical_ajax' %}{% else %}{% url 'buyer_queue_ajax' %}{% endif %}" data-unvoice-url="{% url 'unvoice_order' %}">
 {% include 'shaw_queue/buyer_queue_ajax.html' %}
 
