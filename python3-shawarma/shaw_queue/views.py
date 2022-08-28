@@ -1331,7 +1331,7 @@ def buyer_queue_ajax(request, vertical=False):
                         'display_ready_orders2': display_ready_orders2, })
     else:
         context.update({'display_open_orders': display_open_orders,
-                        'display_ready_orders': display_ready_orders,})
+                        'display_ready_orders': display_ready_orders, })
 
     template = loader.get_template('shaw_queue/buyer_queue_ajax.html')
     data = {
