@@ -1227,12 +1227,12 @@ def buyer_queue(request, vertical=False, black=False):
     }
 
     if vertical:
-        length = len(display_ready_orders)
+        length = len(display_ready_orders) + 1
         middle_index = length // 2
         display_ready_orders2 = display_ready_orders[middle_index:]
         display_ready_orders = display_ready_orders[:middle_index]
 
-        length = len(display_open_orders)
+        length = len(display_open_orders) + 1
         middle_index = length // 2
         display_open_orders2 = display_open_orders[middle_index:]
         display_open_orders = display_open_orders[:middle_index]
@@ -1315,12 +1315,12 @@ def buyer_queue_ajax(request, vertical=False):
     }
 
     if vertical:
-        length = len(display_ready_orders)
+        length = len(display_ready_orders) + 1
         middle_index = length // 2
         display_ready_orders2 = display_ready_orders[middle_index:]
         display_ready_orders = display_ready_orders[:middle_index]
 
-        length = len(display_open_orders)
+        length = len(display_open_orders) + 1
         middle_index = length // 2
         display_open_orders2 = display_open_orders[middle_index:]
         display_open_orders = display_open_orders[:middle_index]
