@@ -27,13 +27,15 @@
         document.getElementById("quene-style").innerHTML = new_style
     });
 </script>
-<style>
-    body, html {
-        height: 100%;
-        overflow: hidden;
-        margin: 0;
-    }
-</style>
+{% if not is_voicing %}
+    <style>
+        body, html {
+            height: 100%;
+            overflow: hidden;
+            margin: 0;
+        }
+    </style>
+{% endif %}
 <style id="quene-style">
     {% if black %}
         body{background-color: #000000;} div.open-order-display {color: #ffffff;}
@@ -48,14 +50,15 @@
 
 
 {% if not vertical %}
-    <div class="carousel-container">
-        <div id="carousels">
-            {% for image in carousel_images %}
-                <div class="carousel"><img class="carousel-image" src="{{ image }}"></div>
-            {% endfor %}
+    {% if not is_voicing %}
+        <div class="carousel-container">
+            <div id="carousels">
+                {% for image in carousel_images %}
+                    <div class="carousel"><img class="carousel-image" src="{{ image }}"></div>
+                {% endfor %}
+            </div>
         </div>
-    </div>
-
+    {% endif %}
     <audio controls id="speaker-0">
         <source src="{% static 'audio/0.opus' %}" type="audio/ogg">
     </audio>
