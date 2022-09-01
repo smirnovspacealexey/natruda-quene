@@ -7,7 +7,11 @@ from .models import Menu, Staff, Order, StaffCategory, \
 from django.contrib import admin
 
 # Register your models here.
-admin.site.register(Menu)
+@admin.register(Menu)
+class MenuAdmin(admin.ModelAdmin):
+    list_display = ['title', 'customer_title', 'note', 'price', 'guid_1c', 'category']
+    search_fields = ['title', 'guid_1c', ]
+
 admin.site.register(Staff)
 admin.site.register(Servery)
 admin.site.register(Order)
