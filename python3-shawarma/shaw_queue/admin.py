@@ -11,6 +11,8 @@ from django.contrib import admin
 class MenuAdmin(admin.ModelAdmin):
     list_display = ['title', 'customer_title', 'note', 'price', 'guid_1c', 'category']
     search_fields = ['title', 'guid_1c', ]
+    list_editable = ('customer_title', 'category', )
+
 
 admin.site.register(Staff)
 admin.site.register(Servery)
