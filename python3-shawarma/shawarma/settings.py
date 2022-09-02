@@ -131,6 +131,12 @@ LOGGING = {
             'filename': 'log/debug_db.log',
             'formatter': 'verbose'
         },
+        'debug_logger': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'log/debug_logger.log',
+            'formatter': 'verbose'
+        },
     },
     'loggers': {
         'django.request': {
@@ -152,7 +158,11 @@ LOGGING = {
             'handlers': ['file_db'],
             'level': 'DEBUG',
             'propagate': True,
-        }
+        },
+        'debug_logger': {
+            'handlers': ['debug_logger'],
+            'level': 'INFO',
+        },
     },
 }
 
