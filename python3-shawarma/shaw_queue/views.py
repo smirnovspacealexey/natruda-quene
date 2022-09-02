@@ -6177,7 +6177,7 @@ def order_1c_payment(request):
 
 def define_service_point(ip: str) -> dict:
     logger_debug = logging.getLogger('debug_logger')  # del me
-    logger_debug.info(f'\n\nin define_service_point <ip>: {}')  # del me
+    logger_debug.info(f'\n\nin define_service_point <ip>: {ip}')  # del me
     if LOCAL_TEST:  # del me
         return {'success': True, 'service_point': ServicePoint.objects.first()}
 
