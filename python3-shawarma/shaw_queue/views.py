@@ -6176,18 +6176,18 @@ def order_1c_payment(request):
 
 
 def define_service_point(ip: str) -> dict:
-    logger_debug = logging.getLogger('debug_logger')  # del me
-    logger_debug.info(f'\n\nin define_service_point <ip>: {ip}')  # del me
+    # logger_debug = logging.getLogger('debug_logger')  # del me
+    # logger_debug.info(f'\n\nin define_service_point <ip>: {ip}')  # del me
     if LOCAL_TEST:  # del me
         return {'success': True, 'service_point': ServicePoint.objects.first()}
 
     ip_blocks = ip.split('.')
-    logger_debug.info(f'ip_blocks {str(ip_blocks)}')  # del me
+    # logger_debug.info(f'ip_blocks {str(ip_blocks)}')  # del me
     subnet_number = ip_blocks[2]
-    logger_debug.info(f'ip_blocks {str(subnet_number)}')  # del me
+    # logger_debug.info(f'ip_blocks {str(subnet_number)}')  # del me
     try:
         service_point = ServicePoint.objects.get(subnetwork=subnet_number)
-        logger_debug.info(f'service_point {str(service_point)}')
+        # logger_debug.info(f'service_point {str(service_point)}')  # del me
     except MultipleObjectsReturned:
         data = {
             'success': False,
@@ -6195,7 +6195,7 @@ def define_service_point(ip: str) -> dict:
         }
         logger.error('Множество точек возвращено для ip {}!'.format(ip_blocks))
         client.captureException()
-        logger_debug.info(f'ERROR: Множество точек возвращено для ip {ip_blocks}')  # del me
+        # logger_debug.info(f'ERROR: Множество точек возвращено для ip {ip_blocks}')  # del me
         return data
     except:
         data = {
@@ -6203,11 +6203,11 @@ def define_service_point(ip: str) -> dict:
             'message': 'Что-то пошло не так при поиске точки!'
         }
         logger.error('Что-то пошло не так при поиске точки для ip {}!'.format(ip_blocks))
-        logger_debug.info(f'ERROR: Что-то пошло не так при поиске точки для ip {ip_blocks}')  # del me
+        # logger_debug.info(f'ERROR: Что-то пошло не так при поиске точки для ip {ip_blocks}')  # del me
         client.captureException()
         return data
-    logger_debug.info(f'success {service_point}')  # del me
-    logger_debug.info(f'define_service_point CLOSE\n\n')  # del me
+    # logger_debug.info(f'success {service_point}')  # del me
+    # logger_debug.info(f'define_service_point CLOSE\n\n')  # del me
     return {'success': True, 'service_point': service_point}
 
 
