@@ -3879,7 +3879,7 @@ def deliver_delivery_order(request) -> JsonResponse:
 
 
 @login_required()
-@permission_required('shaw_queue.change_order')
+# @permission_required('shaw_queue.change_order')
 def close_all(request):
     close_unpaid = json.loads(request.POST.get('close_unpaid', None))
     device_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
