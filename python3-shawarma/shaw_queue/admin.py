@@ -14,8 +14,14 @@ class MenuAdmin(admin.ModelAdmin):
     list_editable = ('customer_title', 'category', )
 
 
+@admin.register(Servery)
+class ServeryAdmin(admin.ModelAdmin):
+    list_display = ['display_title', 'display_title', 'ip_address', 'guid_1c', 'service_point', 'payment_kiosk', 'default_remote_order_acceptor']
+    search_fields = ['display_title', 'title', 'guid_1c', ]
+    list_editable = ('display_title', 'display_title', 'ip_address', 'guid_1c', 'service_point', 'payment_kiosk', 'default_remote_order_acceptor')
+
+
 admin.site.register(Staff)
-admin.site.register(Servery)
 admin.site.register(Order)
 admin.site.register(StaffCategory)
 admin.site.register(MenuCategory)
