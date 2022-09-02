@@ -198,7 +198,10 @@ class Servery(models.Model):
                                                         help_text="Может быть выбрана ТОЛЬКО ОДНА касса на точку.")
 
     def __str__(self):
-        return u"{}".format(self.title)
+        if self.title:
+            return u"{}".format(self.title)
+        else:
+            return 'no title'
 
     def __unicode__(self):
         return "{}".format(self.title)
