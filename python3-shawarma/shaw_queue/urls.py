@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.urls import path
 from . import views
 # test
 urlpatterns = [
@@ -76,14 +77,17 @@ urlpatterns = [
     url(r'^shashlychnik_interface', views.shashlychnik_interface, name="shashlychnik_interface"),
     url(r'^s_i_ajax', views.s_i_a, name="shashlychnik_interface_ajax"),
     url(r'^redirection', views.redirection, name="redirection"),
-    url(r'^buyer_queue/(?P<px>[0-9]+)/', views.buyer_queue_px, name="buyer_queue_px"),
-    url(r'^buyer_queue/(?P<px>[0-9]+)/black/vertical', views.buyer_queue_black_vertical_px, name="buyer_queue_black_vertical_px"),
-    url(r'^buyer_queue/(?P<px>[0-9]+)/black', views.buyer_queue_black_px, name="buyer_queue_black_px"),
-    url(r'^buyer_queue/(?P<px>[0-9]+)/vertical', views.buyer_queue_vertical_px, name="buyer_queue_vertical_px"),
-    url(r'^buyer_queue/black/vertical', views.buyer_queue_black_vertical, name="buyer_queue_black_vertical"),
-    url(r'^buyer_queue/black', views.buyer_queue_black, name="buyer_queue_black"),
-    url(r'^buyer_queue/vertical', views.buyer_queue_vertical, name="buyer_queue_vertical"),
-    url(r'^buyer_queue', views.buyer_queue, name="buyer_queue"),
+
+    path('buyer_queue/black/vertical/', views.buyer_queue_black_vertical, name='buyer_queue_black_vertical'),
+    path('buyer_queue/black/', views.buyer_queue_black, name='buyer_queue_black'),
+    path('buyer_queue/vertical/', views.buyer_queue_vertical, name='buyer_queue_vertical'),
+    path('buyer_queue/', views.buyer_queue, name='buyer_queue'),
+
+    path('buyer_queue/<str:px>/black/vertical/', views.buyer_queue_black_vertical_px, name='buyer_queue_black_vertical_px'),
+    path('buyer_queue/<str:px>/black/', views.buyer_queue_black_px, name='buyer_queue_black_px'),
+    path('buyer_queue/<str:px>/vertical/', views.buyer_queue_vertical_px, name='buyer_queue_vertical_px'),
+    path('buyer_queue/<str:px>/', views.buyer_queue_px, name='buyer_queue_px'),
+
     url(r'^statistics', views.statistic_page, name="statistics"),
     url(r'^not_paid_statistics', views.not_paid_statistics, name="not_paid_statistics"),
     url(r'^opinion_statistics', views.opinion_statistics, name="opinion_statistics"),

@@ -1161,6 +1161,9 @@ def evaluate(request):
 
 
 def buyer_queue(request, vertical=False, black=False, px=None):
+    print(black)
+    print(vertical)
+    print(px)
     is_voicing = int(request.GET.get('is_voicing', 0))
     device_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
     if DEBUG_SERVERY:
@@ -1263,6 +1266,8 @@ def buyer_queue_black(request):
 
 
 def buyer_queue_px(request, px):
+    print('px')
+    print(px)
     return buyer_queue(request, px=px)
 
 
@@ -1275,6 +1280,8 @@ def buyer_queue_black_vertical_px(request, px):
 
 
 def buyer_queue_black_px(request, px):
+    print('px')
+    print(px)
     return buyer_queue(request, black=True, px=px)
 
 
