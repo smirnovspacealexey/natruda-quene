@@ -1160,7 +1160,7 @@ def evaluate(request):
         return JsonResponse(data)
 
 
-def buyer_queue(request, vertical=False, black=False):
+def buyer_queue(request, vertical=False, black=False, px=None):
     is_voicing = int(request.GET.get('is_voicing', 0))
     device_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
     if DEBUG_SERVERY:
@@ -1217,6 +1217,7 @@ def buyer_queue(request, vertical=False, black=False):
     print('black')
     print(black)
     context = {
+        'px': px,
         'vertical': vertical,
         'black': black,
         'open_orders': [{'servery': order.servery, 'daily_number': order.daily_number} for order in open_orders],
@@ -1259,6 +1260,22 @@ def buyer_queue_black_vertical(request):
 
 def buyer_queue_black(request):
     return buyer_queue(request, black=True)
+
+
+def buyer_queue_px(request, px):
+    return buyer_queue(request, px=px)
+
+
+def buyer_queue_vertical_px(request, px):
+    return buyer_queue(request, vertical=True, px=px)
+
+
+def buyer_queue_black_vertical_px(request, px):
+    return buyer_queue(request, vertical=True, black=True, px=px)
+
+
+def buyer_queue_black_px(request, px):
+    return buyer_queue(request, black=True, px=px)
 
 
 def buyer_queue_ajax(request, vertical=False):
@@ -3879,7 +3896,7 @@ def deliver_delivery_order(request) -> JsonResponse:
 
 
 @login_required()
-# @permission_required('shaw_queue.change_order')
+# @permission_required('shaw_queue.change_order')  #unhide TODO
 def close_all(request):
     close_unpaid = json.loads(request.POST.get('close_unpaid', None))
     device_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')

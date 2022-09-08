@@ -34,6 +34,11 @@
             overflow: hidden;
             margin: 0;
         }
+        {% if px %}
+            span.order-display-number  {font-size: {{ px }}px;}
+        {% else %}
+            span.order-display-number  {font-size: 110px;}
+        {% endif %}
     </style>
 {% endif %}
 <style id="quene-style">
@@ -43,7 +48,6 @@
     {% if vertical %}
         div.open-order-display, div.ready-order-display {font-size: 110px;}
     {% endif %}
-    span.order-display-number  {font-size: 110px;}
 </style>
 <input hidden id="urls" data-refresh-url="{% if vertical %}{% url 'buyer_queue_vertical_ajax' %}{% else %}{% url 'buyer_queue_ajax' %}{% endif %}" data-unvoice-url="{% url 'unvoice_order' %}">
 {% include 'shaw_queue/buyer_queue_ajax.html' %}
