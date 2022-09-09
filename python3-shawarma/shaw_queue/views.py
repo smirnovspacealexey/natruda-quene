@@ -5357,7 +5357,7 @@ def pause_statistic_page_ajax(request):
 
 
 @login_required()
-# @permission_required('shaw_queue.view_statistics')
+@permission_required('shaw_queue.view_statistics')
 def call_record_page(request):
     template = loader.get_template('shaw_queue/call_records.html')
     try:
@@ -5411,6 +5411,13 @@ def call_record_page(request):
         }
         return JsonResponse(data)
 
+    logger_debug = logging.getLogger('debug_logger')
+    logger_debug.info(f'\n\n CALLS \n\n')
+    for staff in engaged_staff:
+        calls = CallData.objects.filter(timepoint__contains=timezone.now().date(), call_manager=staff).order_by('timepoint')
+        logger_debug.info(f'\n {str(calls)}')
+
+
     context = {
         'staff_category': StaffCategory.objects.get(staff__user=request.user),
         'total_records': len(CallData.objects.filter(timepoint__contains=timezone.now().date())),
@@ -5419,8 +5426,7 @@ def call_record_page(request):
         'max_duration': str(max_duration_time['duration_max']).split('.', 2)[0],
         'records_info': [{
             'total_duration': CallData.objects.filter(timepoint__contains=timezone.now().date(),
-                                                      call_manager=staff).aggregate(
-                duration=Sum('duration')),
+                                                      call_manager=staff).aggregate(duration=Sum('duration')),
             'call_manager': staff,
             'records': [{
                 'call_manager': record.call_manager,
