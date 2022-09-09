@@ -4,14 +4,16 @@ from raven.contrib.django.raven_compat.models import client
 from shaw_queue.models import CallData
 from requests.exceptions import HTTPError,TooManyRedirects, ConnectionError, Timeout
 import requests
-
+import logging
+logger_debug = logging.getLogger('debug_logger')
 
 class Command(BaseCommand):
     help = 'Requests record data from Elastix'
     # def add_arguments(self, parser):
     #     parser.add_argument('poll_id', nargs='+', type=int)
-
     def handle(self, *args, **options):
+        logger_debug.info(f'in get call records\n\n')
+
         original_prefix = '/var/spool/asterisk/monitor'
         substitute_prefix = '//192.168.20.25/rec/monitor'
         result = None
