@@ -5357,7 +5357,7 @@ def pause_statistic_page_ajax(request):
 
 
 @login_required()
-@permission_required('shaw_queue.view_statistics')
+# @permission_required('shaw_queue.view_statistics')
 def call_record_page(request):
     template = loader.get_template('shaw_queue/call_records.html')
     try:
