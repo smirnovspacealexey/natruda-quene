@@ -5412,11 +5412,12 @@ def call_record_page(request):
         return JsonResponse(data)
 
     logger_debug = logging.getLogger('debug_logger')
-    logger_debug.info(f'\n\n CALLS \n\n')
+    logger_debug.info(f'\n\n CALLS {timezone.now().date()} \n\n')
+    logger_debug.info(f'\n\n ... {CallData.objects.filter(timepoint__contains=timezone.now().date())} \n\n')
     for staff in engaged_staff:
+        logger_debug.info(f'\nstaff: {str(staff)}')
         calls = CallData.objects.filter(timepoint__contains=timezone.now().date(), call_manager=staff).order_by('timepoint')
         logger_debug.info(f'\n {str(calls)}')
-
 
     context = {
         'staff_category': StaffCategory.objects.get(staff__user=request.user),
