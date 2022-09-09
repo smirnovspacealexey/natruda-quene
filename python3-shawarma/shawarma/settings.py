@@ -286,7 +286,7 @@ RAVEN_CONFIG = {
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 CRONJOBS = [
-    ('*/30 * * * *', 'shaw_queue.management.commands.get_call_records')
+    ('*/30 * * * *', 'shaw_queue.management.commands.get_call_records.py')
 ]
 
 try:
