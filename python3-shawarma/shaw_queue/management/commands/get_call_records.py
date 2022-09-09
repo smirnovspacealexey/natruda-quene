@@ -8,7 +8,6 @@ import requests
 
 class Command(BaseCommand):
     help = 'Requests record data from Elastix'
-
     # def add_arguments(self, parser):
     #     parser.add_argument('poll_id', nargs='+', type=int)
 
