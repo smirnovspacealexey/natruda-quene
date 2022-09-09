@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'shaw_queue.apps.ShawQueueConfig',
     'jquery',
-    'django_crontab',
 ]
 
 MIDDLEWARE = [
@@ -284,10 +283,6 @@ RAVEN_CONFIG = {
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-
-CRONJOBS = [
-    ('*/30 * * * *', 'shaw_queue.management.commands.get_call_records.py')
-]
 
 try:
     LOCAL_TEST
