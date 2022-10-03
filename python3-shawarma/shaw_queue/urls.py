@@ -119,4 +119,6 @@ urlpatterns = [
     url(r'^get_customers_menu', views.get_customers_menu, name='get_customers_menu'),
     url(r'^send_customers_menu', views.send_customers_menu, name='get_customers_menu'),
     url(r'^register_customer_order', views.register_customer_order, name='register_customer_order'),
+
+    path('order-from-site/', views.order_from_site, name='order_from_site'),
 ]

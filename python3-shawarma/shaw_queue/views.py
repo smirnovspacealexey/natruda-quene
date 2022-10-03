@@ -3537,8 +3537,8 @@ def make_order(request):
 def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, servery,
                     service_point, discount=0, is_preorder=False):
     file = open('log/cook_choose.log', 'a')
-    logger_debug = logging.getLogger('debug_logger')
-    logger_debug.info(f'-----\n{content}\n\n{servery}\n\n{service_point}\n\n')
+    logger_debug = logging.getLogger('debug_logger')  # del me
+    logger_debug.info(f'-----\n{content}\n\n{servery}\n\n{service_point}\n\n')  # del me
     try:
         order_last_daily_number = Order.objects.filter(open_time__contains=timezone.now().date(),
                                                        servery__service_point=service_point).aggregate(
@@ -3794,6 +3794,15 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
         data["daily_number"] = order.daily_number % 100
         data["pk"] = order.pk
     return data
+
+
+def order_from_site(request):
+    content = [{'id': 17, 'title': 'Соус Белый', 'price': 50, 'quantity': 1, 'note': 'НЕ ГОТОВИТЬ. ТЕСТОВЫЙ ЗАКАЗ!!!!!'}]
+
+    res = make_order_func(content, 'delivery', True, '8888888', False, Servery.objects.filter(pk=16).first(), ServicePoint.objects.filter(pk=1).first(), discount=0, is_preorder=False)
+    logger_debug = logging.getLogger(f'order_from_site {res}')
+
+    return JsonResponse({'success': True})
 
 
 @login_required()
