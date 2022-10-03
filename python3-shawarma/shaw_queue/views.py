@@ -3537,6 +3537,8 @@ def make_order(request):
 def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, servery,
                     service_point, discount=0, is_preorder=False):
     file = open('log/cook_choose.log', 'a')
+    logger_debug = logging.getLogger('debug_logger')
+    logger_debug.info(f'-----\n{content}\n\n{servery}\n\n{service_point}\n\n')
     try:
         order_last_daily_number = Order.objects.filter(open_time__contains=timezone.now().date(),
                                                        servery__service_point=service_point).aggregate(
