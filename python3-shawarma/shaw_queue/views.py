@@ -3799,7 +3799,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
 def order_from_site(request):
     content = [{'id': 17, 'title': 'Соус Белый', 'price': 50, 'quantity': 1, 'note': 'НЕ ГОТОВИТЬ. ТЕСТОВЫЙ ЗАКАЗ!!!!!'}]
 
-    res = make_order_func(content, 'delivery', True, '88', False, Servery.objects.filter(pk=6).first(), ServicePoint.objects.filter(pk=1).first(), discount=0, is_preorder=False)
+    res = make_order_func(content, 'delivery', True, None, False, Servery.objects.filter(pk=6).first(), ServicePoint.objects.filter(pk=1).first(), discount=0, is_preorder=False)
     logger_debug = logging.getLogger('debug_logger')
     logger_debug.info(f'order_from_site {res}')
     return JsonResponse({'success': True})
