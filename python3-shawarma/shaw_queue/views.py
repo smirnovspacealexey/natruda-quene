@@ -31,6 +31,7 @@ from raven.contrib.django.raven_compat.models import client
 from random import sample
 from itertools import chain
 import time
+from django.views.decorators.csrf import csrf_exempt
 import requests
 import datetime
 import logging
@@ -3796,12 +3797,21 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
     return data
 
 
+@csrf_exempt
 def order_from_site(request):
-    # content = [{'id': 17, 'title': 'Соус Белый', 'price': 50, 'quantity': 1, 'note': 'НЕ ГОТОВИТЬ. ТЕСТОВЫЙ ЗАКАЗ!!!!!'}]
-    #
-    # res = make_order_func(content, 'delivery', True, None, False, Servery.objects.filter(pk=6).first(), ServicePoint.objects.filter(pk=1).first(), discount=0, is_preorder=False)
-    # logger_debug = logging.getLogger('debug_logger')
-    # logger_debug.info(f'order_from_site {res}')
+    logger_debug = logging.getLogger('debug_logger')
+    device_ip = request.META.get('REMOTE_ADDR', '')
+    logger_debug.info(f'device_ip {device_ip}')
+
+    res = json.loads(request.body.decode('utf-8'))
+
+    res = make_order_func(res['content'], 'delivery' if res['delivery'] else None,
+                          True, None, False,
+                          Servery.objects.filter(pk=6).first(),
+                          ServicePoint.objects.filter(pk=1).first(),
+                          discount=0, is_preorder=False)
+
+    logger_debug.info(f'order_from_site {res}')
     return JsonResponse({'success': True})
 
 
