@@ -3802,19 +3802,22 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
 @csrf_exempt
 def order_from_site(request):
     logger_debug = logging.getLogger('debug_logger')
-    device_ip = request.META.get('HTTP_X_FORWARDED_FOR', '')
-    device_ip = request.META.get('HTTP_X_REAL_IP', '')
+    device_ip = request.META.get('HTTP_X_REAL_IP', request.META.get('HTTP_X_FORWARDED_FOR', ''))
+
+    if device_ip != '10.50.1.11':
+        return JsonResponse({'success': False})
+
     logger_debug.info(f'device_ip {device_ip}')
 
     res = json.loads(request.body.decode('utf-8'))
 
-    # res = make_order_func(res['content'], 'delivery' if res['delivery'] else None,
-    #                       True, None, False,
-    #                       Servery.objects.filter(pk=6).first(),
-    #                       ServicePoint.objects.filter(pk=1).first(),
-    #                       discount=0, is_preorder=False, from_site=True)
-    #
-    # logger_debug.info(f'order_from_site {res}')
+    res = make_order_func(res['content'], 'delivery' if res['delivery'] else None,
+                          True, None, False,
+                          Servery.objects.filter(pk=1).first(),
+                          ServicePoint.objects.filter(subnetwork=1).first(),
+                          discount=0, is_preorder=False, from_site=True)
+
+    logger_debug.info(f'order_from_site {res}')
     return JsonResponse({'success': True})
 
 

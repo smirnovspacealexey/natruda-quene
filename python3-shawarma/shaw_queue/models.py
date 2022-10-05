@@ -191,7 +191,7 @@ class Servery(models.Model):
     title = models.CharField(max_length=500, default="")
     ip_address = models.CharField(max_length=500, default="")
     guid_1c = models.CharField(max_length=100, default="")
-    service_point = models.ForeignKey(ServicePoint, default=None, null=True, on_delete=models.CASCADE)
+    service_point = models.ForeignKey(ServicePoint, default=None, null=True, blank=True, on_delete=models.CASCADE)
     payment_kiosk = models.BooleanField(verbose_name="Точка приёма платежей", default=True)
     default_remote_order_acceptor = models.BooleanField(verbose_name="Касса, принимающая интернет-заказы",
                                                         default=False,
