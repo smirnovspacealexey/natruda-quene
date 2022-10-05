@@ -3802,7 +3802,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
 @csrf_exempt
 def order_from_site(request):
     logger_debug = logging.getLogger('debug_logger')
-    device_ip = request.META.get('REMOTE_ADDR', '')
+    device_ip = request.META.get('HTTP_X_FORWARDED_FOR', '')
     logger_debug.info(f'device_ip {device_ip}')
 
     res = json.loads(request.body.decode('utf-8'))
