@@ -3803,6 +3803,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
 def order_from_site(request):
     logger_debug = logging.getLogger('debug_logger')
     device_ip = request.META.get('HTTP_X_FORWARDED_FOR', '')
+    device_ip = request.META.get('HTTP_X_REAL_IP', '')
     logger_debug.info(f'device_ip {device_ip}')
 
     res = json.loads(request.body.decode('utf-8'))
