@@ -3536,7 +3536,7 @@ def make_order(request):
 
 
 def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, servery,
-                    service_point, discount=0, is_preorder=False):
+                    service_point, discount=0, is_preorder=False, from_site=False):
     file = open('log/cook_choose.log', 'a')
     logger_debug = logging.getLogger('debug_logger')  # del me
     logger_debug.info(f'-----\n{content}\n\n{servery}\n\n{service_point}\n\n')  # del me
@@ -3571,9 +3571,11 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
             order.is_paid = is_paid
             order.paid_with_cash = paid_with_cash
             order.discount = discount
+            order.from_site = from_site
         else:
             order = Order(open_time=timezone.now(), daily_number=order_next_number, is_paid=is_paid,
-                          paid_with_cash=paid_with_cash, status_1c=0, discount=discount, is_preorder=is_preorder)
+                          paid_with_cash=paid_with_cash, status_1c=0, discount=discount,
+                          is_preorder=is_preorder, from_site=from_site)
     except:
         data = {
             'success': False,
@@ -3809,7 +3811,7 @@ def order_from_site(request):
                           True, None, False,
                           Servery.objects.filter(pk=6).first(),
                           ServicePoint.objects.filter(pk=1).first(),
-                          discount=0, is_preorder=False)
+                          discount=0, is_preorder=False, from_site=True)
 
     logger_debug.info(f'order_from_site {res}')
     return JsonResponse({'success': True})
