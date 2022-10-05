@@ -3807,13 +3807,13 @@ def order_from_site(request):
 
     res = json.loads(request.body.decode('utf-8'))
 
-    res = make_order_func(res['content'], 'delivery' if res['delivery'] else None,
-                          True, None, False,
-                          Servery.objects.filter(pk=6).first(),
-                          ServicePoint.objects.filter(pk=1).first(),
-                          discount=0, is_preorder=False, from_site=True)
-
-    logger_debug.info(f'order_from_site {res}')
+    # res = make_order_func(res['content'], 'delivery' if res['delivery'] else None,
+    #                       True, None, False,
+    #                       Servery.objects.filter(pk=6).first(),
+    #                       ServicePoint.objects.filter(pk=1).first(),
+    #                       discount=0, is_preorder=False, from_site=True)
+    #
+    # logger_debug.info(f'order_from_site {res}')
     return JsonResponse({'success': True})
 
 
