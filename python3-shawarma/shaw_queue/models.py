@@ -241,6 +241,7 @@ class Order(models.Model):
     is_preorder = models.BooleanField(default=False, verbose_name="Предзаказ")
     # True - if paid with cash, False - if paid with card.
     paid_with_cash = models.BooleanField(default=True, verbose_name="Paid With Cash")
+    from_site = models.BooleanField(default=False, verbose_name="From site")
     servery = models.ForeignKey(Servery, verbose_name="Servery", on_delete=models.CASCADE)
     guid_1c = models.CharField(max_length=100, default="")
     discount = models.FloatField(default=0, validators=[MinValueValidator(0, "Discount can't be negative!"),
