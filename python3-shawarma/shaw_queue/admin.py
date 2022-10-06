@@ -6,6 +6,11 @@ from .models import Menu, Staff, Order, StaffCategory, \
     Server1C
 from django.contrib import admin
 
+
+def accepted_everything(modeladmin, request, queryset):
+    CallData.objects.filter(accepted=False).update(accepted=True)
+
+
 # Register your models here.
 @admin.register(Menu)
 class MenuAdmin(admin.ModelAdmin):
@@ -25,6 +30,8 @@ class ServeryAdmin(admin.ModelAdmin):
 class CallDataAdmin(admin.ModelAdmin):
     list_display = ['customer', 'call_manager', 'ats_id', 'timepoint', 'duration', 'record', 'accepted', 'missed']
     search_fields = ['customer__phone_number', 'customer__name', 'customer__email', 'ats_id', ]
+    list_filter = ['accepted', 'missed', ]
+    actions = [accepted_everything, ]
 
 admin.site.register(Staff)
 admin.site.register(Order)
