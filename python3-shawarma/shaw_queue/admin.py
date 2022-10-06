@@ -31,7 +31,7 @@ class ServeryAdmin(admin.ModelAdmin):
 
 @admin.register(CallData)
 class CallDataAdmin(admin.ModelAdmin):
-    list_display = ['customer', 'call_manager', 'ats_id', 'timepoint', 'duration', 'record', 'accepted', 'missed']
+    list_display = ['customer', 'call_manager', 'ats_id', 'timepoint', 'accepted', 'missed', 'duration', 'record']
     search_fields = ['customer__phone_number', 'customer__name', 'customer__email', 'ats_id', ]
     list_filter = ['accepted', 'missed', ]
     actions = [accepted_everything, ]
