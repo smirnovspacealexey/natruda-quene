@@ -24,7 +24,7 @@ class ServeryAdmin(admin.ModelAdmin):
 @admin.register(CallData)
 class CallDataAdmin(admin.ModelAdmin):
     list_display = ['customer', 'call_manager', 'ats_id', 'timepoint', 'duration', 'record', 'accepted', 'missed']
-    search_fields = ['customer', 'ats_id', ]
+    search_fields = ['customer__phone_number', 'customer__name', 'customer__email', 'ats_id', ]
 
 admin.site.register(Staff)
 admin.site.register(Order)
