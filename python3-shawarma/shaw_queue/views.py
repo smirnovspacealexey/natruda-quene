@@ -3536,7 +3536,7 @@ def make_order(request):
 
 
 def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, servery,
-                    service_point, discount=0, is_preorder=False, from_site=False):
+                    service_point, discount=0, is_preorder=False, from_site=False, with1c=True):
     file = open('log/cook_choose.log', 'a')
     logger_debug = logging.getLogger('debug_logger')  # del me
     logger_debug.info(f'-----\n{content}\n\n{servery}\n\n{service_point}\n\n')  # del me
@@ -3770,7 +3770,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
         print(order)
         if FORCE_TO_LISTNER:
             data = send_order_to_listner(order)
-        else:
+        elif with1c:
             data = send_order_to_1c(order, False)
             if not data["success"]:
                 if order_id:
@@ -3816,7 +3816,7 @@ def order_from_site(request):
                               True, None, False,
                               Servery.objects.filter(ip_address='1.1.1.1').last(),
                               ServicePoint.objects.filter(subnetwork=res['point']).last(),
-                              discount=0, is_preorder=False, from_site=True)
+                              discount=0, is_preorder=False, from_site=True, with1c=False)
         logger_debug.info(f'order_from_site {res}')
         if 'daily_number' in res:
             return JsonResponse({'success': True, 'number': res['daily_number']})
