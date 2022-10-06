@@ -11,6 +11,9 @@ def accepted_everything(modeladmin, request, queryset):
     CallData.objects.filter(accepted=False).update(accepted=True)
 
 
+accepted_everything.short_description = 'завершить все звонки'
+
+
 # Register your models here.
 @admin.register(Menu)
 class MenuAdmin(admin.ModelAdmin):
