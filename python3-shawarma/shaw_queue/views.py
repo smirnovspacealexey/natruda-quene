@@ -3601,18 +3601,18 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
                                          service_point=service_point)
             cooks = sample(list(cooks), len(cooks))
         except:
-            data = {
+            data.update({
                 'success': False,
                 'message': 'Something wrong happened while getting set of cooks!'
-            }
+            })
             client.captureException()
             return data
 
         if len(cooks) == 0:
-            data = {
+            data.update({
                 'success': False,
                 'message': 'Нет доступных поваров!'
-            }
+            })
             return data
     if has_cook_content and cook_choose != 'delivery':
         if cook_choose == 'auto':
@@ -3628,10 +3628,10 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
                                                                       order__is_ready=False,
                                                                       menu_item__can_be_prepared_by__title__iexact='Cook')
                 except:
-                    data = {
+                    data.update({
                         'success': False,
                         'message': 'Something wrong happened while getting cook\'s content!'
-                    }
+                    })
                     return data
 
                 file.write("{}: {}\n".format(cooks[cook_index], len(cooks_order_content)))
@@ -3647,17 +3647,17 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
                 try:
                     order.prepared_by = Staff.objects.get(id=int(cook_choose))
                 except MultipleObjectsReturned:
-                    data = {
+                    data.update({
                         'success': False,
                         'message': 'Multiple staff returned while binding cook to order!'
-                    }
+                    })
                     client.captureException()
                     return data
                 except:
-                    data = {
+                    data.update({
                         'success': False,
                         'message': 'Something wrong happened while getting set of orders!'
-                    }
+                    })
                     client.captureException()
                     return data
     content_to_send = []
@@ -3801,24 +3801,29 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
 
 @csrf_exempt
 def order_from_site(request):
-    logger_debug = logging.getLogger('debug_logger')
-    device_ip = request.META.get('HTTP_X_REAL_IP', request.META.get('HTTP_X_FORWARDED_FOR', ''))
+    try:
+        logger_debug = logging.getLogger('debug_logger')
+        device_ip = request.META.get('HTTP_X_REAL_IP', request.META.get('HTTP_X_FORWARDED_FOR', ''))
 
-    if device_ip != '10.50.1.11':
+        if device_ip != '10.50.1.11':
+            return JsonResponse({'success': False})
+
+        logger_debug.info(f'device_ip {device_ip}')
+
+        res = json.loads(request.body.decode('utf-8'))
+
+        res = make_order_func(res['content'], 'delivery' if res['delivery'] else None,
+                              True, None, False,
+                              Servery.objects.filter(ip_address='1.1.1.1').last(),
+                              ServicePoint.objects.filter(subnetwork=res['point']).last(),
+                              discount=0, is_preorder=False, from_site=True)
+        logger_debug.info(f'order_from_site {res}')
+        if 'daily_number' in res:
+            return JsonResponse({'success': True, 'number': res['daily_number']})
+        else:
+            return JsonResponse({'success': False})
+    except:
         return JsonResponse({'success': False})
-
-    logger_debug.info(f'device_ip {device_ip}')
-
-    res = json.loads(request.body.decode('utf-8'))
-
-    res = make_order_func(res['content'], 'delivery' if res['delivery'] else None,
-                          True, None, False,
-                          Servery.objects.filter(pk=1).first(),
-                          ServicePoint.objects.filter(subnetwork=1).first(),
-                          discount=0, is_preorder=False, from_site=True)
-
-    logger_debug.info(f'order_from_site {res}')
-    return JsonResponse({'success': True})
 
 
 @login_required()

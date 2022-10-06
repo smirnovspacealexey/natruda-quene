@@ -21,13 +21,17 @@ class ServeryAdmin(admin.ModelAdmin):
     list_editable = ('ip_address', 'guid_1c', 'service_point', 'payment_kiosk', 'default_remote_order_acceptor')
 
 
+@admin.register(CallData)
+class CallDataAdmin(admin.ModelAdmin):
+    list_display = ['customer', 'call_manager', 'ats_id', 'timepoint', 'duration', 'record', 'accepted', 'missed']
+    search_fields = ['customer', 'ats_id', ]
+
 admin.site.register(Staff)
 admin.site.register(Order)
 admin.site.register(StaffCategory)
 admin.site.register(MenuCategory)
 admin.site.register(ServicePoint)
 admin.site.register(Printer)
-admin.site.register(CallData)
 admin.site.register(Customer)
 admin.site.register(Delivery)
 admin.site.register(DeliveryOrder)
