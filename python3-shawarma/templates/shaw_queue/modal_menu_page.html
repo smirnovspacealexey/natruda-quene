@@ -46,19 +46,19 @@
                                                                               src="{% static 'img/btns/noVegetables.png' %}">
                     </button>
                     <button class="btn img-btn" id="frenchFries-button"><img alt=""
-                                                                              src="{% static 'img/btns/frenchFries.png' %}">
+                                                                             src="{% static 'img/btns/frenchFries.png' %}">
                     </button>
                     <button class="btn img-btn" id="chile-button"><img alt=""
-                                                                              src="{% static 'img/btns/chile.png' %}">
+                                                                       src="{% static 'img/btns/chile.png' %}">
                     </button>
                     <button class="btn img-btn" id="mushrooms-button"><img alt=""
-                                                                              src="{% static 'img/btns/mushrooms.png' %}">
+                                                                           src="{% static 'img/btns/mushrooms.png' %}">
                     </button>
                     <button class="btn img-btn" id="jalapeno-button"><img alt=""
-                                                                              src="{% static 'img/btns/jalapeno.png' %}">
+                                                                          src="{% static 'img/btns/jalapeno.png' %}">
                     </button>
                     <button class="btn img-btn" id="bellPepper-button"><img alt=""
-                                                                              src="{% static 'img/btns/bellPepper.png' %}">
+                                                                            src="{% static 'img/btns/bellPepper.png' %}">
                     </button>
                 </div>
                 </p>
@@ -102,7 +102,8 @@
         </div>
         <div class="order-div" style="width:250px;">
 
-            <button type="button" class="subm small-btn success" data-send-url="{% url 'make_order' %}">
+            <button type="button" class="subm small-btn success" data-send-url="{% url 'make_order' %}"
+                    onclick="SendOrder()">
                 Принять
             </button>
             <div class="shadowed">
