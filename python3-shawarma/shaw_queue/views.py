@@ -6509,7 +6509,7 @@ def register_customer_order(request):
 
             data = make_order_func(customer_order_content, 'delivery', is_paid, None, False, servery, service_point)
             if not data['success']:
-                logger_debug.info(f'11')
+                logger_debug.info(f'11 {data}')
                 return JsonResponse(data)
 
             customer = None
