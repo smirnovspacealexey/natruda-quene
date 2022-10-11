@@ -3779,6 +3779,8 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
                 else:
                     print("Deleting order.")
                     order.delete()
+        else:
+            data["success"] = True
 
         print("Request sent.")
         if data.get("success"):
