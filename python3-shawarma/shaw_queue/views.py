@@ -3781,7 +3781,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
                     order.delete()
 
         print("Request sent.")
-        if data["success"]:
+        if data.get("success"):
             data["total"] = order.total
             data["content"] = json.dumps(content_to_send)
             data["message"] = ''
