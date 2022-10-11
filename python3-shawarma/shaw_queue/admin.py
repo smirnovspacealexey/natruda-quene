@@ -36,6 +36,14 @@ class CallDataAdmin(admin.ModelAdmin):
     list_filter = ['accepted', 'missed', ]
     actions = [accepted_everything, ]
 
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['daily_number', 'open_time', 'close_time', 'content_completed', 'is_paid', 'is_delivery', 'from_site', 'guid_1c']
+    search_fields = ['daily_number', ]
+    list_filter = ['from_site', 'is_delivery', 'is_paid']
+
+
 admin.site.register(Staff)
 admin.site.register(Order)
 admin.site.register(StaffCategory)
