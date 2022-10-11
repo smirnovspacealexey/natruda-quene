@@ -21,6 +21,7 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from threading import Thread
 from unidecode import unidecode
+import sys, traceback
 from hashlib import md5
 from shawarma.settings import TIME_ZONE, LISTNER_URL, LISTNER_PORT, PRINTER_URL, SERVER_1C_PORT, SERVER_1C_IP, \
     GETLIST_URL, SERVER_1C_USER, SERVER_1C_PASS, ORDER_URL, FORCE_TO_LISTNER, DEBUG_SERVERY, RETURN_URL, \
@@ -6438,130 +6439,134 @@ def send_customers_menu(request):
 def register_customer_order(request):
     import logging  # del me
     logger_debug = logging.getLogger('debug_logger')  # del me
-    logger_debug.info(f'\n\nregister_customer_order\n')
+    try:
+        logger_debug.info(f'\n\nregister_customer_order\n')
 
-    name = request.GET.get('name', None)
-    phone_number = request.GET.get('phone_number', None)
-    comment = request.GET.get('comment', None)
-    order_content_str = request.GET.get('order_content', None)
-    payment = request.GET.get('payment', None)
-    service_point_id = request.GET.get('delivery_place', None)
-    address = request.GET.get('address', None)
-    cash_amount = request.GET.get('cash_amount', None)
-    deliver_to_time = request.GET.get('deliver_to_time', None)
-    time = request.GET.get('time', '')
-    is_delivery = request.GET.get('is_delivery', False)
+        name = request.GET.get('name', None)
+        phone_number = request.GET.get('phone_number', None)
+        comment = request.GET.get('comment', None)
+        order_content_str = request.GET.get('order_content', None)
+        payment = request.GET.get('payment', None)
+        service_point_id = request.GET.get('delivery_place', None)
+        address = request.GET.get('address', None)
+        cash_amount = request.GET.get('cash_amount', None)
+        deliver_to_time = request.GET.get('deliver_to_time', None)
+        time = request.GET.get('time', '')
+        is_delivery = request.GET.get('is_delivery', False)
 
-    is_delivery = json.loads(is_delivery) if is_delivery is not False else False
-    order_datetime = datetime.datetime.strptime(time, '%H:%M:%S').time() if time != '' else ''
-    timezone_date = timezone.datetime.today().date()
-    corrected_order_datetime = timezone.datetime.combine(timezone_date, order_datetime)
+        is_delivery = json.loads(is_delivery) if is_delivery is not False else False
+        order_datetime = datetime.datetime.strptime(time, '%H:%M:%S').time() if time != '' else ''
+        timezone_date = timezone.datetime.today().date()
+        corrected_order_datetime = timezone.datetime.combine(timezone_date, order_datetime)
 
-    customer_order_content = {}
-    if order_content_str is not None and order_content_str != "":
-        logger_debug.info(f'1')
-        customer_order_content = json.loads(order_content_str)
-        try:
+        customer_order_content = {}
+        if order_content_str is not None and order_content_str != "":
+            logger_debug.info(f'1')
+            customer_order_content = json.loads(order_content_str)
+            try:
+                if not is_delivery:
+                    logger_debug.info(f'2')
+                    service_point = ServicePoint.objects.get(id=service_point_id)
+                else:
+                    logger_debug.info(f'3')
+                    service_point = ServicePoint.objects.get(default_remote_order_acceptor=True)
+            except MultipleObjectsReturned:
+                logger_debug.info(f'4')
+                service_point = ServicePoint.objects.filter(default_remote_order_acceptor=True).first()
+            except ServicePoint.DoesNotExist:
+                logger_debug.info(f'5')
+                service_point = ServicePoint.objects.all().first()
+            except Exception as e:
+                logger_debug.info(f'6 {e}')
+                data = {
+                    'success': False,
+                    'message': 'Something gone wrong while searching service points!'
+                }
+                client.captureException()
+                return JsonResponse(data)
+
+            try:
+                logger_debug.info(f'7')
+                servery = Servery.objects.get(service_point=service_point, default_remote_order_acceptor=True)
+            except MultipleObjectsReturned:
+                logger_debug.info(f'8')
+                servery = Servery.objects.get(service_point=service_point, default_remote_order_acceptor=True).first()
+            except Servery.DoesNotExist:
+                logger_debug.info(f'9')
+                servery = Servery.objects.all().first()
+            except:
+                logger_debug.info(f'10')
+                data = {
+                    'success': False,
+                    'message': 'Something gone wrong while searching serveries!'
+                }
+                client.captureException()
+                return JsonResponse(data)
+
+            data = make_order_func(customer_order_content, 'delivery', False, None, False, servery, service_point)
+            if not data['success']:
+                logger_debug.info(f'11')
+                return JsonResponse(data)
+
+            customer = None
+            try:
+                logger_debug.info(f'12')
+                customer = Customer.objects.get(phone_number=phone_number)
+            except MultipleObjectsReturned:
+                logger_debug.info(f'13')
+                data = {
+                    'success': False,
+                    'message': 'Multiple customers found!'
+                }
+                client.captureException()
+                return JsonResponse(data)
+            except Customer.DoesNotExist:
+                logger_debug.info(f'14')
+                customer = Customer(phone_number=phone_number)
+                customer.save()
+
+            if name is not None:
+                customer.name = name
+                customer.save()
+
             if not is_delivery:
-                logger_debug.info(f'2')
-                service_point = ServicePoint.objects.get(id=service_point_id)
-            else:
-                logger_debug.info(f'3')
-                service_point = ServicePoint.objects.get(default_remote_order_acceptor=True)
-        except MultipleObjectsReturned:
-            logger_debug.info(f'4')
-            service_point = ServicePoint.objects.filter(default_remote_order_acceptor=True).first()
-        except ServicePoint.DoesNotExist:
-            logger_debug.info(f'5')
-            service_point = ServicePoint.objects.all().first()
-        except Exception as e:
-            logger_debug.info(f'6 {e}')
-            data = {
-                'success': False,
-                'message': 'Something gone wrong while searching service points!'
-            }
-            client.captureException()
-            return JsonResponse(data)
+                address = service_point.title
 
-        try:
-            logger_debug.info(f'7')
-            servery = Servery.objects.get(service_point=service_point, default_remote_order_acceptor=True)
-        except MultipleObjectsReturned:
-            logger_debug.info(f'8')
-            servery = Servery.objects.get(service_point=service_point, default_remote_order_acceptor=True).first()
-        except Servery.DoesNotExist:
-            logger_debug.info(f'9')
-            servery = Servery.objects.all().first()
-        except:
-            logger_debug.info(f'10')
-            data = {
-                'success': False,
-                'message': 'Something gone wrong while searching serveries!'
-            }
-            client.captureException()
-            return JsonResponse(data)
+            delivery_order = DeliveryOrder(address=address, customer=customer, note=comment,
+                                           obtain_timepoint=timezone.now(),
+                                           delivered_timepoint=timezone.now() if deliver_to_time == 'nearest_time' else corrected_order_datetime,
+                                           order=Order.objects.get(pk=data['pk']), moderation_needed=True,
+                                           prefered_payment=payment)
+            try:
+                logger_debug.info(f'15')
+                order_last_daily_number = DeliveryOrder.objects.filter(
+                    obtain_timepoint__contains=timezone.datetime.today().date(),
+                    order__servery__service_point=service_point).aggregate(Max('daily_number'))
+            except EmptyResultSet:
+                logger_debug.info(f'16')
+                data = {
+                    'success': False,
+                    'message': 'Empty set of orders returned!'
+                }
+                client.captureException()
+                return JsonResponse(data)
 
-        data = make_order_func(customer_order_content, 'delivery', False, None, False, servery, service_point)
-        if not data['success']:
-            logger_debug.info(f'11')
-            return JsonResponse(data)
+            daily_number = 1
+            if order_last_daily_number:
+                logger_debug.info(f'17')
+                if order_last_daily_number['daily_number__max'] is not None:
+                    logger_debug.info(f'18')
+                    daily_number = order_last_daily_number['daily_number__max'] + 1
+                else:
+                    logger_debug.info(f'19')
+                    daily_number = 1
+            delivery_order.daily_number = daily_number
+            delivery_order.save()
+            logger_debug.info(f'20')
+            return JsonResponse(data={'success': True, 'order_number': daily_number})
+        else:
+            logger_debug.info(f'21')
+            return Http404()
+    except:
+        logger_debug.info(f'error: {traceback.format_exc()}')
 
-        customer = None
-        try:
-            logger_debug.info(f'12')
-            customer = Customer.objects.get(phone_number=phone_number)
-        except MultipleObjectsReturned:
-            logger_debug.info(f'13')
-            data = {
-                'success': False,
-                'message': 'Multiple customers found!'
-            }
-            client.captureException()
-            return JsonResponse(data)
-        except Customer.DoesNotExist:
-            logger_debug.info(f'14')
-            customer = Customer(phone_number=phone_number)
-            customer.save()
-
-        if name is not None:
-            customer.name = name
-            customer.save()
-
-        if not is_delivery:
-            address = service_point.title
-
-        delivery_order = DeliveryOrder(address=address, customer=customer, note=comment,
-                                       obtain_timepoint=timezone.now(),
-                                       delivered_timepoint=timezone.now() if deliver_to_time == 'nearest_time' else corrected_order_datetime,
-                                       order=Order.objects.get(pk=data['pk']), moderation_needed=True,
-                                       prefered_payment=payment)
-        try:
-            logger_debug.info(f'15')
-            order_last_daily_number = DeliveryOrder.objects.filter(
-                obtain_timepoint__contains=timezone.datetime.today().date(),
-                order__servery__service_point=service_point).aggregate(Max('daily_number'))
-        except EmptyResultSet:
-            logger_debug.info(f'16')
-            data = {
-                'success': False,
-                'message': 'Empty set of orders returned!'
-            }
-            client.captureException()
-            return JsonResponse(data)
-
-        daily_number = 1
-        if order_last_daily_number:
-            logger_debug.info(f'17')
-            if order_last_daily_number['daily_number__max'] is not None:
-                logger_debug.info(f'18')
-                daily_number = order_last_daily_number['daily_number__max'] + 1
-            else:
-                logger_debug.info(f'19')
-                daily_number = 1
-        delivery_order.daily_number = daily_number
-        delivery_order.save()
-        logger_debug.info(f'20')
-        return JsonResponse(data={'success': True, 'order_number': daily_number})
-    else:
-        logger_debug.info(f'21')
-        return Http404()
