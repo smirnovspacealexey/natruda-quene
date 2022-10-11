@@ -6436,6 +6436,10 @@ def send_customers_menu(request):
 
 
 def register_customer_order(request):
+    import logging  # del me
+    logger_debug = logging.getLogger('debug_logger')  # del me
+    logger_debug.info(f'\n\nregister_customer_order\n')
+
     name = request.GET.get('name', None)
     phone_number = request.GET.get('phone_number', None)
     comment = request.GET.get('comment', None)
@@ -6455,17 +6459,23 @@ def register_customer_order(request):
 
     customer_order_content = {}
     if order_content_str is not None and order_content_str != "":
+        logger_debug.info(f'1')
         customer_order_content = json.loads(order_content_str)
         try:
             if not is_delivery:
+                logger_debug.info(f'2')
                 service_point = ServicePoint.objects.get(id=service_point_id)
             else:
+                logger_debug.info(f'3')
                 service_point = ServicePoint.objects.get(default_remote_order_acceptor=True)
         except MultipleObjectsReturned:
+            logger_debug.info(f'4')
             service_point = ServicePoint.objects.filter(default_remote_order_acceptor=True).first()
         except ServicePoint.DoesNotExist:
+            logger_debug.info(f'5')
             service_point = ServicePoint.objects.all().first()
         except Exception as e:
+            logger_debug.info(f'6 {e}')
             data = {
                 'success': False,
                 'message': 'Something gone wrong while searching service points!'
@@ -6474,12 +6484,16 @@ def register_customer_order(request):
             return JsonResponse(data)
 
         try:
+            logger_debug.info(f'7')
             servery = Servery.objects.get(service_point=service_point, default_remote_order_acceptor=True)
         except MultipleObjectsReturned:
+            logger_debug.info(f'8')
             servery = Servery.objects.get(service_point=service_point, default_remote_order_acceptor=True).first()
         except Servery.DoesNotExist:
+            logger_debug.info(f'9')
             servery = Servery.objects.all().first()
         except:
+            logger_debug.info(f'10')
             data = {
                 'success': False,
                 'message': 'Something gone wrong while searching serveries!'
@@ -6489,12 +6503,15 @@ def register_customer_order(request):
 
         data = make_order_func(customer_order_content, 'delivery', False, None, False, servery, service_point)
         if not data['success']:
+            logger_debug.info(f'11')
             return JsonResponse(data)
 
         customer = None
         try:
+            logger_debug.info(f'12')
             customer = Customer.objects.get(phone_number=phone_number)
         except MultipleObjectsReturned:
+            logger_debug.info(f'13')
             data = {
                 'success': False,
                 'message': 'Multiple customers found!'
@@ -6502,6 +6519,7 @@ def register_customer_order(request):
             client.captureException()
             return JsonResponse(data)
         except Customer.DoesNotExist:
+            logger_debug.info(f'14')
             customer = Customer(phone_number=phone_number)
             customer.save()
 
@@ -6518,10 +6536,12 @@ def register_customer_order(request):
                                        order=Order.objects.get(pk=data['pk']), moderation_needed=True,
                                        prefered_payment=payment)
         try:
+            logger_debug.info(f'15')
             order_last_daily_number = DeliveryOrder.objects.filter(
                 obtain_timepoint__contains=timezone.datetime.today().date(),
                 order__servery__service_point=service_point).aggregate(Max('daily_number'))
         except EmptyResultSet:
+            logger_debug.info(f'16')
             data = {
                 'success': False,
                 'message': 'Empty set of orders returned!'
@@ -6531,12 +6551,17 @@ def register_customer_order(request):
 
         daily_number = 1
         if order_last_daily_number:
+            logger_debug.info(f'17')
             if order_last_daily_number['daily_number__max'] is not None:
+                logger_debug.info(f'18')
                 daily_number = order_last_daily_number['daily_number__max'] + 1
             else:
+                logger_debug.info(f'19')
                 daily_number = 1
         delivery_order.daily_number = daily_number
         delivery_order.save()
+        logger_debug.info(f'20')
         return JsonResponse(data={'success': True, 'order_number': daily_number})
     else:
+        logger_debug.info(f'21')
         return Http404()
