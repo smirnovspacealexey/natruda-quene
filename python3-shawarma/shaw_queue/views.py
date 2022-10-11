@@ -6454,11 +6454,13 @@ def register_customer_order(request):
         time = request.GET.get('time', '')
         is_delivery = request.GET.get('is_delivery', False)
 
-
         is_delivery = json.loads(is_delivery) if is_delivery is not False else False
-        order_datetime = datetime.datetime.strptime(time, '%H:%M:%S').time() if time != '' else ''
-        timezone_date = timezone.datetime.today().date()
-        corrected_order_datetime = timezone.datetime.combine(timezone_date, order_datetime)
+        if time:
+            order_datetime = datetime.datetime.strptime(time, '%H:%M:%S').time()
+            timezone_date = timezone.datetime.today().date()
+            corrected_order_datetime = timezone.datetime.combine(timezone_date, order_datetime)
+        else:
+            corrected_order_datetime = None
 
         customer_order_content = {}
         if order_content_str is not None and order_content_str != "":
