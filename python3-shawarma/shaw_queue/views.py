@@ -6453,6 +6453,7 @@ def register_customer_order(request):
         deliver_to_time = request.GET.get('deliver_to_time', None)
         time = request.GET.get('time', '')
         is_delivery = request.GET.get('is_delivery', False)
+        is_paid = request.GET.get('is_paid', False)
 
         is_delivery = json.loads(is_delivery) if is_delivery is not False else False
         if time:
@@ -6506,7 +6507,7 @@ def register_customer_order(request):
                 client.captureException()
                 return JsonResponse(data)
 
-            data = make_order_func(customer_order_content, 'delivery', False, None, False, servery, service_point)
+            data = make_order_func(customer_order_content, 'delivery', is_paid, None, False, servery, service_point)
             if not data['success']:
                 logger_debug.info(f'11')
                 return JsonResponse(data)
