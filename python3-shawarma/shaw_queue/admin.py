@@ -39,7 +39,7 @@ class CallDataAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['daily_number', 'open_time', 'close_time', 'content_completed', 'is_paid', 'is_delivery', 'from_site', 'guid_1c']
+    list_display = ['__str__', 'daily_number', 'open_time', 'close_time', 'content_completed', 'is_paid', 'is_delivery', 'from_site', 'guid_1c']
     search_fields = ['daily_number', ]
     list_filter = ['from_site', 'is_delivery', 'is_paid']
 
