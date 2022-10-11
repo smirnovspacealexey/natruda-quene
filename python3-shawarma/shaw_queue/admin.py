@@ -45,7 +45,6 @@ class OrderAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Staff)
-admin.site.register(Order)
 admin.site.register(StaffCategory)
 admin.site.register(MenuCategory)
 admin.site.register(ServicePoint)
