@@ -6440,7 +6440,7 @@ def register_customer_order(request):
     import logging  # del me
     logger_debug = logging.getLogger('debug_logger')  # del me
     try:
-        logger_debug.info(f'\n\nregister_customer_order\n')
+        logger_debug.info(f'\n\nregister_customer_order\n{str(request.GET)}\n')
 
         name = request.GET.get('name', None)
         phone_number = request.GET.get('phone_number', None)
@@ -6453,6 +6453,7 @@ def register_customer_order(request):
         deliver_to_time = request.GET.get('deliver_to_time', None)
         time = request.GET.get('time', '')
         is_delivery = request.GET.get('is_delivery', False)
+
 
         is_delivery = json.loads(is_delivery) if is_delivery is not False else False
         order_datetime = datetime.datetime.strptime(time, '%H:%M:%S').time() if time != '' else ''
