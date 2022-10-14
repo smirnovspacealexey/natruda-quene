@@ -68,7 +68,7 @@ function refresher() {
 
         },
         complete: function () {
-            setTimeout(refresher, 10000);
+            setTimeout(refresher, 1000);
         }
     });
 }

@@ -6472,6 +6472,7 @@ def register_customer_order(request):
             try:
                 if not is_delivery:
                     logger_debug.info(f'2')
+                    service_point_id = 2  # del
                     service_point = ServicePoint.objects.get(id=service_point_id)
                 else:
                     logger_debug.info(f'3')
