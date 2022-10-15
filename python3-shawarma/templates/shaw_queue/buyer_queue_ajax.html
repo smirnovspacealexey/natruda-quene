@@ -6,11 +6,13 @@
     {% endif %}
     <div class="open-orders-container{% if vertical %}-vertical{% endif %}">
         {% if not vertical %}
-            {% if new %}
-                <img src="https://sunveter.ru/uploads/posts/2021-10/1634392734_fire_1024.gif" alt="this slowpoke moves"  width="70" style="margin-left: 36px"/>
-            {% else %}
-                Жарим
-            {% endif %}
+            <div class="open-order-display">
+                {% if new %}
+                    <img src="https://sunveter.ru/uploads/posts/2021-10/1634392734_fire_1024.gif" alt="this slowpoke moves"  width="70" style="margin-left: 36px"/>
+                {% else %}
+                    Жарим
+                {% endif %}
+            </div>
         {% endif %}
         {% for open_order in display_open_orders %}
             <div class="open-order-display">
