@@ -1376,6 +1376,104 @@ def buyer_queue_ajax(request, vertical=False):
     return JsonResponse(data)
 
 
+
+
+
+
+
+def buyer_queue_ajax_new(request, vertical=False):   # del me after, Im copy
+    is_voicing = request.GET.get('is_voicing', 0)
+    device_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
+    if DEBUG_SERVERY:
+        device_ip = '127.0.0.1'
+
+    result = define_service_point(device_ip)
+
+    if result['success']:
+        try:
+            open_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
+                                               close_time__isnull=True,
+                                               is_canceled=False, is_ready=False,
+                                               servery__service_point=result['service_point']).order_by('open_time')
+        except:
+            data = {
+                'success': False,
+                'message': 'Что-то пошло не так при поиске открытых заказов!'
+            }
+            client.captureException()
+            return JsonResponse(data)
+        try:
+            ready_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
+                                                close_time__isnull=True,
+                                                content_completed=True, supplement_completed=True, is_ready=True,
+                                                is_canceled=False,
+                                                servery__service_point=result['service_point']).order_by('open_time')
+        except:
+            data = {
+                'success': False,
+                'message': 'Что-то пошло не так при поиске готовых заказов!'
+            }
+            client.captureException()
+            return JsonResponse(data)
+    else:
+        return JsonResponse(result)
+
+    display_open_orders = [{'servery': order.servery.display_title, 'daily_number': order.daily_number % 100} for
+                           order in
+                           open_orders]
+
+    display_ready_orders = [{'servery': order.servery.display_title, 'daily_number': order.daily_number % 100} for
+                            order in
+                            ready_orders]
+
+    context = {
+        'new': True,
+        'vertical': vertical,
+        'open_orders': [{'servery': order.servery, 'daily_number': order.daily_number} for order in open_orders],
+        'ready_orders': [{'servery': order.servery, 'daily_number': order.daily_number} for order in
+                         ready_orders],
+
+    }
+
+    if vertical:
+        length = len(display_ready_orders) + 1
+        middle_index = length // 2
+        display_ready_orders2 = display_ready_orders[middle_index:]
+        display_ready_orders = display_ready_orders[:middle_index]
+
+        length = len(display_open_orders) + 1
+        middle_index = length // 2
+        display_open_orders2 = display_open_orders[middle_index:]
+        display_open_orders = display_open_orders[:middle_index]
+
+        context.update({'display_open_orders': display_open_orders,
+                        'display_open_orders2': display_open_orders2,
+                        'display_ready_orders': display_ready_orders,
+                        'display_ready_orders2': display_ready_orders2, })
+    else:
+        context.update({'display_open_orders': display_open_orders,
+                        'display_ready_orders': display_ready_orders, })
+
+    template = loader.get_template('shaw_queue/buyer_queue_ajax.html')
+    data = {
+        'html': template.render(context, request),
+        'ready': json.dumps(
+            [order.daily_number for order in ready_orders.filter(is_voiced=False)]),
+        'voiced': json.dumps(
+            [order.is_voiced for order in ready_orders.filter(is_voiced=False)])
+    }
+    # for order in ready_orders:
+    #     order.is_voiced = True
+    #     order.save()
+    return JsonResponse(data)
+
+
+
+
+
+
+
+
 def buyer_queue_vertical_ajax(request):
     return buyer_queue_ajax(request, vertical=True)
 

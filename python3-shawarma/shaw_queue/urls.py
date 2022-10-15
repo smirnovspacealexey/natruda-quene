@@ -88,7 +88,10 @@ urlpatterns = [
     path('buyer_queue/<str:px>/vertical/', views.buyer_queue_vertical_px, name='buyer_queue_vertical_px'),
     path('buyer_queue/<str:px>/', views.buyer_queue_px, name='buyer_queue_px'),
 
+
     path('buyer_queue/new', views.buyer_queue_new, name='buyer_queue_new'),
+    path('ajax/buyer_queue/new', views.buyer_queue_ajax_new, name='buyer_queue_ajax_new'),  # del me after, Im copy
+
 
     url(r'^statistics', views.statistic_page, name="statistics"),
     url(r'^not_paid_statistics', views.not_paid_statistics, name="not_paid_statistics"),
