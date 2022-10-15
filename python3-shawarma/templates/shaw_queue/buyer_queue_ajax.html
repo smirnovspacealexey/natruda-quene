@@ -6,9 +6,11 @@
     {% endif %}
     <div class="open-orders-container{% if vertical %}-vertical{% endif %}">
         {% if not vertical %}
-            <div class="open-order-display">
+            {% if new %}
+                <img src="http://i.stack.imgur.com/SBv4T.gif" alt="this slowpoke moves"  width="100" />
+            {% else %}
                 Жарим
-            </div>
+            {% endif %}
         {% endif %}
         {% for open_order in display_open_orders %}
             <div class="open-order-display">
@@ -36,11 +38,11 @@
     <div class="ready-orders-container{% if vertical %}-vertical{% endif %}">
         {% if not vertical %}
             <div class="open-order-display">
-            {% if new %}
-                <img src="http://i.stack.imgur.com/SBv4T.gif" alt="this slowpoke moves"  width="250" />
-            {% else %}
-                Готовы
-            {% endif %}
+                {% if new %}
+                    <img src="http://i.stack.imgur.com/SBv4T.gif" alt="this slowpoke moves"  width="100" />
+                {% else %}
+                    Готовы
+                {% endif %}
             </div>
         {% endif %}
         {% for ready_order in display_ready_orders %}

@@ -39,6 +39,17 @@
         {% else %}
             span.order-display-number  {font-size: 110px;}
         {% endif %}
+
+        {% if new %}
+            div.open-orders-container, div.ready-orders-container {
+                width: 8%;
+                height: 100%;
+                float: left;
+                border-right: solid 2px #D8D8D8;
+                border-left: solid 2px #D8D8D8;
+            }
+        {% endif %}
+
     </style>
 {% endif %}
 <style id="quene-style">

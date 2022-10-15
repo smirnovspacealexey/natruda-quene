@@ -3,6 +3,12 @@ from django.urls import path
 from . import views
 # test
 urlpatterns = [
+
+    path('buyer_queue/new', views.buyer_queue_new, name='buyer_queue_new'),
+    path('ajax/buyer_queue/new', views.buyer_queue_ajax_new, name='buyer_queue_ajax_new'),  # del me after, Im copy
+
+
+
     url(r'^$', views.welcomer, name='welcomer'),
     url(r'^reload_menu', views.get_1c_menu, name='reload_menu'),
     url(r'^order_status', views.recive_1c_order_status, name='order_status'),
@@ -87,10 +93,6 @@ urlpatterns = [
     path('buyer_queue/<str:px>/black/', views.buyer_queue_black_px, name='buyer_queue_black_px'),
     path('buyer_queue/<str:px>/vertical/', views.buyer_queue_vertical_px, name='buyer_queue_vertical_px'),
     path('buyer_queue/<str:px>/', views.buyer_queue_px, name='buyer_queue_px'),
-
-
-    path('buyer_queue/new', views.buyer_queue_new, name='buyer_queue_new'),
-    path('ajax/buyer_queue/new', views.buyer_queue_ajax_new, name='buyer_queue_ajax_new'),  # del me after, Im copy
 
 
     url(r'^statistics', views.statistic_page, name="statistics"),
