@@ -1162,7 +1162,7 @@ def evaluate(request):
         return JsonResponse(data)
 
 
-def buyer_queue(request, vertical=False, black=False, px=None):
+def buyer_queue(request, vertical=False, black=False, px=None, new=False):
     print(black)
     print(vertical)
     print(px)
@@ -1223,6 +1223,7 @@ def buyer_queue(request, vertical=False, black=False, px=None):
     print(black)
     context = {
         'px': px,
+        'new': new,
         'vertical': vertical,
         'black': black,
         'open_orders': [{'servery': order.servery, 'daily_number': order.daily_number} for order in open_orders],
@@ -1282,9 +1283,11 @@ def buyer_queue_black_vertical_px(request, px):
 
 
 def buyer_queue_black_px(request, px):
-    print('px')
-    print(px)
     return buyer_queue(request, black=True, px=px)
+
+
+def buyer_queue_new(request):
+    return buyer_queue(request, black=True, new=True)
 
 
 def buyer_queue_ajax(request, vertical=False):

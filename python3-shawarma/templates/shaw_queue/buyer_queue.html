@@ -54,15 +54,23 @@
 
 
 {% if not vertical %}
-    {% if not is_voicing %}
-        <div class="carousel-container">
-            <div id="carousels">
-                {% for image in carousel_images %}
-                    <div class="carousel"><img class="carousel-image" src="{{ image }}"></div>
-                {% endfor %}
+
+    {% if new %}
+        <iframe width="1280" height="720" src="https://www.youtube.com/embed/D4rL1lkeqOo?autoplay=1" title="ULD GYMKHANA 2022 PART II" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    {% else %}
+
+        {% if not is_voicing %}
+            <div class="carousel-container">
+                <div id="carousels">
+                    {% for image in carousel_images %}
+                        <div class="carousel"><img class="carousel-image" src="{{ image }}"></div>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
+        {% endif %}
     {% endif %}
+
+
     <audio controls id="speaker-0">
         <source src="{% static 'audio/0.opus' %}" type="audio/ogg">
     </audio>
