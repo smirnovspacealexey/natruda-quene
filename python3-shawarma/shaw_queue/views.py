@@ -1287,7 +1287,8 @@ def buyer_queue_black_px(request, px):
 
 
 def buyer_queue_new(request):
-    return buyer_queue(request, black=True, new=True)
+    px = 50
+    return buyer_queue(request, black=True, new=True, px=px)
 
 
 def buyer_queue_ajax(request, vertical=False):
