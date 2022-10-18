@@ -265,6 +265,10 @@ td.item {
     text-align: left;
 }
 
+.fromSite {
+    background-color: #69c1cd;
+}
+
 .inProduction {
     background-color: orange;
 }
@@ -280,6 +284,23 @@ td.item {
 .preorder_ready {
     background: rgb(255, 113, 41);
     background: linear-gradient(90deg, rgba(125, 205, 105, 1) 0%, rgba(185, 163, 76, 1) 75%, rgba(255, 113, 41, 1) 100%);
+}
+
+
+.fromSite_inProduction {
+    background: linear-gradient(90deg, orange 0%, rgb(105, 193, 205) 100%);
+}
+
+.fromSite_inGrill {
+    background: linear-gradient(90deg, #a42a2a 0%, rgb(105, 193, 205) 100%);
+}
+
+.fromSite_ready {
+    background: linear-gradient(90deg, #7ccc69 0%, rgb(105, 193, 205) 100%);
+}
+
+.fromSite_preorder_ready {
+    background: linear-gradient(90deg, rgba(255, 113, 41, 1) 0%, rgba(125, 205, 105, 1) 50%, rgba(185, 163, 76, 1) 75%, rgb(105, 192, 204) 100%);
 }
 
 .fixed {
@@ -417,7 +438,7 @@ div.order-block-container {
 div.order-block {
     width: 95%;
     min-width: 160px;
-    padding: 5px;
+    padding: 4px;
     border: solid 1px #D8D8D8;
     background: #F6F6F6;
     line-height: 20px;
@@ -491,6 +512,7 @@ div.order-item-note {
 }
 
 div.order-total {
+    position: relative;
     border-top: solid 1px #6e6e6e;
 }
 
