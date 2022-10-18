@@ -2850,11 +2850,11 @@ def delivery_interface(request):
     processed_d_orders = [
         {
             'order': delivery_order,
-            'show_date': delivery_order.delivered_timepoint.date() == delivery_order.obtain_timepoint.date(),
-            'enlight_warning': True if delivery_order.delivered_timepoint - (
+            'show_date': delivery_order.delivered_timepoint is None or delivery_order.delivered_timepoint.date() == delivery_order.obtain_timepoint.date(),
+            'enlight_warning': delivery_order.delivered_timepoint is None or True if delivery_order.delivered_timepoint - (
                     delivery_order.delivery_duration + delivery_order.preparation_duration) - datetime.timedelta(
                 minutes=5) < timezone.now() and delivery_order.prep_start_timepoint is None else False,
-            'enlight_alert': True if delivery_order.delivered_timepoint - (
+            'enlight_alert': delivery_order.delivered_timepoint is None or True if delivery_order.delivered_timepoint - (
                     delivery_order.delivery_duration + delivery_order.preparation_duration) < timezone.now() and delivery_order.prep_start_timepoint is None else False,
             'available_cooks': Staff.objects.filter(available=True, staff_category__title__iexact='Cook',
                                                     service_point=delivery_order.order.servery.service_point),
