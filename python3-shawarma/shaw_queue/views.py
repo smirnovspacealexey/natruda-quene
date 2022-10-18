@@ -44,6 +44,8 @@ import re
 import subprocess
 
 logger = logging.getLogger(__name__)
+logger_debug = logging.getLogger('debug_logger')   # del me
+
 flag_marker = False
 waiting_numbers = {}
 
@@ -1519,9 +1521,14 @@ def current_queue(request):
         today_delivery_orders = Order.objects.filter(is_delivery=True, close_time__isnull=True, is_canceled=False,
                                                      deliveryorder__moderation_needed=False,
                                                      is_ready=False, servery__service_point=result['service_point'],
-                                                     deliveryorder__delivered_timepoint__contains=timezone.now().date()).order_by(
+                                                     # deliveryorder__delivered_timepoint__contains=timezone.now().date()
+                                                     ).order_by(
             'open_time')
         current_day_orders = regular_orders | today_delivery_orders
+
+        logger_debug.info(f'current_queue regular_orders: {regular_orders}\n')
+        logger_debug.info(f'current_queue today_delivery_orders: {today_delivery_orders}\n')
+
         serveries = Servery.objects.filter(service_point=result['service_point'])
         serveries_dict = {}
         for servery in serveries:
@@ -1605,7 +1612,7 @@ def current_queue(request):
 
             open_orders = filter_orders(current_day_orders, shawarma_filter, shashlyk_filter, paid_filter,
                                         not_paid_filter, serveries_dict)
-
+            logger_debug.info(f'open_orders: {open_orders}')
         except:
             data = {
                 'success': False,
@@ -1634,6 +1641,9 @@ def current_queue(request):
 
     # print open_orders
     # print ready_orders
+
+    logger_debug.info(f'open_orders END: {open_orders}')
+    logger_debug.info(f'ready_orders END: {ready_orders}')
 
     template = loader.get_template('shaw_queue/current_queue_grid.html')
     context = {
