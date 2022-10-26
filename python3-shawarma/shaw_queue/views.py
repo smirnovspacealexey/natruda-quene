@@ -2828,7 +2828,7 @@ def long_poll_handler(request):
 
 
 @login_required()
-def (request):
+def delivery_interface (request):
     utc = pytz.UTC
     template = loader.get_template('shaw_queue/delivery_main.html')
     print("{} {}".format(timezone.now(), datetime.datetime.now()))
