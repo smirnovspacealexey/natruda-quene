@@ -6576,7 +6576,7 @@ def register_customer_order(request):
         is_delivery = request.GET.get('is_delivery', False)
         is_paid = request.GET.get('is_paid', False)
 
-        is_delivery = json.loads(is_delivery) if is_delivery is not False else False
+        is_delivery = True if is_delivery == 'True' else False
         if time:
             order_datetime = datetime.datetime.strptime(time, '%H:%M:%S').time()
             timezone_date = timezone.datetime.today().date()
