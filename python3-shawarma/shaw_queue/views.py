@@ -6568,7 +6568,7 @@ def register_customer_order(request):
         comment = request.GET.get('comment', None)
         order_content_str = request.GET.get('order_content', None)
         payment = request.GET.get('payment', None)
-        service_point_id = request.GET.get('delivery_place', None)
+        service_point_subnetwork = request.GET.get('point', None)
         address = request.GET.get('address', None)
         cash_amount = request.GET.get('cash_amount', None)
         deliver_to_time = request.GET.get('deliver_to_time', None)
@@ -6591,8 +6591,8 @@ def register_customer_order(request):
             try:
                 if not is_delivery:
                     logger_debug.info(f'2')
-                    service_point_id = 2  # del
-                    service_point = ServicePoint.objects.get(id=service_point_id)
+                    service_point = ServicePoint.objects.get(subnetwork=service_point_subnetwork)
+                    logger_debug.info(f'service_point: {service_point}')
                 else:
                     logger_debug.info(f'3')
                     service_point = ServicePoint.objects.get(default_remote_order_acceptor=True)
@@ -6610,7 +6610,6 @@ def register_customer_order(request):
                 }
                 client.captureException()
                 return JsonResponse(data)
-
             try:
                 logger_debug.info(f'7')
                 servery = Servery.objects.get(service_point=service_point, default_remote_order_acceptor=True)
