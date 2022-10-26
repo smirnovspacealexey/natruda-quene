@@ -2847,7 +2847,7 @@ def delivery_interface(request):
     logger_debug.info(f'delivery_interface\n{delivery_orders}\n{deliveries}\n{timezone.datetime.today().date()}\n\n')  # del me
     logger_debug.info(f'delivery_orders2\n{delivery_orders2}\n\n')  # del me
     last_order = delivery_orders2.last()
-    logger_debug.info(f'delivery_orders2\n{last_order.obtain_timepoint}\n{last_order.obtain_timepoint.date()==timezone.datetime.today().date()}\n\n')  # del me
+    logger_debug.info(f'{last_order.pk}\n{last_order.obtain_timepoint}\n{last_order.obtain_timepoint.date()==timezone.datetime.today().date()}\n\n')  # del me
 
 
 
