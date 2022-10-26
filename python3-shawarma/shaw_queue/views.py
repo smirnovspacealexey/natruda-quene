@@ -3656,7 +3656,7 @@ def make_order(request):
 
 
 def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, servery,
-                    service_point, discount=0, is_preorder=False, from_site=False, with1c=True):
+                    service_point, discount=0, is_preorder=False, from_site=False, with1c=True, pickup=False):
     file = open('log/cook_choose.log', 'a')
     logger_debug = logging.getLogger('debug_logger')  # del me
     logger_debug.info(f'-----\n{content}\n\n{servery}\n\n{service_point}\n\n')  # del me
@@ -3782,6 +3782,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
                     return data
     content_to_send = []
     order.servery = servery
+    order.pickup = pickup
     order.is_delivery = True if cook_choose == 'delivery' else False
     order.save()
     total = 0
@@ -6595,7 +6596,10 @@ def register_customer_order(request):
                     logger_debug.info(f'service_point: {service_point}')
                 else:
                     logger_debug.info(f'3')
-                    service_point = ServicePoint.objects.get(default_remote_order_acceptor=True)
+                    # service_point = ServicePoint.objects.get(default_remote_order_acceptor=True)
+                    service_point = ServicePoint.objects.get(subnetwork=service_point_subnetwork)
+
+
             except MultipleObjectsReturned:
                 logger_debug.info(f'4')
                 service_point = ServicePoint.objects.filter(default_remote_order_acceptor=True).first()
@@ -6628,7 +6632,7 @@ def register_customer_order(request):
                 client.captureException()
                 return JsonResponse(data)
 
-            data = make_order_func(customer_order_content, 'delivery', is_paid, None, False, servery, service_point, from_site=True, with1c=False)
+            data = make_order_func(customer_order_content, 'delivery', is_paid, None, False, servery, service_point, from_site=True, with1c=False, pickup=True)
 
             if not data['success']:
                 logger_debug.info(f'11 {data}')
