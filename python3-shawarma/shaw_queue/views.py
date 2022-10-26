@@ -2828,7 +2828,7 @@ def long_poll_handler(request):
 
 
 @login_required()
-def delivery_interface(request):
+def (request):
     utc = pytz.UTC
     template = loader.get_template('shaw_queue/delivery_main.html')
     print("{} {}".format(timezone.now(), datetime.datetime.now()))
@@ -2839,6 +2839,9 @@ def delivery_interface(request):
     deliveries = Delivery.objects.filter(creation_timepoint__contains=timezone.datetime.today().date(),
                                          departure_timepoint__isnull=True, is_canceled=False).order_by(
         'departure_timepoint')
+
+    logger_debug = logging.getLogger('debug_logger')  # del me
+    logger_debug.info(f'delivery_interface\n{delivery_orders}\n{deliveries}\n\n')  # del me
 
     # deliveries = Delivery.objects.filter(departure_timepoint__isnull=True).order_by(
     #     'departure_timepoint')
