@@ -2834,18 +2834,21 @@ def delivery_interface(request):
     print("{} {}".format(timezone.now(), datetime.datetime.now()))
     staff = Staff.objects.get(user=request.user)
     print("staff_id = {}".format(staff.id))
-    delivery_orders = DeliveryOrder.objects.filter(obtain_timepoint__contains=timezone.datetime.today().date(),
+    delivery_orders = DeliveryOrder.objects.filter(obtain_timepoint__gte=timezone.datetime.today().date(),
                                                    order__close_time__isnull=True).order_by('delivered_timepoint')
     deliveries = Delivery.objects.filter(creation_timepoint__contains=timezone.datetime.today().date(),
                                          departure_timepoint__isnull=True, is_canceled=False).order_by(
         'departure_timepoint')
 
 
+
+    timezone_date_now = timezone.now().date()
+    start_date_conv = timezone.datetime.combine(date=timezone_date_now, time=datetime.time(hour=0, minute=1))
     delivery_orders2 = DeliveryOrder.objects.filter(order__close_time__isnull=True).order_by('delivered_timepoint')
 
     logger_debug = logging.getLogger('debug_logger')  # del me
     logger_debug.info(f'delivery_interface\n{delivery_orders}\n{deliveries}\n{timezone.datetime.today().date()}\n\n')  # del me
-    logger_debug.info(f'delivery_orders2\n{delivery_orders2}\n\n')  # del me
+    logger_debug.info(f'delivery_orders2\n{delivery_orders2}\n{start_date_conv}\n\n')  # del me
     last_order = delivery_orders2.filter(pk=1161).last()
     logger_debug.info(f'{last_order.pk}\n{last_order.obtain_timepoint}\n{last_order.obtain_timepoint.date()==timezone.datetime.today().date()}\n\n')  # del me
 
