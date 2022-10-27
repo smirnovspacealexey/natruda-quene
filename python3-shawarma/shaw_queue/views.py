@@ -2840,20 +2840,6 @@ def delivery_interface(request):
                                          departure_timepoint__isnull=True, is_canceled=False).order_by(
         'departure_timepoint')
 
-
-
-    timezone_date_now = timezone.now().date()
-    start_date_conv = timezone.datetime.combine(date=timezone_date_now, time=datetime.time(hour=0, minute=1))
-    delivery_orders2 = DeliveryOrder.objects.filter(order__close_time__isnull=True).order_by('delivered_timepoint')
-
-    logger_debug = logging.getLogger('debug_logger')  # del me
-    logger_debug.info(f'delivery_interface\n{delivery_orders}\n{deliveries}\n{timezone.datetime.today().date()}\n\n')  # del me
-    logger_debug.info(f'delivery_orders2\n{delivery_orders2}\n{start_date_conv}\n\n')  # del me
-    last_order = delivery_orders2.filter(pk=1161).last()
-    logger_debug.info(f'{last_order.pk}\n{last_order.obtain_timepoint}\n{last_order.obtain_timepoint.date()==timezone.datetime.today().date()}\n\n')  # del me
-
-
-
     # deliveries = Delivery.objects.filter(departure_timepoint__isnull=True).order_by(
     #     'departure_timepoint')
 
@@ -6646,7 +6632,7 @@ def register_customer_order(request):
                 client.captureException()
                 return JsonResponse(data)
 
-            data = make_order_func(customer_order_content, 'delivery', is_paid, None, False, servery, service_point, from_site=True, with1c=False, pickup=True)
+            data = make_order_func(customer_order_content, 'delivery', is_paid, None, False, servery, service_point, from_site=True, with1c=False, pickup=is_delivery)
 
             if not data['success']:
                 logger_debug.info(f'11 {data}')
