@@ -6632,7 +6632,7 @@ def register_customer_order(request):
                 client.captureException()
                 return JsonResponse(data)
 
-            data = make_order_func(customer_order_content, 'delivery', is_paid, None, False, servery, service_point, from_site=True, with1c=False, pickup=is_delivery)
+            data = make_order_func(customer_order_content, 'delivery', is_paid, None, False, servery, service_point, from_site=True, with1c=False, pickup=not is_delivery)
 
             if not data['success']:
                 logger_debug.info(f'11 {data}')
