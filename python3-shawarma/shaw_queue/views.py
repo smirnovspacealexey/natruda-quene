@@ -6599,7 +6599,6 @@ def register_customer_order(request):
                     # service_point = ServicePoint.objects.get(default_remote_order_acceptor=True)
                     service_point = ServicePoint.objects.get(subnetwork=service_point_subnetwork)
 
-
             except MultipleObjectsReturned:
                 logger_debug.info(f'4')
                 service_point = ServicePoint.objects.filter(default_remote_order_acceptor=True).first()
