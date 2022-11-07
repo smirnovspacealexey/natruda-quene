@@ -1491,6 +1491,9 @@ def order_display(request):
 
 @login_required()
 def current_queue(request):
+    logger_debug.info(f'timezone.now().date() {timezone.now().date()}')
+    ord = Order.objects.last()
+    logger_debug.info(f'ord {ord.open_time}')
     device_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
     if DEBUG_SERVERY:
         device_ip = '127.0.0.1'
@@ -1513,7 +1516,7 @@ def current_queue(request):
 
     result = define_service_point(device_ip)
     if result['success']:
-        regular_orders = Order.objects.filter(
+        regular_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
                                               close_time__isnull=True,
                                               is_canceled=False, is_delivery=False,
                                               is_ready=False, servery__service_point=result['service_point']).order_by(
