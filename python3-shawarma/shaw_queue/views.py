@@ -1513,7 +1513,7 @@ def current_queue(request):
 
     result = define_service_point(device_ip)
     if result['success']:
-        regular_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
+        regular_orders = Order.objects.filter(
                                               close_time__isnull=True,
                                               is_canceled=False, is_delivery=False,
                                               is_ready=False, servery__service_point=result['service_point']).order_by(
