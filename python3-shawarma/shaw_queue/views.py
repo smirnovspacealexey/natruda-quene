@@ -2873,6 +2873,8 @@ def delivery_interface(request):
                                                             service_point=delivery_order.order.servery.service_point)
         } for delivery_order in delivery_orders
     ]
+
+    logger_debug.info(f'delivery_interface {processed_d_orders}')
     context = {
         'staff_category': StaffCategory.objects.get(staff__user=request.user),
         'delivery_order_form': DeliveryOrderForm,
@@ -2964,6 +2966,10 @@ def delivery_workspace_update(request):
     delivery_context = {
         'delivery_info': delivery_info
     }
+
+    logger_debug.info(f'delivery_workspace_update {processed_d_orders}')
+
+
     delivery_template = loader.get_template('shaw_queue/delivery_left_col_content.html')
     data = {
         'success': True,
