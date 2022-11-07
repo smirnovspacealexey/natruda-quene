@@ -2873,8 +2873,6 @@ def delivery_interface(request):
                                                             service_point=delivery_order.order.servery.service_point)
         } for delivery_order in delivery_orders
     ]
-
-    logger_debug.info(f'delivery_interface {processed_d_orders}')
     context = {
         'staff_category': StaffCategory.objects.get(staff__user=request.user),
         'delivery_order_form': DeliveryOrderForm,
@@ -2910,38 +2908,20 @@ def delivery_workspace_update(request):
     #         delivery_orders = DeliveryOrder.objects.filter(obtain_timepoint__contains=datetime_datetime_now)
     delivery_orders = delivery_orders.filter(order__close_time__isnull=True)
     delivery_orders = delivery_orders.filter(order__is_canceled=False).order_by('obtain_timepoint')
-    # processed_d_orders = [
-    #     {
-    #         'order': delivery_order,
-    #         'enlight_warning': True if delivery_order.delivered_timepoint - (
-    #                 delivery_order.delivery_duration + delivery_order.preparation_duration) - datetime.timedelta(
-    #             minutes=5) < timezone.now() and delivery_order.prep_start_timepoint is None else False,
-    #         'enlight_alert': True if delivery_order.delivered_timepoint - (
-    #                 delivery_order.delivery_duration + delivery_order.preparation_duration) < timezone.now() and
-    #                                  delivery_order.prep_start_timepoint is None or
-    #                                  delivery_order.moderation_needed else False,
-    #         'available_cooks': Staff.objects.filter(available=True, staff_category__title__iexact='Cook',
-    #                                                 service_point=delivery_order.order.servery.service_point)
-    #     } for delivery_order in delivery_orders
-    # ]
-
     processed_d_orders = [
         {
             'order': delivery_order,
-            'show_date': delivery_order.delivered_timepoint is None or delivery_order.delivered_timepoint.date() == delivery_order.obtain_timepoint.date(),
-            'enlight_warning': delivery_order.delivered_timepoint is None or delivery_order.delivered_timepoint - (
+            'enlight_warning': True if delivery_order.delivered_timepoint - (
                     delivery_order.delivery_duration + delivery_order.preparation_duration) - datetime.timedelta(
-                minutes=5) < timezone.now() and delivery_order.prep_start_timepoint is None,
-            'enlight_alert': delivery_order.delivered_timepoint is None or delivery_order.delivered_timepoint - (
-                    delivery_order.delivery_duration + delivery_order.preparation_duration) < timezone.now() and delivery_order.prep_start_timepoint is None,
+                minutes=5) < timezone.now() and delivery_order.prep_start_timepoint is None else False,
+            'enlight_alert': True if delivery_order.delivered_timepoint - (
+                    delivery_order.delivery_duration + delivery_order.preparation_duration) < timezone.now() and
+                                     delivery_order.prep_start_timepoint is None or
+                                     delivery_order.moderation_needed else False,
             'available_cooks': Staff.objects.filter(available=True, staff_category__title__iexact='Cook',
-                                                    service_point=delivery_order.order.servery.service_point),
-            'available_shashlychniks': Staff.objects.filter(available=True,
-                                                            staff_category__title__iexact='Shashlychnik',
-                                                            service_point=delivery_order.order.servery.service_point)
+                                                    service_point=delivery_order.order.servery.service_point)
         } for delivery_order in delivery_orders
     ]
-
 
     for delivery_order in delivery_orders:
         diction = {
@@ -2984,10 +2964,6 @@ def delivery_workspace_update(request):
     delivery_context = {
         'delivery_info': delivery_info
     }
-
-    logger_debug.info(f'delivery_workspace_update {processed_d_orders}')
-
-
     delivery_template = loader.get_template('shaw_queue/delivery_left_col_content.html')
     data = {
         'success': True,
