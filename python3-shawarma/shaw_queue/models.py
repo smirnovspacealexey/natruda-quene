@@ -261,7 +261,7 @@ class Order(models.Model):
     def display_number(self):
         delivery_order = self.deliveryorder_set.last()
         if self.from_site:
-            return str(delivery_order.daily_number) if delivery_order else 'C' + str(self.daily_number % 100)
+            return str(delivery_order.daily_number) + 'C' if delivery_order else 'C' + str(self.daily_number % 100)
         return str(self.daily_number % 100)
 
     class Meta:
