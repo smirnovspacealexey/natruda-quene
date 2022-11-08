@@ -3692,7 +3692,6 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
             order.is_paid = is_paid
             order.paid_with_cash = paid_with_cash
             order.discount = discount
-            order.from_site = from_site
         else:
             order = Order(open_time=timezone.now(), daily_number=order_next_number, is_paid=is_paid,
                           paid_with_cash=paid_with_cash, status_1c=0, discount=discount,
