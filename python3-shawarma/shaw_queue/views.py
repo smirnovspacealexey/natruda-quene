@@ -1800,7 +1800,7 @@ def current_queue_ajax(request):
         today_delivery_orders = Order.objects.filter(is_delivery=True, close_time__isnull=True, is_canceled=False,
                                                      deliveryorder__moderation_needed=False,
                                                      is_ready=False,
-                                                     # servery__service_point=result['service_point'],
+                                                     # servery__service_point=result['service_point'],  # unncomment
                                                      # deliveryorder__delivered_timepoint__contains=timezone.now().date()
                                                      ).order_by(
             'open_time')
@@ -3692,7 +3692,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
         else:
             order = Order(open_time=timezone.now(), daily_number=order_next_number, is_paid=is_paid,
                           paid_with_cash=paid_with_cash, status_1c=0, discount=discount,
-                          is_preorder=is_preorder, from_site=from_site)
+                          is_preorder=is_preorder, from_site=from_site, pickup=pickup)
     except:
         data = {
             'success': False,
@@ -3779,7 +3779,6 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
                     return data
     content_to_send = []
     order.servery = servery
-    order.pickup = pickup
     order.is_delivery = True if cook_choose == 'delivery' else False
     order.save()
     total = 0
