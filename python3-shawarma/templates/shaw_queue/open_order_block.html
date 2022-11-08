@@ -25,13 +25,13 @@
                                         {% endif %}">
                 <a href="{% url 'order_content' open_order.order.id %}">№ {{ open_order.display_number }}</a>
             </div>
-            <div class="order-cook-part {% if open_order.order.from_site %} fromSite{% endif %}
+            <div class="order-cook-part 0 {% if open_order.order.from_site %} fromSite{% endif %}
                                         {% if open_order.order.is_preorder %}
                                             {% if open_order.order.content_completed and open_order.order.shashlyk_completed %}
                                                 {% if open_order.order.from_site %}fromSite_{% endif %}preorder_ready
                                             {% else %}
                                                 {% if open_order.order.from_site %}fromSite_{% endif %}inProduction
-                                            {% endif %}n
+                                            {% endif %}
                                         {% else %}
                                             {% if open_order.order.content_completed and open_order.order.shashlyk_completed %}
                                                     {% if open_order.order.from_site %}fromSite_{% endif %}ready
