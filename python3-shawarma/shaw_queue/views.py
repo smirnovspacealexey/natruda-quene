@@ -1648,8 +1648,7 @@ def current_queue(request):
     template = loader.get_template('shaw_queue/current_queue_grid.html')
     context = {
         'open_orders': [{'order': open_order,
-                         'display_number': str(open_order.daily_number % 100) + "Д" if DeliveryOrder.objects.filter(
-                             order=open_order) else open_order.daily_number % 100,
+                         'display_number': open_order.display_number,
                          'printed': open_order.printed,
                          'cook_part_ready_count': OrderContent.objects.filter(order=open_order,
                                                                               is_canceled=False).filter(
@@ -1670,7 +1669,7 @@ def current_queue(request):
                              count_titles=Count('menu_item__title'))
                          } for open_order in open_orders],
         'ready_orders': [{'order': open_order,
-                          'display_number': open_order.daily_number % 100,
+                          'display_number': open_order.display_number,
                           'cook_part_ready_count': OrderContent.objects.filter(order=open_order,
                                                                                is_canceled=False).filter(
                               menu_item__can_be_prepared_by__title__iexact='cook').filter(
@@ -1735,8 +1734,7 @@ def order_history(request):
     try:
         context = {
             'open_orders': [{'order': open_order,
-                             'display_number': str(open_order.daily_number % 100) + "Д" if DeliveryOrder.objects.filter(
-                                 order=open_order) else open_order.daily_number % 100,
+                             'display_number': open_order.display_number,
                              'printed': open_order.printed,
                              'cook_part_ready_count': OrderContent.objects.filter(order=open_order).filter(
                                  menu_item__can_be_prepared_by__title__iexact='cook').filter(
@@ -1802,7 +1800,7 @@ def current_queue_ajax(request):
         today_delivery_orders = Order.objects.filter(is_delivery=True, close_time__isnull=True, is_canceled=False,
                                                      deliveryorder__moderation_needed=False,
                                                      is_ready=False,
-                                                     # servery__service_point=result['service_point'],  # unncomment !!!
+                                                     servery__service_point=result['service_point'],
                                                      # deliveryorder__delivered_timepoint__contains=timezone.now().date()
                                                      ).order_by(
             'open_time')
@@ -1934,8 +1932,7 @@ def current_queue_ajax(request):
     try:
         context = {
             'open_orders': [{'order': open_order,
-                             'display_number': str(open_order.daily_number % 100) + "Д" if DeliveryOrder.objects.filter(
-                                 order=open_order) else open_order.daily_number % 100,
+                             'display_number': open_order.display_number,
                              'printed': open_order.printed,
                              'cook_part_ready_count': OrderContent.objects.filter(order=open_order,
                                                                                   is_canceled=False).filter(
@@ -1957,7 +1954,7 @@ def current_queue_ajax(request):
                                  count_titles=Count('menu_item__title'))
                              } for open_order in open_orders],
             'ready_orders': [{'order': open_order,
-                              'display_number': open_order.daily_number % 100,
+                              'display_number': open_order.display_number,
                               'cook_part_ready_count': OrderContent.objects.filter(order=open_order,
                                                                                    is_canceled=False).filter(
                                   menu_item__can_be_prepared_by__title__iexact='cook').filter(

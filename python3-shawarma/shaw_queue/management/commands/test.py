@@ -18,8 +18,9 @@ class Command(BaseCommand):
            start_shawarma_cooking=True,
            total=100,
            is_paid=True,
+           pickup=True,
            # is_delivery=True,
-           # from_site=True,
+           from_site=True,
            # is_grilling=True,
            servery=Servery.objects.first(),
 
