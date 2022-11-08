@@ -1800,7 +1800,7 @@ def current_queue_ajax(request):
         today_delivery_orders = Order.objects.filter(is_delivery=True, close_time__isnull=True, is_canceled=False,
                                                      deliveryorder__moderation_needed=False,
                                                      is_ready=False,
-                                                     servery__service_point=result['service_point'],
+                                                     # servery__service_point=result['service_point'],
                                                      # deliveryorder__delivered_timepoint__contains=timezone.now().date()
                                                      ).order_by(
             'open_time')
