@@ -263,7 +263,7 @@ class Order(models.Model):
         if self.from_site:
             import logging
             logger_debug = logging.getLogger('debug_logger')
-            a = str(delivery_order.daily_number) + 'C' if delivery_order else 'C' + str(self.daily_number % 100)
+            a = (str(delivery_order.daily_number) + 'C' if delivery_order else 'C') + str(self.daily_number % 100)
             logger_debug.info(f'display_number {self.daily_number}   {self.daily_number % 100}'
                               f'   {a}')
             return a
