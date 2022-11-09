@@ -261,12 +261,7 @@ class Order(models.Model):
     def display_number(self):
         delivery_order = self.deliveryorder_set.last()
         if self.from_site:
-            import logging
-            logger_debug = logging.getLogger('debug_logger')
-            a = (str(delivery_order.daily_number) + 'C' if delivery_order else 'C') + str(self.daily_number % 100)
-            logger_debug.info(f'display_number {self.daily_number}   {self.daily_number % 100}'
-                              f'   {a}')
-            return a
+            return (str(delivery_order.daily_number) + 'C' if delivery_order else 'C') + str(self.daily_number % 100)
         return str(self.daily_number % 100)
 
     class Meta:
@@ -407,12 +402,14 @@ def limit_order_choises_by_date():
 class DeliveryOrder(models.Model):
     CASH_PAYMENT = "CSH"
     CASHLESS_PAYMENT = "CLS"
+    ONLINE_PAYMENT = "ONL"
     MIXED_PAYMENT = "MXD"
     PAYMENT_CHOISES = [
         (CASH_PAYMENT, 'Наличные'),
         (CASHLESS_PAYMENT, 'Безнал'),
+        (ONLINE_PAYMENT, 'Сайт'),
         (MIXED_PAYMENT, 'Смешанная')]
-    prefered_payment = models.CharField(max_length=3, choices=PAYMENT_CHOISES, default=CASH_PAYMENT,
+    prefered_payment = models.CharField(max_length=3, choices=PAYMENT_CHOISES, default=ONLINE_PAYMENT,
                                         verbose_name="Вид оплаты")
     delivery = models.ForeignKey(Delivery, null=True, blank=True, verbose_name="доставка", on_delete=models.SET_NULL)
     daily_number = models.IntegerField(verbose_name="номер за день")  # , unique_for_date='obtain_timepoint'

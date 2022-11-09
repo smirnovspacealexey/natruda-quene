@@ -6,7 +6,7 @@
     shadowed
     {% endif %}
     {% if not open_order.order.is_paid %}unpaid{% endif %}">
-        <div class="order-block-header">
+        <div class="order-block-header"{% if open_order.order.from_site %} title="С сайта" {% endif %}>
             <div class="order-number {% if open_order.order.is_preorder %}
                                             {% if open_order.order.content_completed and open_order.order.shashlyk_completed %}
                                                 ready
