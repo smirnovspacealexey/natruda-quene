@@ -3629,7 +3629,7 @@ def make_order(request):
         return JsonResponse(data)
 
     try:
-        servery = Servery.objects.get(ip_address=servery_ip)
+        servery = Servery.objects.filter(ip_address=servery_ip).last()
     except MultipleObjectsReturned:
         data = {
             'success': False,
