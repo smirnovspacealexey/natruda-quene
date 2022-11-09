@@ -108,7 +108,7 @@
             </button>
             <div class="shadowed">
                 <p>
-                    <input type="radio" id="not_paid"{% if not order.is_paid %} checked {% endif %}value="not_paid" name="payment_choose">
+                    <input type="radio" id="not_paid" checked value="not_paid" name="payment_choose">
                     <label for="not_paid">Не Оплачен</label>
                 </p>
                 {% if not delivery_mode %}
@@ -139,7 +139,7 @@
                     {% endfor %}
                 {% else %}
                     <p>
-                        <input type="radio" id="cook_delivery"{% if order.is_delivery and not order.pickup %} checked {% endif %}name="cook_choose" value="delivery">
+                        <input type="radio" id="cook_delivery" checked name="cook_choose" value="delivery">
                         <label for="cook_auto">Доставка</label>
                     </p>
                 {% endif %}
