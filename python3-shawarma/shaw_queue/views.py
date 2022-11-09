@@ -6661,7 +6661,7 @@ def register_customer_order(request):
                                            obtain_timepoint=timezone.now(),
                                            delivered_timepoint=timezone.now() if deliver_to_time == 'nearest_time' else corrected_order_datetime,
                                            order=Order.objects.get(pk=data['pk']), moderation_needed=True,
-                                           prefered_payment=payment)
+                                           prefered_payment=DeliveryOrder.ONLINE_PAYMENT)
             try:
                 logger_debug.info(f'15')
                 order_last_daily_number = DeliveryOrder.objects.filter(
