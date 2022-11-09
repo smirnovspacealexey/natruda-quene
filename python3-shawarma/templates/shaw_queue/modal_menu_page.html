@@ -108,8 +108,16 @@
             </button>
             <div class="shadowed">
                 <p>
-                    <input type="radio" id="not_paid" checked value="not_paid" name="payment_choose">
-                    <label for="not_paid">Не Оплачен!</label>
+                    <input type="radio" id="not_paid"{% if not order.is_paid %} checked{% endif %} value="not_paid" name="payment_choose">
+                    <label for="not_paid">Не Оплачен</label>
+                </p>
+                <p>
+                    <input type="radio" id="paid_with_cash"{% if order.paid_with_cash %} checked{% endif %} value="paid_with_cash" name="payment_choose">
+                    <label for="paid_with_cash">Наличные</label>
+                </p>
+                <p>
+                    <input type="radio" id="paid_without_cash"{% if order.is_paid and not order.paid_with_cash %} checked{% endif %} value="paid_without_cash" name="payment_choose">
+                    <label for="paid_without_cash">Безналичный</label>
                 </p>
                 {% if not delivery_mode %}
                     <p>
