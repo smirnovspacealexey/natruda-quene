@@ -6147,8 +6147,8 @@ def status_refresher(request):
     order_guid = request.POST.get('order_guid', None)
     import logging
     logger_debug = logging.getLogger('debug_logger')
-    logger_debug.info(f'order_guid {order_guid}')
-    if order_guid is not None:
+    logger_debug.info(f'order_guid {type(order_guid)}')
+    if order_guid:
         try:
             order = Order.objects.get(guid_1c=order_guid)
         except MultipleObjectsReturned:
