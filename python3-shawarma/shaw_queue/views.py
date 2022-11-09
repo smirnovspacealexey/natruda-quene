@@ -6145,9 +6145,12 @@ def log_deleted_order(order):
 
 def status_refresher(request):
     order_guid = request.POST.get('order_guid', None)
-    import logging
-    logger_debug = logging.getLogger('debug_logger')
-    logger_debug.info(f'order_guid {type(order_guid)}')
+    if order_guid == 'from_site':
+        data = {
+            'success': True,
+            'message': 'Заказ с сайта',
+        }
+        return JsonResponse(data)
     if order_guid:
         try:
             order = Order.objects.get(guid_1c=order_guid)
