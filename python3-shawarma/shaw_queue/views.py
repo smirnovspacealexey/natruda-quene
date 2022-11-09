@@ -6149,6 +6149,9 @@ def status_refresher(request):
         data = {
             'success': True,
             'message': 'Заказ с сайта',
+            'daily_number': '',
+            'status': 200,
+            'guid': ''
         }
         return JsonResponse(data)
     if order_guid:
