@@ -3888,7 +3888,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
         print(order)
         if FORCE_TO_LISTNER:
             data = send_order_to_listner(order)
-        elif with1c:
+        elif with1c and not order.from_site:
             data = send_order_to_1c(order, False)
             if not data["success"]:
                 if order_id:
