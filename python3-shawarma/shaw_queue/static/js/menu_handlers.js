@@ -108,7 +108,7 @@ function SendOrder() {
                     dataType: 'json',
                     success: function (data) {
                         if (data['success']) {
-                            if (payment_choose.val() != "not_paid") {
+                            if (payment_choose.val() != "not_paid" && payment_choose.val() != "paid_web") {
                                 if (payment_choose.val() == "paid_with_cash") {
                                     status.text('Заказ №' + data.display_number + ' добавлен! Введите полученную сумму:');
                                     //var cash = prompt('Заказ №' + data.daily_number + ' добавлен!, Введите полученную сумму:', "");
