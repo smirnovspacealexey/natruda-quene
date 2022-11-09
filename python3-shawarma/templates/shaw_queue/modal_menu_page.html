@@ -112,12 +112,8 @@
                     <label for="not_paid">Не Оплачен</label>
                 </p>
                 <p>
-                    <input type="radio" id="paid_with_cash"{% if order.paid_with_cash %} checked{% endif %} value="paid_with_cash" name="payment_choose">
-                    <label for="paid_with_cash">Наличные</label>
-                </p>
-                <p>
-                    <input type="radio" id="paid_without_cash"{% if order.is_paid and not order.paid_with_cash %} checked{% endif %} value="paid_without_cash" name="payment_choose">
-                    <label for="paid_without_cash">Безналичный</label>
+                    <input type="radio" id="paid_with_cash"{% if order.is_paid %} checked{% endif %} value="paid_web" name="payment_choose">
+                    <label for="paid_with_cash">Оплачен на сайте</label>
                 </p>
                 {% if not delivery_mode %}
                     <p>
