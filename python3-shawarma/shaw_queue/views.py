@@ -762,7 +762,7 @@ def cook_pause(request):
     except MultipleObjectsReturned:
         data = {
             'success': False,
-            'message': 'Множество экземпляров персонала возвращено!'
+            'message': 'Множество экземпляров персонала возвращено! (1)'
         }
         logger.error('{} Множество экземпляров персонала возвращено!'.format(user))
         client.captureException()
@@ -2602,7 +2602,7 @@ def order_content(request, order_id):
         except MultipleObjectsReturned:
             data = {
                 'success': False,
-                'message': 'Множество экземпляров персонала возвращено!'
+                'message': 'Множество экземпляров персонала возвращено! (2)'
             }
             logger.error('{} Множество экземпляров персонала возвращено!'.format(request.user))
             client.captureException()
@@ -2706,7 +2706,7 @@ def order_specifics(request):
         except MultipleObjectsReturned:
             data = {
                 'success': False,
-                'message': 'Множество экземпляров персонала возвращено!'
+                'message': 'Множество экземпляров персонала возвращено! (3)'
             }
             logger.error('{} Множество экземпляров персонала возвращено!'.format(request.user))
             client.captureException()
@@ -2752,7 +2752,7 @@ def update_commodity(request):
         except MultipleObjectsReturned:
             data = {
                 'success': False,
-                'message': 'Множество экземпляров персонала возвращено!'
+                'message': 'Множество экземпляров персонала возвращено! (4)'
             }
             logger.error('{} Множество экземпляров персонала возвращено!'.format(request.user))
             client.captureException()
@@ -3629,7 +3629,7 @@ def make_order(request):
         return JsonResponse(data)
 
     try:
-        servery = Servery.objects.filter(ip_address=servery_ip).last()
+        servery = Servery.objects.get(ip_address=servery_ip)
     except MultipleObjectsReturned:
         data = {
             'success': False,
