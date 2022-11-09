@@ -910,14 +910,15 @@ def menu(request):
     else:
         context['is_modal'] = True
         if order_id != -1:
+            order = Order.objects.get(id=order_id)
             context['delivery_mode'] = delivery_mode
             context['order_id'] = order_id
+            context['order'] = order
         data = {
             'success': True,
             'html': template.render(context, request)
         }
         if order_id != -1:
-            order = Order.objects.get(id=order_id)
             content_selection = OrderContent.objects.filter(order=order).values('menu_item__id', 'menu_item__title',
                                                                                 'menu_item__price', 'note').annotate(
                 quantity_sum=Sum('quantity'))
