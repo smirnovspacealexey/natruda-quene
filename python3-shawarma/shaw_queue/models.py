@@ -257,6 +257,11 @@ class Order(models.Model):
     def __unicode__(self):
         return "{} №{}".format(self.servery, self.daily_number)
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        if self.from_site:
+            self.guid_1c = 'from_site'
+        super().save()
+
     @property
     def display_number(self):
         delivery_order = self.deliveryorder_set.last()
