@@ -6751,14 +6751,14 @@ def excel(request):
                          'ServicePoint': get_titles_ids_links(ServicePoint),
                          }
 
-        link = f'excels/{time.strftime("%Y-%m-%d %H%M%S")}.xlsx'
+        link = f'excels/{time.strftime("%Y-%m-%d %H`%M`%S")}.xlsx'
         writer = pd.ExcelWriter(MEDIA_ROOT + '/' + link, engine='xlsxwriter')
 
         for sheet_name in salary_sheets.keys():
             salary_sheets[sheet_name].to_excel(writer, sheet_name=sheet_name, index=False)
             worksheet = writer.sheets[sheet_name]
             worksheet.set_column('A:A', 40)
-            worksheet.set_column('C:C', 65)
+            worksheet.set_column('C:C', 67)
             worksheet.set_column('D:D', 40)
         writer.save()
 
