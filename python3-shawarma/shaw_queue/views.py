@@ -6717,12 +6717,25 @@ def excel(request):
         titles = []
         ids = []
         links = []
+        id_1cs = []
+        subnetworks = []
         for obj in model.objects.all():
             titles.append(obj.title)
             ids.append(obj.id)
             links.append(HOST + obj.get_admin_url())
+            if hasattr(obj, 'guid_1c'):
+                id_1cs.append(obj.guid_1c)
+            elif hasattr(obj, 'subnetwork'):
+                subnetworks.append(obj.subnetwork)
 
-        return pd.DataFrame({'title': titles, 'id': ids, 'link': links})
+        if subnetworks:
+            additionally = 'subnetwork',  subnetworks
+        elif id_1cs:
+            additionally = '1С', id_1cs
+        else:
+            return pd.DataFrame({'title': titles, 'id': ids, 'link': links})
+
+        return pd.DataFrame({'title': titles, 'id': ids, 'link': links, additionally[0]: additionally[1]})
 
     try:
         salary_sheets = {
@@ -6744,8 +6757,9 @@ def excel(request):
         for sheet_name in salary_sheets.keys():
             salary_sheets[sheet_name].to_excel(writer, sheet_name=sheet_name, index=False)
             worksheet = writer.sheets[sheet_name]
-            worksheet.set_column('A:A', 20)
-            worksheet.set_column('C:C', 80)
+            worksheet.set_column('A:A', 40)
+            worksheet.set_column('C:C', 60)
+            worksheet.set_column('D:D', 20)
         writer.save()
 
         return HttpResponseRedirect(MEDIA_URL + link)
