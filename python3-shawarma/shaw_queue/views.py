@@ -27,7 +27,7 @@ from shawarma.settings import TIME_ZONE, LISTNER_URL, LISTNER_PORT, PRINTER_URL,
     GETLIST_URL, SERVER_1C_USER, SERVER_1C_PASS, ORDER_URL, FORCE_TO_LISTNER, DEBUG_SERVERY, RETURN_URL, \
     CAROUSEL_IMG_DIR, CAROUSEL_IMG_URL, SMTP_LOGIN, SMTP_PASSWORD, SMTP_FROM_ADDR, SMTP_TO_ADDR, TIME_ZONE, \
     DADATA_TOKEN, \
-    LOCAL_TEST
+    LOCAL_TEST, MEDIA_ROOT, MEDIA_URL, HOST
 from raven.contrib.django.raven_compat.models import client
 from random import sample
 from itertools import chain
@@ -41,6 +41,7 @@ import json
 import sys
 import os
 import re
+import pandas as pd
 import subprocess
 
 logger = logging.getLogger(__name__)
@@ -652,7 +653,7 @@ def ats_listner(request):
         call_data = None
         if event_code == 1:
             try:
-                customer = Customer.objects.get(phone_number="+{}".format(caller_id))
+                customer = Customer.objects.filter(phone_number="+{}".format(caller_id)).last()
                 print("Choosing customer {}".format("+{}".format(caller_id)))
             except Customer.DoesNotExist:
                 customer = Customer(phone_number="+{}".format(caller_id))
@@ -3919,7 +3920,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
     return data
 
 
-@csrf_exempt
+# @csrf_exempt
 def order_from_site(request):
     try:
         logger_debug = logging.getLogger('debug_logger')
@@ -6624,7 +6625,9 @@ def register_customer_order(request):
                 servery = Servery.objects.get(service_point=service_point, default_remote_order_acceptor=True)
             except MultipleObjectsReturned:
                 logger_debug.info(f'8')
-                servery = Servery.objects.get(service_point=service_point, default_remote_order_acceptor=True).first()
+                servery = Servery.objects.filter(service_point=service_point, default_remote_order_acceptor=True).first()
+                if not servery:
+                    servery = Servery.objects.all().first()
             except Servery.DoesNotExist:
                 logger_debug.info(f'9')
                 servery = Servery.objects.all().first()
@@ -6704,4 +6707,51 @@ def register_customer_order(request):
             return Http404()
     except:
         logger_debug.info(f'error: {traceback.format_exc()}')
+
+
+@csrf_exempt
+def excel(request):
+    logger_debug = logging.getLogger('debug_logger')
+
+    def get_titles_ids_links(model):
+        titles = []
+        ids = []
+        links = []
+        for obj in model.objects.all():
+            titles.append(obj.title)
+            ids.append(obj.id)
+            links.append(HOST + obj.get_admin_url())
+
+        return pd.DataFrame({'title': titles, 'id': ids, 'link': links})
+
+    try:
+        salary_sheets = {
+                         'Menu': get_titles_ids_links(Menu),
+                         'MenuCategory': get_titles_ids_links(MenuCategory),
+                         'MacroProduct': get_titles_ids_links(MacroProduct),
+                         'ContentOption': get_titles_ids_links(ContentOption),
+                         'MacroProductContent': get_titles_ids_links(MacroProductContent),
+                         'ProductVariant': get_titles_ids_links(ProductVariant),
+                         'ProductOption': get_titles_ids_links(ProductOption),
+
+                         'Servery': get_titles_ids_links(Servery),
+                         'ServicePoint': get_titles_ids_links(ServicePoint),
+                         }
+
+        link = f'excels/{time.strftime("%Y-%m-%d %H%M%S")}.xlsx'
+        writer = pd.ExcelWriter(MEDIA_ROOT + '/' + link, engine='xlsxwriter')
+
+        for sheet_name in salary_sheets.keys():
+            salary_sheets[sheet_name].to_excel(writer, sheet_name=sheet_name, index=False)
+            worksheet = writer.sheets[sheet_name]
+            worksheet.set_column('A:A', 20)
+            worksheet.set_column('C:C', 80)
+        writer.save()
+
+        return HttpResponseRedirect(MEDIA_URL + link)
+
+    except:
+        logger_debug.info(f'ERROR in excel \n{traceback.format_exc()}\n\n')
+        print(f'ERROR in excel \n{traceback.format_exc()}\n\n')
+        return JsonResponse({'message': str(traceback.format_exc())})
 

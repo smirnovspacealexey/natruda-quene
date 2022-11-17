@@ -128,4 +128,5 @@ urlpatterns = [
     url(r'^register_customer_order', views.register_customer_order, name='register_customer_order'),
 
     path('order-from-site/', views.order_from_site, name='order_from_site'),
+    path('excel/', views.excel, name='excel'),
 ]

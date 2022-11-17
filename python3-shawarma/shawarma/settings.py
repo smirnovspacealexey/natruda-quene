@@ -284,6 +284,8 @@ RAVEN_CONFIG = {
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
+HOST = 'http://shawarma.natruda'
+
 try:
     LOCAL_TEST
 except:

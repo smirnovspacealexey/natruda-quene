@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
 from django.db import models
+from django.contrib.contenttypes.models import ContentType
 import datetime
 
 
@@ -19,6 +20,10 @@ class MenuCategory(models.Model):
 
     def __str__(self):
         return u"{}".format(self.title)
+
+    def get_admin_url(self):
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        return reverse("admin:%s_%s_change" % (content_type.app_label, content_type.model), args=(self.id,))
 
         # def __unicode__(self):
         #     return "{}".format(self.title)
@@ -55,6 +60,10 @@ class ServicePoint(models.Model):
     default_remote_order_acceptor = models.BooleanField(verbose_name="Точка, принимающая интернет-заказы",
                                                         default=False,
                                                         help_text="Может быть выбрана ТОЛЬКО ОДНА точка.")
+
+    def get_admin_url(self):
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        return reverse("admin:%s_%s_change" % (content_type.app_label, content_type.model), args=(self.id,))
 
     def __str__(self):
         return u"{}".format(self.title)
@@ -113,6 +122,10 @@ class Menu(models.Model):
     customer_appropriate = models.BooleanField(verbose_name="Подходит для демонстрации покупателю", default=False)
     icon = models.ImageField(upload_to="img/icons", blank=True, null=True, verbose_name="Иконка")
 
+    def get_admin_url(self):
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        return reverse("admin:%s_%s_change" % (content_type.app_label, content_type.model), args=(self.id,))
+
     def __str__(self):
         return u"{}".format(self.title)
 
@@ -125,6 +138,10 @@ class MacroProduct(models.Model):
     customer_title = models.CharField(max_length=200, default="", verbose_name="Название для покупателя")
     icon = models.ImageField(upload_to="img/icons", blank=True, null=True, verbose_name="Иконка")
 
+    def get_admin_url(self):
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        return reverse("admin:%s_%s_change" % (content_type.app_label, content_type.model), args=(self.id,))
+
     def __str__(self):
         return u"{}".format(self.title)
 
@@ -133,6 +150,10 @@ class SizeOption(models.Model):
     title = models.CharField(max_length=200)
     customer_title = models.CharField(max_length=200, default="", verbose_name="Название для покупателя")
 
+    def get_admin_url(self):
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        return reverse("admin:%s_%s_change" % (content_type.app_label, content_type.model), args=(self.id,))
+
     def __str__(self):
         return u"{}".format(self.title)
 
@@ -140,6 +161,10 @@ class SizeOption(models.Model):
 class ContentOption(models.Model):
     title = models.CharField(max_length=200)
     customer_title = models.CharField(max_length=200, default="", verbose_name="Название для покупателя")
+
+    def get_admin_url(self):
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        return reverse("admin:%s_%s_change" % (content_type.app_label, content_type.model), args=(self.id,))
 
     def __str__(self):
         return u"{}".format(self.title)
@@ -158,6 +183,10 @@ class MacroProductContent(models.Model):
                                        null=True)
     macro_product = models.ForeignKey(MacroProduct, on_delete=models.CASCADE, verbose_name="Макротовар", null=True)
 
+    def get_admin_url(self):
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        return reverse("admin:%s_%s_change" % (content_type.app_label, content_type.model), args=(self.id,))
+
     def __str__(self):
         return u"{}".format(self.title) if bool(self.picture) else u"{} [No Photo]".format(self.title)
 
@@ -172,6 +201,10 @@ class ProductVariant(models.Model):
     macro_product_content = models.ForeignKey(MacroProductContent, on_delete=models.CASCADE,
                                               verbose_name="Содержимое макротовара", null=True)
 
+    def get_admin_url(self):
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        return reverse("admin:%s_%s_change" % (content_type.app_label, content_type.model), args=(self.id,))
+
     def __str__(self):
         return u"{}".format(self.title)
 
@@ -181,6 +214,10 @@ class ProductOption(models.Model):
     customer_title = models.CharField(max_length=200, default="", verbose_name="Название для покупателя")
     menu_item = models.ForeignKey(Menu, on_delete=models.CASCADE, verbose_name="Товар из меню 1С")
     product_variants = models.ManyToManyField(ProductVariant, verbose_name="Вариант товара")
+
+    def get_admin_url(self):
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        return reverse("admin:%s_%s_change" % (content_type.app_label, content_type.model), args=(self.id,))
 
     def __str__(self):
         return u"{}".format(self.title)
@@ -196,6 +233,10 @@ class Servery(models.Model):
     default_remote_order_acceptor = models.BooleanField(verbose_name="Касса, принимающая интернет-заказы",
                                                         default=False,
                                                         help_text="Может быть выбрана ТОЛЬКО ОДНА касса на точку.")
+
+    def get_admin_url(self):
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        return reverse("admin:%s_%s_change" % (content_type.app_label, content_type.model), args=(self.id,))
 
     def __str__(self):
         if self.title:
