@@ -6758,8 +6758,8 @@ def excel(request):
             salary_sheets[sheet_name].to_excel(writer, sheet_name=sheet_name, index=False)
             worksheet = writer.sheets[sheet_name]
             worksheet.set_column('A:A', 40)
-            worksheet.set_column('C:C', 60)
-            worksheet.set_column('D:D', 20)
+            worksheet.set_column('C:C', 65)
+            worksheet.set_column('D:D', 40)
         writer.save()
 
         return HttpResponseRedirect(MEDIA_URL + link)
