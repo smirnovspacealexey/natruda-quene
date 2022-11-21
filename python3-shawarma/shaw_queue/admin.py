@@ -44,11 +44,19 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ['from_site', 'is_delivery', 'is_paid']
 
 
+@admin.register(ProductOption)
+class ProductOptionAdmin(admin.ModelAdmin):
+    list_display = ['title', 'customer_title', 'menu_item',]
+    search_fields = ['title', 'customer_title']
+    filter_horizontal = ('product_variants', )
+
+
 @admin.register(CookingTime)
 class CookingTimeAdmin(admin.ModelAdmin):
     list_display = ['minutes', 'quantity_products', 'quantity_categories', 'default']
     list_editable = ('default', )
     search_fields = ['minutes', ]
+    filter_horizontal = ()
 
 
 admin.site.register(Staff)
@@ -63,7 +71,6 @@ admin.site.register(ServiceAreaPolygon)
 admin.site.register(ServiceAreaPolyCoord)
 admin.site.register(MacroProduct)
 admin.site.register(MacroProductContent)
-admin.site.register(ProductOption)
 admin.site.register(ProductVariant)
 admin.site.register(SizeOption)
 admin.site.register(ContentOption)
