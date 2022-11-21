@@ -3,7 +3,7 @@
 from .models import Menu, Staff, Order, StaffCategory, \
     MenuCategory, Servery, ServicePoint, Printer, CallData, Customer, Delivery, DeliveryOrder, ServiceAreaPolygon, \
     ServiceAreaPolyCoord, MacroProduct, MacroProductContent, ProductOption, ProductVariant, SizeOption, ContentOption, \
-    Server1C
+    Server1C, CookingTime
 from django.contrib import admin
 
 
@@ -42,6 +42,13 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'daily_number', 'open_time', 'close_time', 'content_completed', 'is_paid', 'is_delivery', 'from_site', 'guid_1c']
     search_fields = ['daily_number', ]
     list_filter = ['from_site', 'is_delivery', 'is_paid']
+
+
+@admin.register(CookingTime)
+class CookingTimeAdmin(admin.ModelAdmin):
+    list_display = ['minutes', 'quantity_products', 'quantity_categories', 'default']
+    list_editable = ('default', )
+    search_fields = ['minutes', ]
 
 
 admin.site.register(Staff)

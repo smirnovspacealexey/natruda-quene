@@ -208,6 +208,9 @@ class ProductVariant(models.Model):
     def __str__(self):
         return u"{}".format(self.title)
 
+    class Meta:
+        ordering = ('title', 'customer_title')
+
 
 class ProductOption(models.Model):
     title = models.CharField(max_length=200)
@@ -501,3 +504,28 @@ class CallData(models.Model):
 
     def __unicode__(self):
         return "{} {}".format(self.customer, self.duration)
+
+
+class CookingTime(models.Model):
+    minutes = models.IntegerField(verbose_name="минуты на готовку")
+    products = models.ManyToManyField(Menu, verbose_name="Товары")
+    categories = models.ManyToManyField(MenuCategory, verbose_name="Категории")
+    default = models.BooleanField('по умолчанию', default=True)
+
+    def __str__(self):
+        return str(self.minutes)
+
+    def __unicode__(self):
+        return str(self.minutes)
+
+    def quantity_products(self):
+        return len(self.products.all())
+
+    def quantity_categories(self):
+        return len(self.categories.all())
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        if self.default:
+            type(self).objects.exclude(pk=self.pk).update(default=False)
+        super().save()
+
