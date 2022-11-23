@@ -136,7 +136,7 @@ class Menu(models.Model):
                     return cooking_time.minutes
                 else:
                     return 15
-        return cooking_times.order_by('minutes').last()
+        return cooking_times.order_by('minutes').last().minutes
 
     def __str__(self):
         return u"{}".format(self.title)
