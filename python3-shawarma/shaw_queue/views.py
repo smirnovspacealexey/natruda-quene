@@ -4,7 +4,7 @@ from django.http.response import HttpResponseRedirect
 
 from .models import Menu, Order, Staff, StaffCategory, MenuCategory, OrderContent, Servery, OrderOpinion, PauseTracker, \
     ServicePoint, Printer, Customer, CallData, DiscountCard, Delivery, DeliveryOrder, ContentOption, SizeOption, \
-    MacroProduct, MacroProductContent, ProductOption, ProductVariant, OrderContentOption
+    MacroProduct, MacroProductContent, ProductOption, ProductVariant, OrderContentOption, CookingTime
 from django.template import loader
 from django.core.exceptions import EmptyResultSet, MultipleObjectsReturned, PermissionDenied, ObjectDoesNotExist, \
     ValidationError
@@ -6511,7 +6511,8 @@ def send_customers_menu(request):
             {
                 'id': item.id,
                 'name': item.customer_title,
-                'price': item.price
+                'price': item.price,
+                'minutes': item.get_cooking_time()
             } for item in
             Menu.objects.filter(customer_appropriate=True).order_by('customer_title') | Menu.objects.filter(
                 productoption__in=ProductOption.objects.all())
@@ -6560,7 +6561,19 @@ def send_customers_menu(request):
                 'content_option_id': macro_product_content.content_option.id,
                 'macro_product_id': macro_product_content.macro_product.id
             } for macro_product_content in MacroProductContent.objects.filter(customer_appropriate=True)
-        ]
+        ],
+        'cooking_times': [
+            {
+                'id': cooking_time.id,
+                'minutes': cooking_time.minutes,
+                'menus': [
+                    product.id for product in cooking_time.products.all()
+                ],
+                'categories': [
+                    category.id for category in cooking_time.categories.all()
+                ]
+            } for cooking_time in CookingTime.objects.all()
+        ],
     }
     return JsonResponse(data=data)
 

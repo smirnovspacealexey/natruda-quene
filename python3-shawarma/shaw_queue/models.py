@@ -126,6 +126,18 @@ class Menu(models.Model):
         content_type = ContentType.objects.get_for_model(self.__class__)
         return reverse("admin:%s_%s_change" % (content_type.app_label, content_type.model), args=(self.id,))
 
+    def get_cooking_time(self):
+        cooking_times = self.cookingtime_set.all()
+        if len(cooking_times) == 0:
+            cooking_times = self.category.cookingtime_set.all()
+            if len(cooking_times) == 0:
+                cooking_time = CookingTime.objects.filter(default=True).last()
+                if cooking_time:
+                    return cooking_time.minutes
+                else:
+                    return 15
+        return cooking_times.order_by('minutes').last()
+
     def __str__(self):
         return u"{}".format(self.title)
 
@@ -508,9 +520,9 @@ class CallData(models.Model):
 
 class CookingTime(models.Model):
     minutes = models.IntegerField(verbose_name="минуты на готовку")
-    products = models.ManyToManyField(Menu, verbose_name="Товары")
-    categories = models.ManyToManyField(MenuCategory, verbose_name="Категории")
-    default = models.BooleanField('по умолчанию', default=True)
+    products = models.ManyToManyField(Menu, verbose_name="Товары", blank=True)
+    categories = models.ManyToManyField(MenuCategory, verbose_name="Категории", blank=True)
+    default = models.BooleanField('по умолчанию', default=False)
 
     def __str__(self):
         return str(self.minutes)

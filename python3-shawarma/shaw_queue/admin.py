@@ -17,9 +17,11 @@ accepted_everything.short_description = 'завершить все звонки'
 # Register your models here.
 @admin.register(Menu)
 class MenuAdmin(admin.ModelAdmin):
-    list_display = ['title', 'customer_title', 'note', 'price', 'guid_1c', 'category']
+    list_display = ['title', 'customer_title', 'note', 'price', 'guid_1c', 'category', 'get_cooking_time']
     search_fields = ['title', 'guid_1c', ]
     list_editable = ('customer_title', 'category', )
+
+    Menu.get_cooking_time.short_description = 'время готовки'
 
 
 @admin.register(Servery)
