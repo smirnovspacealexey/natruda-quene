@@ -6759,6 +6759,7 @@ def excel(request):
                          'MacroProductContent': get_titles_ids_links(MacroProductContent),
                          'ProductVariant': get_titles_ids_links(ProductVariant),
                          'ProductOption': get_titles_ids_links(ProductOption),
+                         'SizeOption': get_titles_ids_links(SizeOption),
 
                          'Servery': get_titles_ids_links(Servery),
                          'ServicePoint': get_titles_ids_links(ServicePoint),
