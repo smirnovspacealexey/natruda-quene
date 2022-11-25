@@ -1311,7 +1311,8 @@ def buyer_queue_ajax(request, vertical=False):
             open_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
                                                close_time__isnull=True,
                                                is_canceled=False, is_ready=False,
-                                               servery__service_point=result['service_point']).order_by('open_time')
+                                               servery__service_point=result['service_point'],
+                                               DeliveryOrder_set__moderation_needed=False).order_by('open_time')
         except:
             data = {
                 'success': False,

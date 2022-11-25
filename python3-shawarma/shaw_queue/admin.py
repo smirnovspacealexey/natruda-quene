@@ -61,6 +61,14 @@ class CookingTimeAdmin(admin.ModelAdmin):
     filter_horizontal = ()
 
 
+@admin.register(DeliveryOrder)
+class DeliveryOrderAdmin(admin.ModelAdmin):
+    list_display = ['order', 'daily_number', 'address', 'obtain_timepoint', 'note', 'moderation_needed', 'is_ready', 'is_delivered']
+    list_editable = ('note', 'moderation_needed')
+    search_fields = ['note', 'address']
+    raw_id_fields = ["order", 'customer']
+
+
 admin.site.register(Staff)
 admin.site.register(StaffCategory)
 admin.site.register(MenuCategory)
@@ -68,7 +76,6 @@ admin.site.register(ServicePoint)
 admin.site.register(Printer)
 admin.site.register(Customer)
 admin.site.register(Delivery)
-admin.site.register(DeliveryOrder)
 admin.site.register(ServiceAreaPolygon)
 admin.site.register(ServiceAreaPolyCoord)
 admin.site.register(MacroProduct)
