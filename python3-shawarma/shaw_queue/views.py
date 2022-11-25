@@ -6733,6 +6733,7 @@ def excel(request):
         id_1cs = []
         subnetworks = []
         avg_preparation_times = []
+        notes = []
         for obj in model.objects.all():
             titles.append(obj.title)
             ids.append(obj.id)
@@ -6743,6 +6744,7 @@ def excel(request):
                 subnetworks.append(obj.subnetwork)
             if hasattr(obj, 'avg_preparation_time'):
                 avg_preparation_times.append(str(obj.avg_preparation_time).split('.', 2)[0])
+                notes.append(obj.note)
 
         if subnetworks:
             additionally = 'subnetwork',  subnetworks
@@ -6752,7 +6754,8 @@ def excel(request):
             return pd.DataFrame({'title': titles, 'id': ids, 'link': links})
 
         if avg_preparation_times:
-            return pd.DataFrame({'title': titles, 'id': ids, 'link': links, additionally[0]: additionally[1], 'time': avg_preparation_times})
+            return pd.DataFrame({'title': titles, 'id': ids, 'link': links, additionally[0]: additionally[1],
+                                 'time': avg_preparation_times, 'описания': notes})
         return pd.DataFrame({'title': titles, 'id': ids, 'link': links, additionally[0]: additionally[1]})
 
     try:
@@ -6779,6 +6782,9 @@ def excel(request):
             worksheet.set_column('A:A', 40)
             worksheet.set_column('C:C', 67)
             worksheet.set_column('D:D', 40)
+
+            if sheet_name == 'Menu':
+                worksheet.set_column('F:F', 100)
         writer.save()
 
         return HttpResponseRedirect(MEDIA_URL + link)
