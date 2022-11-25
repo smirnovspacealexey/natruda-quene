@@ -131,6 +131,12 @@ LOGGING = {
             'filename': 'log/debug_db.log',
             'formatter': 'verbose'
         },
+        '1c': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'log/1c.log',
+            'formatter': 'verbose'
+        },
         'debug_logger': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
@@ -161,6 +167,10 @@ LOGGING = {
         },
         'debug_logger': {
             'handlers': ['debug_logger'],
+            'level': 'INFO',
+        },
+        '1c': {
+            'handlers': ['1c'],
             'level': 'INFO',
         },
     },

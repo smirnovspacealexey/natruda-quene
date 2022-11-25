@@ -47,6 +47,9 @@ import subprocess
 logger = logging.getLogger(__name__)
 logger_debug = logging.getLogger('debug_logger')   # del me
 
+logger_1c = logging.getLogger('1c')
+
+
 flag_marker = False
 waiting_numbers = {}
 
@@ -6352,12 +6355,18 @@ def send_order_to_listner(order):
 
 
 def order_1c_payment(request):
-    order_guid = request.POST.get('GUID', None)
-    payment_result = request.POST.get('payment_result', None)
-    order = Order.objects.get(guid_1c=order_guid)
-    order.paid_in_1c = payment_result
-    order.save()
-    return HttpResponse()
+    try:
+        logger_1c.info(f'order_1c_payment: {request.POST}')
+        order_guid = request.POST.get('GUID', None)
+        payment_result = request.POST.get('payment_result', None)
+        order = Order.objects.get(guid_1c=order_guid)
+        logger_1c.info(f'order_1c_payment order: {order}')
+        order.paid_in_1c = payment_result
+        order.save()
+        return HttpResponse()
+    except:
+        return JsonResponse({'status': 'false', 'message': str(traceback.format_exc())}, status=500)
+
 
 
 def define_service_point(ip: str) -> dict:
