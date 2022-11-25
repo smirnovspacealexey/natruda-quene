@@ -6109,14 +6109,16 @@ def recive_1c_order_status(request):
                 'message': 'Множество экземпляров точек возвращено!'
             }
             client.captureException()
-            return HttpResponse()
-        except:
+            logger_1c.error(f'recive_1c_order_status {order_guid} - Множество экземпляров точек возвращено!')
+            return JsonResponse({'status': 'false', 'message': 'Множество экземпляров точек возвращено!'}, status=500)
+        except Exception as e:
             data = {
                 'success': False,
-                'message': 'Множество экземпляров точек возвращено!'
+                'message': str(e)
             }
+            logger_1c.error(f'recive_1c_order_status {order_guid}\n {str(traceback.format_exc())}')
             client.captureException()
-            return HttpResponse()
+            return JsonResponse({'status': 'false', 'message': str(e)}, status=500)
 
         # All Good
         if status == 200:
