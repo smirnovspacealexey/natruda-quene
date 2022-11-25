@@ -2090,6 +2090,7 @@ def cook_interface(request):
                                                         start_shawarma_cooking=True, close_time__isnull=True).order_by(
             'open_time')
         new_order = regular_new_order | today_delivery_new_order
+        new_order = new_order.exclude(deliveryorder__moderation_needed=True)
         regular_other_orders = Order.objects.filter(prepared_by=staff, open_time__isnull=False,
                                                     start_shawarma_cooking=True,
                                                     open_time__contains=timezone.now().date(),
@@ -2102,6 +2103,7 @@ def cook_interface(request):
                                                            servery__service_point=result['service_point'],
                                                            close_time__isnull=True).order_by('open_time')
         other_orders = regular_other_orders | today_delivery_other_orders
+        other_orders = other_orders.exclude(deliveryorder__moderation_needed=True)
         has_order = False
         display_number = ''
 
