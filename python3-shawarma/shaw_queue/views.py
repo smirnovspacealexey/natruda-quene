@@ -6732,6 +6732,7 @@ def excel(request):
         links = []
         id_1cs = []
         subnetworks = []
+        avg_preparation_times = []
         for obj in model.objects.all():
             titles.append(obj.title)
             ids.append(obj.id)
@@ -6740,6 +6741,8 @@ def excel(request):
                 id_1cs.append(obj.guid_1c)
             elif hasattr(obj, 'subnetwork'):
                 subnetworks.append(obj.subnetwork)
+            if hasattr(obj, 'avg_preparation_time'):
+                avg_preparation_times.append(obj.avg_preparation_time)
 
         if subnetworks:
             additionally = 'subnetwork',  subnetworks
@@ -6748,6 +6751,8 @@ def excel(request):
         else:
             return pd.DataFrame({'title': titles, 'id': ids, 'link': links})
 
+        if avg_preparation_times:
+            return pd.DataFrame({'title': titles, 'id': ids, 'link': links, additionally[0]: additionally[1], 'time': avg_preparation_times})
         return pd.DataFrame({'title': titles, 'id': ids, 'link': links, additionally[0]: additionally[1]})
 
     try:
