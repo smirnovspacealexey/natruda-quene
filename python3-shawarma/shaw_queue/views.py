@@ -6783,3 +6783,5 @@ def excel(request):
         print(f'ERROR in excel \n{traceback.format_exc()}\n\n')
         return JsonResponse({'message': str(traceback.format_exc())})
 
+
+

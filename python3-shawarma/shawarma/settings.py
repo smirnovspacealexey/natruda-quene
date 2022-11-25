@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'shaw_queue.apps.ShawQueueConfig',
     'jquery',
+    'django_crontab',
 ]
 
 MIDDLEWARE = [
@@ -285,6 +286,11 @@ RAVEN_CONFIG = {
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 HOST = 'http://shawarma.natruda'
+
+CRONJOBS = [
+    ('*/1 * * * *', "shaw_queue.views.test"),
+
+]
 
 try:
     LOCAL_TEST
