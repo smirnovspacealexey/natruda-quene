@@ -2086,11 +2086,11 @@ def cook_interface(request):
             'open_time')
         today_delivery_new_order = Order.objects.filter(prepared_by=staff, open_time__isnull=False,
                                                         deliveryorder__delivered_timepoint__contains=timezone.now().date(),
+                                                        deliveryorder__moderation_needed=False,
                                                         is_canceled=False, content_completed=False, is_grilling=False,
                                                         start_shawarma_cooking=True, close_time__isnull=True).order_by(
             'open_time')
         new_order = regular_new_order | today_delivery_new_order
-        new_order = new_order.exclude(deliveryorder__moderation_needed=True)
         regular_other_orders = Order.objects.filter(prepared_by=staff, open_time__isnull=False,
                                                     start_shawarma_cooking=True,
                                                     open_time__contains=timezone.now().date(),
@@ -2099,11 +2099,11 @@ def cook_interface(request):
         today_delivery_other_orders = Order.objects.filter(prepared_by=staff, open_time__isnull=False,
                                                            start_shawarma_cooking=True,
                                                            deliveryorder__delivered_timepoint__contains=timezone.now().date(),
+                                                           deliveryorder__moderation_needed=False,
                                                            is_canceled=False,
                                                            servery__service_point=result['service_point'],
                                                            close_time__isnull=True).order_by('open_time')
         other_orders = regular_other_orders | today_delivery_other_orders
-        other_orders = other_orders.exclude(deliveryorder__moderation_needed=True)
         has_order = False
         display_number = ''
 
@@ -2193,6 +2193,7 @@ def c_i_a(request):
                                                     close_time__isnull=True).order_by('open_time')
         today_delivery_other_orders = Order.objects.filter(prepared_by=staff, open_time__isnull=False, is_delivery=True,
                                                            deliveryorder__delivered_timepoint__contains=timezone.now().date(),
+                                                           deliveryorder__moderation_needed=False,
                                                            is_canceled=False,
                                                            close_time__isnull=True).filter(
             Q(start_shawarma_cooking=True) | Q(start_shawarma_preparation=True)).order_by('open_time')
@@ -2206,6 +2207,7 @@ def c_i_a(request):
         today_delivery_free_orders = Order.objects.filter(prepared_by__isnull=True, open_time__isnull=False,
                                                           is_delivery=True,
                                                           deliveryorder__delivered_timepoint__contains=timezone.now().date(),
+                                                          deliveryorder__moderation_needed=False,
                                                           is_canceled=False,
                                                           servery__service_point=result['service_point'],
                                                           close_time__isnull=True).filter(
@@ -2225,6 +2227,7 @@ def c_i_a(request):
             today_delivery_new_order = Order.objects.filter(prepared_by=staff, open_time__isnull=False,
                                                             is_delivery=True,
                                                             deliveryorder__delivered_timepoint__contains=timezone.now().date(),
+                                                            deliveryorder__moderation_needed=False,
                                                             is_canceled=False, content_completed=False,
                                                             is_grilling=False,
                                                             close_time__isnull=True).filter(
@@ -2487,6 +2490,7 @@ def s_i_a(request):
                                                   is_delivery=False).order_by('open_time')
             today_delivery_orders = Order.objects.filter(is_delivery=True,
                                                          deliveryorder__delivered_timepoint__contains=timezone.now().date(),
+                                                         deliveryorder__moderation_needed=False,
                                                          close_time__isnull=True,
                                                          with_shashlyk=True, is_canceled=False, is_grilling_shash=True,
                                                          is_ready=False,
