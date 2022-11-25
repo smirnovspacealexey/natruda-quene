@@ -6742,7 +6742,7 @@ def excel(request):
             elif hasattr(obj, 'subnetwork'):
                 subnetworks.append(obj.subnetwork)
             if hasattr(obj, 'avg_preparation_time'):
-                avg_preparation_times.append(str(obj.avg_preparation_time['preparation_time']).split('.', 2)[0])
+                avg_preparation_times.append(str(obj.avg_preparation_time).split('.', 2)[0])
 
         if subnetworks:
             additionally = 'subnetwork',  subnetworks
