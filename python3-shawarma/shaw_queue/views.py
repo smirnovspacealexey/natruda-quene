@@ -1184,7 +1184,7 @@ def buyer_queue(request, vertical=False, black=False, px=None, new=False):
             open_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
                                                close_time__isnull=True,
                                                is_canceled=False, is_ready=False,
-                                               servery__service_point=result['service_point']).order_by('open_time')
+                                               servery__service_point=result['service_point']).exclude(deliveryorder__moderation_needed=True).order_by('open_time')
         except:
             data = {
                 'success': False,
@@ -1402,7 +1402,7 @@ def buyer_queue_ajax_new(request, vertical=False):   # del me after, Im copy
             open_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
                                                close_time__isnull=True,
                                                is_canceled=False, is_ready=False,
-                                               servery__service_point=result['service_point']).order_by('open_time')
+                                               servery__service_point=result['service_point']).exclude(deliveryorder__moderation_needed=True).order_by('open_time')
         except:
             data = {
                 'success': False,
@@ -2404,7 +2404,7 @@ def shashlychnik_interface(request):
                                                close_time__isnull=True,
                                                with_shashlyk=True, is_canceled=False, is_grilling_shash=True,
                                                is_ready=False,
-                                               servery__service_point=result['service_point']).order_by(
+                                               servery__service_point=result['service_point']).exclude(deliveryorder__moderation_needed=True).order_by(
                 'open_time')
             context = {
                 'open_orders': [{'order': open_order,
