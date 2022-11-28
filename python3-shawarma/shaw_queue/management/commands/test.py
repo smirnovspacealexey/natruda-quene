@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from shaw_queue.models import Order, Servery, DeliveryOrder, Customer
 from django.utils import timezone
+from django.contrib.sessions.models import Session
 
 
 class Command(BaseCommand):
@@ -28,8 +29,7 @@ class Command(BaseCommand):
        # print(order)
        # print(DeliveryOrder.objects.create(order=order, daily_number=11, customer=Customer.objects.first()))
 
-
-
+       Session.objects.all().delete()
 
        print('---------END----------')
 
