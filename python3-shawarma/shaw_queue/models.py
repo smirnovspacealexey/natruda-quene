@@ -127,16 +127,19 @@ class Menu(models.Model):
         return reverse("admin:%s_%s_change" % (content_type.app_label, content_type.model), args=(self.id,))
 
     def get_cooking_time(self):
-        cooking_times = self.cookingtime_set.all()
-        if len(cooking_times) == 0:
-            cooking_times = self.category.cookingtime_set.all()
+        try:
+            cooking_times = self.cookingtime_set.all()
             if len(cooking_times) == 0:
-                cooking_time = CookingTime.objects.filter(default=True).last()
-                if cooking_time:
-                    return cooking_time.minutes
-                else:
-                    return 15
-        return cooking_times.order_by('minutes').last().minutes
+                cooking_times = self.category.cookingtime_set.all()
+                if len(cooking_times) == 0:
+                    cooking_time = CookingTime.objects.filter(default=True).last()
+                    if cooking_time:
+                        return cooking_time.minutes
+                    else:
+                        return 15
+            return cooking_times.order_by('minutes').last().minutes
+        except:
+            return 15
 
     def __str__(self):
         return u"{}".format(self.title)

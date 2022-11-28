@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'shaw_queue.apps.ShawQueueConfig',
+    'apps.main',
     'jquery',
 ]
 
