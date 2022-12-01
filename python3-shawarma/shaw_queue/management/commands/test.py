@@ -32,7 +32,7 @@ class Command(BaseCommand):
        i = 1721026 - 1000
        for n in range(i):
            try:
-             print(Order.objects.filter(pk=n).last().delete())
+             print(i, Order.objects.filter(pk=n).last().delete())
            except:
                pass
 
