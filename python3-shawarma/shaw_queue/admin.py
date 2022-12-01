@@ -3,7 +3,7 @@
 from .models import Menu, Staff, Order, StaffCategory, \
     MenuCategory, Servery, ServicePoint, Printer, CallData, Customer, Delivery, DeliveryOrder, ServiceAreaPolygon, \
     ServiceAreaPolyCoord, MacroProduct, MacroProductContent, ProductOption, ProductVariant, SizeOption, ContentOption, \
-    Server1C, CookingTime
+    Server1C, CookingTime, OrderContent
 from django.contrib import admin
 
 
@@ -89,3 +89,4 @@ admin.site.register(ProductVariant)
 admin.site.register(SizeOption)
 admin.site.register(ContentOption)
 admin.site.register(Server1C)
+admin.site.register(OrderContent)

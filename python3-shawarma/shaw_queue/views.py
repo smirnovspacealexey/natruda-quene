@@ -1312,7 +1312,6 @@ def buyer_queue_ajax(request, vertical=False):
                                                close_time__isnull=True,
                                                is_canceled=False, is_ready=False,
                                                servery__service_point=result['service_point']).exclude(deliveryorder__moderation_needed=True).order_by('open_time')
-            # logger_debug.info(f'buyer_queue_ajax {open_orders}')
         except:
             data = {
                 'success': False,
