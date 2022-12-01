@@ -69,6 +69,12 @@ class DeliveryOrderAdmin(admin.ModelAdmin):
     raw_id_fields = ["order", 'customer']
 
 
+@admin.register(MacroProductContent)
+class MacroProductContentAdmin(admin.ModelAdmin):
+    list_display = ['__str__', 'title', 'menu_title', 'customer_title', 'customer_appropriate']
+    list_editable = ('title', 'customer_appropriate')
+    search_fields = ['title', 'menu_title', 'customer_title']
+
 admin.site.register(Staff)
 admin.site.register(StaffCategory)
 admin.site.register(MenuCategory)
@@ -79,7 +85,6 @@ admin.site.register(Delivery)
 admin.site.register(ServiceAreaPolygon)
 admin.site.register(ServiceAreaPolyCoord)
 admin.site.register(MacroProduct)
-admin.site.register(MacroProductContent)
 admin.site.register(ProductVariant)
 admin.site.register(SizeOption)
 admin.site.register(ContentOption)
