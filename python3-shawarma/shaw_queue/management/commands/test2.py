@@ -29,10 +29,11 @@ class Command(BaseCommand):
        # print(order)
        # print(DeliveryOrder.objects.create(order=order, daily_number=11, customer=Customer.objects.first()))
 
+       # i = 1721026 - 1000
        i = 1721026 - 1000
        a = 0
        soc = []
-       for n in range(i):
+       for n in range(715665, i):
            try:
                soc.append(n)
                if a == 30:
