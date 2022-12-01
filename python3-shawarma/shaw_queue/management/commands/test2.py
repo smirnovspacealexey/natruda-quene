@@ -48,7 +48,7 @@ class Command(BaseCommand):
        #     except:
        #         pass
 
-       print(Order.objects.all().exclude(pk__in=range(1000)).delete())
+       print(Order.objects.all().delete())
 
        print('---------END----------')
 
