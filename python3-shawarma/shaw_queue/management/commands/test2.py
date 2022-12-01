@@ -33,17 +33,20 @@ class Command(BaseCommand):
        a = 0
        soc = []
        for n in range(i):
-           soc.append(n)
-           if a == 100:
-               a = 0
-               try:
-                 print(n, Order.objects.filter(pk__in=soc).delete())
-               except:
+           try:
+               soc.append(n)
+               if a == 30:
+                   a = 0
+                   try:
+                     print(n, Order.objects.filter(pk__in=soc).delete())
+                   except:
+                       soc = []
+                       pass
                    soc = []
-                   pass
-               soc = []
-           else:
-               a += 1
+               else:
+                   a += 1
+           except:
+               pass
 
        print('---------END----------')
 
