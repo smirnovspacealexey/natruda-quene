@@ -29,9 +29,9 @@ class Command(BaseCommand):
        # print(order)
        # print(DeliveryOrder.objects.create(order=order, daily_number=11, customer=Customer.objects.first()))
 
-       orders = Order.objects.all()
-       for order in orders:
-        print(order)
+       i = 1721026
+       for n in range(i):
+           print(Order.objects.filter(pk=i).last())
 
        print('---------END----------')
 
