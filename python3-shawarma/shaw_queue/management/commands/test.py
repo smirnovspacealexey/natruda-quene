@@ -31,7 +31,7 @@ class Command(BaseCommand):
 
        i = 1721026
        for n in range(i):
-           print(Order.objects.filter(pk=i).last())
+           print(Order.objects.filter(pk=n).last())
 
        print('---------END----------')
 
