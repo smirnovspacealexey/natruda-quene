@@ -34,7 +34,7 @@ class Command(BaseCommand):
        soc = []
        for n in range(i):
            soc.append(n)
-           if a == 10000:
+           if a == 1000:
                a = 0
                try:
                  print(n, Order.objects.filter(pk__in=soc).delete())
