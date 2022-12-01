@@ -29,9 +29,12 @@ class Command(BaseCommand):
        # print(order)
        # print(DeliveryOrder.objects.create(order=order, daily_number=11, customer=Customer.objects.first()))
 
-       i = 1721026
+       i = 1721026 - 1000
        for n in range(i):
-           print(Order.objects.filter(pk=n).last())
+           try:
+             print(Order.objects.filter(pk=n).last().delete())
+           except:
+               pass
 
        print('---------END----------')
 
