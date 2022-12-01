@@ -30,7 +30,8 @@ class Command(BaseCommand):
        # print(DeliveryOrder.objects.create(order=order, daily_number=11, customer=Customer.objects.first()))
 
        orders = Order.objects.all().exclude(open_time__contains=timezone.now().date())
-       print(orders.delete())
+       for order in orders:
+        print(order.delete())
 
        print('---------END----------')
 
