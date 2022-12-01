@@ -29,24 +29,26 @@ class Command(BaseCommand):
        # print(order)
        # print(DeliveryOrder.objects.create(order=order, daily_number=11, customer=Customer.objects.first()))
 
-       i = 1719873 - 1000
-       a = 0
-       soc = []
-       for n in range(i):
-           try:
-               soc.append(n)
-               if a == 20:
-                   a = 0
-                   try:
-                     print(n, Order.objects.filter(pk__in=soc).delete())
-                   except:
-                       soc = []
-                       pass
-                   soc = []
-               else:
-                   a += 1
-           except:
-               pass
+       # i = 1719873 - 1000
+       # a = 0
+       # soc = []
+       # for n in range(i):
+       #     try:
+       #         soc.append(n)
+       #         if a == 20:
+       #             a = 0
+       #             try:
+       #               print(n, Order.objects.filter(pk__in=soc).delete())
+       #             except:
+       #                 soc = []
+       #                 pass
+       #             soc = []
+       #         else:
+       #             a += 1
+       #     except:
+       #         pass
+
+       print(Order.objects.all().exclude(pk__in=range(1000)).delete())
 
        print('---------END----------')
 
