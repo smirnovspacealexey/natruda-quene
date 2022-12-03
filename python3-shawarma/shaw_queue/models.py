@@ -298,6 +298,7 @@ class Order(models.Model):
     is_voiced = models.BooleanField(default=False, verbose_name="Is Voiced")
     is_delivery = models.BooleanField(default=False, verbose_name="Is Delivery Order")
     is_preorder = models.BooleanField(default=False, verbose_name="Предзаказ")
+    is_pickup = models.BooleanField(default=False, verbose_name="С собой")
     # True - if paid with cash, False - if paid with card.
     paid_with_cash = models.BooleanField(default=True, verbose_name="Paid With Cash")
     from_site = models.BooleanField(default=False, verbose_name="From site")

@@ -3613,6 +3613,7 @@ def make_order(request):
     order_id = request.POST.get('order_id', None)
     delivery_order_pk = request.POST.get('delivery_order_pk', None)
     is_preorder = True if int(request.POST.get('is_preorder', 0)) == 1 else False
+    is_pickup = True if int(request.POST.get('is_pickup', 0)) == 1 else False
     servery_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
     if DEBUG_SERVERY:
         servery_ip = '127.0.0.1'
@@ -3659,13 +3660,13 @@ def make_order(request):
     if result['success']:
         service_point = result['service_point']
         return JsonResponse(data=make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash,
-                                                 servery, service_point, discount, is_preorder))
+                                                 servery, service_point, discount, is_preorder, is_pickup))
     else:
         return JsonResponse(result)
 
 
 def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, servery,
-                    service_point, discount=0, is_preorder=False, from_site=False, with1c=True, pickup=False):
+                    service_point, discount=0, is_preorder=False, is_pickup=False, from_site=False, with1c=True, delivery_pickup=False):
     file = open('log/cook_choose.log', 'a')
     logger_debug = logging.getLogger('debug_logger')  # del me
     logger_debug.info(f'-----\n{content}\n\n{servery}\n\n{service_point}\n\n')  # del me
@@ -3703,7 +3704,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
         else:
             order = Order(open_time=timezone.now(), daily_number=order_next_number, is_paid=is_paid,
                           paid_with_cash=paid_with_cash, status_1c=0, discount=discount,
-                          is_preorder=is_preorder, from_site=from_site, pickup=pickup)
+                          is_preorder=is_preorder, is_pickup=is_pickup, from_site=from_site, pickup=delivery_pickup)
     except:
         data = {
             'success': False,
@@ -6670,7 +6671,7 @@ def register_customer_order(request):
                 client.captureException()
                 return JsonResponse(data)
 
-            data = make_order_func(customer_order_content, 'delivery', is_paid, None, False, servery, service_point, from_site=True, with1c=False, pickup=not is_delivery)
+            data = make_order_func(customer_order_content, 'delivery', is_paid, None, False, servery, service_point, from_site=True, with1c=False, delivery_pickup=not is_delivery)
 
             if not data['success']:
                 logger_debug.info(f'11 {data}')

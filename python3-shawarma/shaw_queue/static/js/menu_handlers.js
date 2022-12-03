@@ -2,6 +2,7 @@
  * Created by paul on 15.07.17.
  */
 var preorder_checkbox;
+var pickup_checkbox;
 const channel = new BroadcastChannel('app-data');
 
 $(document).ready(function () {
@@ -12,6 +13,8 @@ $(document).ready(function () {
     $('[name="discount"]').prop('checked', false);
     preorder_checkbox = $('[name=preorder_checkbox]');
     preorder_checkbox.prop("checked", false);
+    pickup_checkbox = $('[name=pickup_checkbox]');
+    pickup_checkbox.prop("checked", false);
 
     // Get the modal
     var modal = document.getElementById('modal-edit');
@@ -89,7 +92,8 @@ function SendOrder() {
                 "payment": $('[name=payment_choose]:checked').val(),
                 "cook_choose": $('[name=cook_choose]:checked').val(),
                 "discount": $('[name=discount]:checked').val() ? parseFloat($('[name=discount]:checked').val()) : 0,
-                "is_preorder": preorder_checkbox.prop("checked") ? 1 : 0
+                "is_preorder": preorder_checkbox.prop("checked") ? 1 : 0,
+                "is_pickup": pickup_checkbox.prop("checked") ? 1 : 0
             };
             var order_id = $('#order_id').val();
             if (order_id)

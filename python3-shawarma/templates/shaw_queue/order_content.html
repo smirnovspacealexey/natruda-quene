@@ -57,6 +57,7 @@
                 </td>
                 <td>
                     Сумма: <span id="total-td">{{ order_info.total }}</span>.р
+                    {% if order_info.is_pickup %}<span style="background-color: #cacd58; border: 4px solid green;">с собой</span>{% endif %}
                 </td>
             </tr>
         {% endif %}

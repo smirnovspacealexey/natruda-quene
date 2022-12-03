@@ -17,33 +17,33 @@
                 <input type="text" value="" class="quantityInput" id="item-quantity" onclick="this.setSelectionRange(0, this.value.length)">
                 <button class="btn info" id="plus-button">+</button>
                 <button class="btn info" id="minus-button">-</button>
-                <div class="quick-comment-container">
-                    <button class="btn img-btn" id="cheese-button"><img alt="" src="{% static 'img/btns/cheese.png' %}"></button>
-                    <button class="btn img-btn" id="greens-button"><img alt="" src="{% static 'img/btns/greens.png' %}"></button>
-                    <button class="btn img-btn" id="spicy-button"><img alt="" src="{% static 'img/btns/spicy.png' %}"></button>
-                    <button class="btn img-btn" id="spicy30-button"><img alt="" src="{% static 'img/btns/spicy30.png' %}"></button>
-                    <button class="btn img-btn" id="yellow-button"><img alt="" src="{% static 'img/btns/yellow.png' %}"></button>
-                    <button class="btn img-btn" id="noOnion-button"><img alt="" src="{% static 'img/btns/noOnion.png' %}"></button>
-                    <button class="btn img-btn" id="saucePlus-button"><img alt="" src="{% static 'img/btns/saucePlus.png' %}"></button>
-                    <button class="btn img-btn" id="sauceMinus-button"><img alt="" src="{% static 'img/btns/sauceMinus.png' %}"></button>
-                    <button class="btn img-btn" id="noVegetables-button"><img alt="" src="{% static 'img/btns/noVegetables.png' %}"></button>
-                    <button class="btn img-btn" id="frenchFries-button"><img alt="" src="{% static 'img/btns/frenchFries.png' %}"></button>
-                    <button class="btn img-btn" id="chile-button"><img alt="" src="{% static 'img/btns/chile.png' %}"></button>
-                    <button class="btn img-btn" id="mushrooms-button"><img alt="" src="{% static 'img/btns/mushrooms.png' %}"></button>
-                    <button class="btn img-btn" id="jalapeno-button"><img alt="" src="{% static 'img/btns/jalapeno.png' %}"></button>
-                    <button class="btn img-btn" id="bellPepper-button"><img alt="" src="{% static 'img/btns/bellPepper.png' %}"></button>
-                </div>
+            <div class="quick-comment-container">
+                <button class="btn img-btn" id="cheese-button"><img alt="" src="{% static 'img/btns/cheese.png' %}"></button>
+                <button class="btn img-btn" id="greens-button"><img alt="" src="{% static 'img/btns/greens.png' %}"></button>
+                <button class="btn img-btn" id="spicy-button"><img alt="" src="{% static 'img/btns/spicy.png' %}"></button>
+                <button class="btn img-btn" id="spicy30-button"><img alt="" src="{% static 'img/btns/spicy30.png' %}"></button>
+                <button class="btn img-btn" id="yellow-button"><img alt="" src="{% static 'img/btns/yellow.png' %}"></button>
+                <button class="btn img-btn" id="noOnion-button"><img alt="" src="{% static 'img/btns/noOnion.png' %}"></button>
+                <button class="btn img-btn" id="saucePlus-button"><img alt="" src="{% static 'img/btns/saucePlus.png' %}"></button>
+                <button class="btn img-btn" id="sauceMinus-button"><img alt="" src="{% static 'img/btns/sauceMinus.png' %}"></button>
+                <button class="btn img-btn" id="noVegetables-button"><img alt="" src="{% static 'img/btns/noVegetables.png' %}"></button>
+                <button class="btn img-btn" id="frenchFries-button"><img alt="" src="{% static 'img/btns/frenchFries.png' %}"></button>
+                <button class="btn img-btn" id="chile-button"><img alt="" src="{% static 'img/btns/chile.png' %}"></button>
+                <button class="btn img-btn" id="mushrooms-button"><img alt="" src="{% static 'img/btns/mushrooms.png' %}"></button>
+                <button class="btn img-btn" id="jalapeno-button"><img alt="" src="{% static 'img/btns/jalapeno.png' %}"></button>
+                <button class="btn img-btn" id="bellPepper-button"><img alt="" src="{% static 'img/btns/bellPepper.png' %}"></button>
+            </div>
             </p>
             <p>
                 <label for="item-note" class="modal-label">Комментарий</label>
                 <input type="text" value="" class="live-search-box" id="item-note">
-                <div id="dropdown-list-container"></div>
+            <div id="dropdown-list-container"></div>
             </p>
         </div>
     </div>
     <div class="modal" id="modal-status">
         <div class="modal-content">
-{#            <span class="close" id="close-modal-status">&times;</span>#}
+            {#            <span class="close" id="close-modal-status">&times;</span>#}
             <div class="loader-container" id="loader-container">
                 <div class="loader" id="loading-indicator"></div>
             </div>
@@ -131,14 +131,14 @@
                         <label for="cook_auto">Автоназначение</label>
                     </p>
                     {% for available_cooker in available_cookers %}
-                    <p>
-                        <input type="radio" id="cook_{{ available_cooker.id }}" name="cook_choose" value="{{ available_cooker.id }}">
-                        <label for="cook_{{ available_cooker.id }}">{{ available_cooker.user.first_name }} {{ available_cooker.user.last_name }}</label>
-                    </p>
-                {% endfor %}
+                        <p>
+                            <input type="radio" id="cook_{{ available_cooker.id }}" name="cook_choose" value="{{ available_cooker.id }}">
+                            <label for="cook_{{ available_cooker.id }}">{{ available_cooker.user.first_name }} {{ available_cooker.user.last_name }}</label>
+                        </p>
+                    {% endfor %}
                 </div>
                 <div class="shadowed">
-<p>
+                    <p>
                         <input type="radio" id="discount_10" name="discount" value="10">
                         <label for="discount_10">Скидка 10%</label>
                     </p>
@@ -149,6 +149,10 @@
                     <p>
                         <input type="checkbox" id="preorder" name="preorder_checkbox" value="1">
                         <label for="preorder_checkbox">Предзаказ</label>
+                    </p>
+                    <p>
+                        <input type="checkbox" id="pickup" name="pickup_checkbox" value="1">
+                        <label for="pickup_checkbox">С собой</label>
                     </p>
                 </div>
 
