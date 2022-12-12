@@ -5,6 +5,8 @@ from .models import Menu, Staff, Order, StaffCategory, \
     ServiceAreaPolyCoord, MacroProduct, MacroProductContent, ProductOption, ProductVariant, SizeOption, ContentOption, \
     Server1C, CookingTime, OrderContent
 from django.contrib import admin
+from django import forms
+
 
 
 def accepted_everything(modeladmin, request, queryset):
@@ -42,6 +44,14 @@ class CallDataAdmin(admin.ModelAdmin):
 class OrderContentInline(admin.TabularInline):
     model = OrderContent
     extra = 0
+
+    fieldsets = (
+        (None, {
+            # 'fields': ('menu_item', 'note', 'quantity', 'info'),
+            'fields': ('info', ),
+        }),
+    )
+    readonly_fields = ('info',)
 
 
 @admin.register(Order)

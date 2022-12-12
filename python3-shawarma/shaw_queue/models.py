@@ -8,6 +8,7 @@ from django.db import models
 from django.contrib.contenttypes.models import ContentType
 import datetime
 import logging
+from django.utils.html import format_html
 
 logger_debug = logging.getLogger('debug_logger')  # del me
 
@@ -358,6 +359,31 @@ class OrderContent(models.Model):
 
     def __unicode__(self):
         return "№{} {}".format(self.order, self.menu_item)
+
+    def info(self):
+        html = f'''
+        <span><b>Staff Maker:</b> {self.staff_maker}&nbsp; <b>Canceled By:</b> {self.canceled_by}<br/>
+        <b>Start Timestam:</b> {self.start_timestamp.strftime("%B %d, %H:%M") if self.start_timestamp else '-'}&nbsp;
+        <b>Grill Start Timestamp:</b> {self.grill_timestamp.strftime("%B %d, %H:%M") if self.grill_timestamp else '-'}
+        <br/> <b>Finish Timestamp:</b> {self.finish_timestamp.strftime("%B %d, %H:%M") if self.finish_timestamp else '-'}<br/>
+        <b>Is in grill:</b> {'✅' if self.is_in_grill else '❌'}&nbsp; <b>Is canceled:</b> {'✅' if self.is_canceled else '❌'}</span>
+        <br/><br/><br/>
+        <input hidden type="text" value="{self.menu_item}" id="menuitem-{self.pk}">    
+        <b>пункут меню:</b><br/>
+        <i><a href="/admin/shaw_queue/menu/{self.menu_item.pk}/change/">{self.menu_item}</a></i>
+        <br/><br/>
+        <a class="button" onclick="copyText('menuitem-{self.pk}')">копировать буфер</a>
+        <br/><br/><br/>
+        <input hidden type="text" value="{self.note}" id="note-{self.pk}">
+        <b>описание:</b><br/>
+       <i>{self.note}</i>
+        <br/><br/>
+        <a class="button" onclick="copyText('note-{self.pk}')">копировать буфер</a>
+        '''
+        return format_html(html)
+
+    info.allow_tags = False
+    info.short_description = 'информация'
 
     class Meta:
         permissions = (
