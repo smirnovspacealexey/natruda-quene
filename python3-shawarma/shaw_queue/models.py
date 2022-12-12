@@ -373,16 +373,16 @@ class OrderContent(models.Model):
         <i><a href="/admin/shaw_queue/menu/{self.menu_item.pk}/change/">{self.menu_item}</a></i>
         <br/><br/>
         <a class="button" onclick="copyText('menuitem-{self.pk}')">копировать буфер</a>
-        <br/><br/><br/>
-        <input hidden type="text" value="{self.note}" id="note-{self.pk}">
-        <b>описание:</b>
         '''
         if self.note:
             html += f'''
+            <br/><br/><br/>
+            <input hidden type="text" value="{self.note}" id="note-{self.pk}">
+            <b>описание:</b>
             <br/><i>{self.note}</i><br/><br/><a class="button" onclick="copyText('note-{self.pk}')">копировать буфер</a>
             '''
         else:
-            html += '-'
+            html += '<br/><br/><b>описание:</b> -<br/>'
         return format_html(html)
 
     info.allow_tags = False
