@@ -7,6 +7,9 @@ from django.urls import reverse
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 import datetime
+import logging
+
+logger_debug = logging.getLogger('debug_logger')  # del me
 
 
 # Create your models here.
@@ -501,8 +504,43 @@ class DeliveryOrder(models.Model):
     def __unicode__(self):
         return "№{} {} {}".format(self.daily_number, self.customer.phone_number, self.order)
 
+    def create_cooking_timer(self):
+        max_minutes = 0
+        first_cook = []
+        last_cook = []
+        order_content_all = self.order.ordercontent_set.all()
+        for order_item in order_content_all:
+            order_item_cooking_time = order_item.menu_item.get_cooking_time()
+            if max_minutes < order_item_cooking_time:
+                max_minutes = order_item_cooking_time
+                last_cook += first_cook
+                first_cook = [order_item, ]
+            elif max_minutes == order_item_cooking_time:
+                first_cook.append(order_item)
+            else:
+                last_cook.append(order_item)
+
+        for item in first_cook:
+            CookingTimerOrderContent.cook_now(item)
+        for item in last_cook:
+            minutes = max_minutes - item.menu_item.get_cooking_time()
+            date_time = timezone.now() + datetime.timedelta(minutes=minutes)
+            CookingTimerOrderContent.objects.create(order_content=item, date_time=date_time)
+
     def get_absolute_url(self):
         return reverse('delivery-order-list')  # , kwargs={'pk': self.pk}
+
+
+class CookingTimerOrderContent(models.Model):
+    order_content = models.ForeignKey(OrderContent, on_delete=models.CASCADE)
+    date_time = models.DateTimeField(blank=True, null=True, verbose_name="время начала готовки")
+
+    def __str__(self):
+        return u"№{} {}".format(self.order_content, self.date_time)
+
+    def cook_now(self=None, order_content=None):
+        logger_debug.info(f'cook_now {order_content if order_content else self}')
+        return
 
 
 class CallData(models.Model):

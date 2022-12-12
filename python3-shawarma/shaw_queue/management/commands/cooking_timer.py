@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from shaw_queue.models import Order, Servery, DeliveryOrder, Customer
+from shaw_queue.models import Order, Servery, DeliveryOrder, Customer, CookingTimerOrderContent
 from django.utils import timezone
 import logging
 
@@ -7,16 +7,13 @@ logger_debug = logging.getLogger('debug_logger')
 
 
 class Command(BaseCommand):
-
     def handle(self, *args, **options):
-       print('--------START---------')
+        print('--------START---------')
+        logger_debug.info(f'COOKING TIMER')
+        for cooking_timer_item in CookingTimerOrderContent.objects.all():
+            logger_debug.info(f'{cooking_timer_item}')
+            if cooking_timer_item.date_time > timezone.now():
+                logger_debug.info(f'{cooking_timer_item} cook now!')
+                cooking_timer_item.cook_now()
 
-       delivery_orders = DeliveryOrder.objects.filter(obtain_timepoint__gte=timezone.datetime.today().date(),
-                                                      order__close_time__isnull=True).order_by('delivered_timepoint')
-       logger_debug.info(f'delivery_orders {timezone.datetime.today()} \n{delivery_orders}')
-       for delivery_order in delivery_orders:
-          for order in delivery_order.order.ordercontent_set.all():
-              logger_debug.info(f'{order} {order.menu_item.get_cooking_time()}')
-       print('this')
-
-       print('---------END----------')
+        print('---------END----------')
