@@ -375,11 +375,14 @@ class OrderContent(models.Model):
         <a class="button" onclick="copyText('menuitem-{self.pk}')">копировать буфер</a>
         <br/><br/><br/>
         <input hidden type="text" value="{self.note}" id="note-{self.pk}">
-        <b>описание:</b><br/>
-       <i>{self.note}</i>
-        <br/><br/>
-        <a class="button" onclick="copyText('note-{self.pk}')">копировать буфер</a>
+        <b>описание:</b>
         '''
+        if self.note:
+            html += f'''
+            <br/><i>{self.note}</i><br/><br/><a class="button" onclick="copyText('note-{self.pk}')">копировать буфер</a>
+            '''
+        else:
+            html += '-'
         return format_html(html)
 
     info.allow_tags = False
