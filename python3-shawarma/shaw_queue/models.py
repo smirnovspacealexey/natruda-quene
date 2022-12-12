@@ -379,10 +379,10 @@ class OrderContent(models.Model):
             <br/><br/><br/>
             <input hidden type="text" value="{self.note}" id="note-{self.pk}">
             <b>описание:</b>
-            <br/><i>{self.note}</i><br/><br/><a class="button" onclick="copyText('note-{self.pk}')">копировать буфер</a>
+            <i>{self.note}</i><br/><br/><a class="button" onclick="copyText('note-{self.pk}')">копировать буфер</a><br/>
             '''
         else:
-            html += '<br/><br/><b>описание:</b> -<br/>'
+            html += '<br/><br/><b>без описание:</b><br/>'
         return format_html(html)
 
     info.allow_tags = False
