@@ -369,17 +369,21 @@ class OrderContent(models.Model):
         <b>Is in grill:</b> {'✅' if self.is_in_grill else '❌'}&nbsp; <b>Is canceled:</b> {'✅' if self.is_canceled else '❌'}</span>
         <br/><br/><br/>
         <input hidden type="text" value="{self.menu_item}" id="menuitem-{self.pk}">    
-        <b>пункут меню:</b><br/>
+        <b>пункут меню:</b>&nbsp;&nbsp;
         <i><a href="/admin/shaw_queue/menu/{self.menu_item.pk}/change/">{self.menu_item}</a></i>
-        <br/><br/>
+        <br/>
+        <br/>
         <a class="button" onclick="copyText('menuitem-{self.pk}')">копировать буфер</a>
         '''
         if self.note:
             html += f'''
             <br/><br/><br/>
             <input hidden type="text" value="{self.note}" id="note-{self.pk}">
-            <b>описание:</b>
-            <br/><i>{self.note}</i><br/><a class="button" onclick="copyText('note-{self.pk}')">копировать буфер</a><br/>
+            <b>описание:</b>&nbsp;&nbsp;       
+            <i>{self.note}</i>
+            <br/>
+            <br/>
+            <a class="button" onclick="copyText('note-{self.pk}')">копировать буфер</a><br/>
             '''
         else:
             html += '<br/><br/><b>без описания</b><br/>'
