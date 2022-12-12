@@ -373,7 +373,7 @@ class OrderContent(models.Model):
         <i><a href="/admin/shaw_queue/menu/{self.menu_item.pk}/change/">{self.menu_item}</a></i>
         <br/>
         <br/>
-        <a class="button" onclick="copyText('menuitem-{self.pk}')">копировать буфер</a>
+        <a class="button" onclick="copyText('menuitem-{self.pk}')">копировать в буфер</a>
         '''
         if self.note:
             html += f'''
@@ -383,7 +383,7 @@ class OrderContent(models.Model):
             <i>{self.note}</i>
             <br/>
             <br/>
-            <a class="button" onclick="copyText('note-{self.pk}')">копировать буфер</a><br/>
+            <a class="button" onclick="copyText('note-{self.pk}')">копировать в буфер</a><br/>
             '''
         else:
             html += '<br/><br/><b>без описания</b><br/>'
