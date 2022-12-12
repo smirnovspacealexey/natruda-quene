@@ -367,7 +367,9 @@ class OrderContent(models.Model):
         <b>Grill Start Timestamp:</b> {self.grill_timestamp.strftime("%B %d, %H:%M") if self.grill_timestamp else '-'}
         <br/> <b>Finish Timestamp:</b> {self.finish_timestamp.strftime("%B %d, %H:%M") if self.finish_timestamp else '-'}<br/>
         <b>Is in grill:</b> {'✅' if self.is_in_grill else '❌'}&nbsp; <b>Is canceled:</b> {'✅' if self.is_canceled else '❌'}</span>
-        <br/><br/><br/>
+        <br/><br/>
+        <b>Количество:</b> {int(self.quantity)}
+        <br/><br/>
         <input hidden type="text" value="{self.menu_item}" id="menuitem-{self.pk}">    
         <b>пункут меню:</b>&nbsp;&nbsp;
         <i><a href="/admin/shaw_queue/menu/{self.menu_item.pk}/change/">{self.menu_item}</a></i>
