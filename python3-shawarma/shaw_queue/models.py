@@ -546,6 +546,7 @@ class DeliveryOrder(models.Model):
         order_content_all = self.order.ordercontent_set.all()
         for order_item in order_content_all:
             order_item_cooking_time = order_item.menu_item.get_cooking_time()
+            logger_debug.info(f'create_cooking_timer {order_item} {order_item_cooking_time}')
             if max_minutes < order_item_cooking_time:
                 max_minutes = order_item_cooking_time
                 last_cook += first_cook
