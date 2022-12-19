@@ -6731,6 +6731,7 @@ def register_customer_order(request):
                     daily_number = 1
             delivery_order.daily_number = daily_number
             delivery_order.save()
+            delivery_order.create_cooking_timer()
             logger_debug.info(f'20')
             return JsonResponse(data={'success': True, 'order_number': daily_number})
         else:
