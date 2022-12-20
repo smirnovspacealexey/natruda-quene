@@ -13,7 +13,7 @@ class Command(BaseCommand):
         for cooking_timer_item in CookingTimerOrderContent.objects.all():
             logger_debug.info(f'{cooking_timer_item}')
             logger_debug.info(f'{cooking_timer_item.date_time} {timezone.now()}')
-            if cooking_timer_item.date_time > timezone.now():
+            if cooking_timer_item.date_time < timezone.now():
                 logger_debug.info(f'{cooking_timer_item} cook now!')
                 cooking_timer_item.cook_now()
 
