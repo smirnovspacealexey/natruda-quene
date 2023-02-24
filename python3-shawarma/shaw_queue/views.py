@@ -6814,4 +6814,10 @@ def excel(request):
         return JsonResponse({'message': str(traceback.format_exc())})
 
 
+@csrf_exempt
+def test(request):
+    template = loader.get_template('shaw_queue/test.html')
+    context = {
+    }
+    return HttpResponse(template.render(context, request))
 

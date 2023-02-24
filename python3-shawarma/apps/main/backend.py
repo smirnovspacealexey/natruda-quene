@@ -54,25 +54,33 @@ def excel_to_base(excel):
         menu_obj.guid_1c = workbook.iloc[i, 3]
         menu_obj.save()
 
-        if macro_product_content_obj:
-            macro_product_content_obj.content_option = content_option_obj
-            macro_product_content_obj.macro_product = macro_product_obj
-            macro_product_content_obj.save()
+        try:
+            if macro_product_content_obj:
+                macro_product_content_obj.content_option = content_option_obj
+                macro_product_content_obj.macro_product = macro_product_obj
+                macro_product_content_obj.save()
+        except:
+            pass
 
-        if product_variant_obj:
-            product_variant_obj.menu_item = menu_obj
-            product_variant_obj.size_option = size_option_obj
-            product_variant_obj.macro_product_content = macro_product_content_obj
-            product_variant_obj.save()
+        try:
+            if product_variant_obj:
+                product_variant_obj.menu_item = menu_obj
+                product_variant_obj.size_option = size_option_obj
+                product_variant_obj.macro_product_content = macro_product_content_obj
+                product_variant_obj.save()
+        except:
+            pass
 
         print(workbook.iloc[i, 24])
-        product_option_ids = workbook.iloc[i, 24].split()
-        for product_option_id in product_option_ids:
-            product_option_obj, created = ProductOption.objects.get_or_create(pk=int(product_option_id),
-                                                                              defaults={'title': workbook.iloc[i, 23],
-                                                                                        'menu_item': menu_obj})
-            if product_variant_obj:
-                product_option_obj.product_variants.add(product_variant_obj)
-
+        try:
+            product_option_ids = workbook.iloc[i, 24].split()
+            for product_option_id in product_option_ids:
+                product_option_obj, created = ProductOption.objects.get_or_create(pk=int(product_option_id),
+                                                                                  defaults={'title': workbook.iloc[i, 23],
+                                                                                            'menu_item': menu_obj})
+                if product_variant_obj:
+                    product_option_obj.product_variants.add(product_variant_obj)
+        except:
+            pass
 
     print('-----------------')

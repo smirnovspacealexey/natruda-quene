@@ -4,6 +4,9 @@ from . import views
 # test
 urlpatterns = [
 
+    path('test/test', views.test, name='test_test'),
+
+
     path('buyer_queue/new', views.buyer_queue_new, name='buyer_queue_new'),
     path('ajax/buyer_queue/new', views.buyer_queue_ajax_new, name='buyer_queue_ajax_new'),  # del me after, Im copy
 
