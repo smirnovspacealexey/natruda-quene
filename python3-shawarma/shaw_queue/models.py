@@ -352,6 +352,7 @@ class OrderContent(models.Model):
     canceled_by = models.ForeignKey(Staff, related_name="content_canceler", verbose_name="Canceled By", null=True,
                                     on_delete=models.SET_NULL)
     note = models.CharField(max_length=500, default="")
+    qr = models.CharField(max_length=500, default="")
     quantity = models.FloatField(verbose_name="Quantity", default=1.0, null=False)
 
     def __str__(self):

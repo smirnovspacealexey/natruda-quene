@@ -5948,7 +5948,8 @@ def send_order_to_1c(order, is_return):
             {
                 'Name': item['menu_item__title'],
                 'Count': round(item['count'], 3),
-                'GUID': item['menu_item__guid_1c']
+                'GUID': item['menu_item__guid_1c'],
+                'QR': item['qr'] if item['qr'] else None,
             }
         )
     try:
