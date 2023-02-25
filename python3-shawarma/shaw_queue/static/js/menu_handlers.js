@@ -484,6 +484,7 @@ function ShowModalEdit(index) {
     var title = $('#item-title');
     var quantity = $('#item-quantity');
     var note = $('#item-note');
+    var qr = $('#item-qr');
     var plus = $('#plus-button');
     var minus = $('#minus-button');
 
@@ -717,7 +718,7 @@ function ShowModalEdit(index) {
     var modal = document.getElementById('modal-edit');
 
     modal.style.display = "block";
-    note.focus();
+    qr.focus();
 }
 
 function CloseModalEdit() {
@@ -917,4 +918,37 @@ function isScrolledIntoView(elem) {
     var elemBottom = elemTop + $elem.height();
 
     return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+}
+
+function addSymbol() {
+    inputing = true;
+    setTimeout(checkInputing, 2000);
+}
+
+let inputQR = document.getElementById("item-qr");
+let inputing = false;
+
+function checkInputing() {
+    if (inputing) {
+        inputQR.value = rus_to_latin(inputQR.value)
+    } else {
+        inputing = false;
+    }
+}
+
+function rus_to_latin (str) {
+    var ru = {
+        'й': 'q', 'ц': 'w', 'у': 'e', 'к': 'r', 'е': 't', 'н': 'y', 'г': 'u', 'ш': 'i', 'щ': 'o', 'з': 'p', 'х': '[', 'ъ': ']', 'ф': 'a', 'ы': 's', 'в': 'd', 'а': 'f', 'п': 'g', 'р': 'h', 'о': 'j', 'л': 'k', 'д': 'l', 'ж': ';', 'э': "'", 'я': 'z', 'ч': 'x', 'с': 'c', 'м': 'v', 'и': 'b', 'т': 'n', 'ь': 'm', 'б': ',', 'ю': '.', '.': '/',
+        'Й': 'Q', 'Ц': 'W', 'У': 'E', 'К': 'R', 'Е': 'T', 'Н': 'Y', 'Г': 'U', 'Ш': 'I', 'Щ': 'O', 'З': 'P', 'Х': '[', 'Ъ': ']', 'Ф': 'A', 'Ы': 'S', 'В': 'D', 'А': 'F', 'П': 'G', 'Р': 'H', 'О': 'J', 'Л': 'K', 'Д': 'L', 'Ж': ';', 'Э': "'", 'Я': 'Z', 'Ч': 'X', 'С': 'C', 'М': 'V', 'И': 'B', 'Т': 'N', 'Ь': 'M', 'Б': ',', 'Ю': '.',
+
+    }, n_str = [];
+
+    for ( var i = 0; i < str.length; ++i ) {
+        n_str.push(
+            ru[ str[i] ]
+            || ru[ str[i].toLowerCase() ] == undefined && str[i]
+            || ru[ str[i].toLowerCase() ].replace(/^(.)/, function ( match ) { return match.toUpperCase() })
+        );
+    }
+    return n_str.join('');
 }
