@@ -5941,7 +5941,7 @@ def send_order_to_1c(order, is_return):
         'Goods': []
     }
     curr_order_content = OrderContent.objects.filter(order=order, menu_item__price__gt=0).values('menu_item__title',
-                                                                                                 'menu_item__guid_1c').annotate(
+                                                                                                 'menu_item__guid_1c', 'qr').annotate(
         count=Sum('quantity'))
     for item in curr_order_content:
         order_dict['Goods'].append(
@@ -5949,7 +5949,7 @@ def send_order_to_1c(order, is_return):
                 'Name': item['menu_item__title'],
                 'Count': round(item['count'], 3),
                 'GUID': item['menu_item__guid_1c'],
-                'QR': item.qr,
+                'QR': item['qr'],
             }
         )
     try:
