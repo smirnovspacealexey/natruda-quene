@@ -536,6 +536,9 @@ function ShowModalEdit(index) {
             SelectSuggestion(index, note.val());
         }
     );
+    qr.on('input', function() {
+        addSymbolInQR(index, qr)
+    })
     plus.click(
         function () {
             PlusOneItem(index);
@@ -855,9 +858,7 @@ function ss(index, id) {
     var input = $('#item-note');
     var input_pos = input.position();
     var searchTerm = $('#item-note').val();
-    var QRs = $('#item-qr').val();
     currOrder[index]['note'] = searchTerm;
-    currOrder[index]['qr'] = QRs;
     $.ajaxSetup({
         beforeSend: function (xhr, settings) {
             xhr.setRequestHeader("X-CSRFToken", csrftoken)
@@ -923,30 +924,32 @@ function isScrolledIntoView(elem) {
     return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
 }
 
-function addSymbol() {
-    inputing = true;
-    setTimeout(checkInputing, 2000);
-}
-
-let inputQR = document.getElementById("item-qr");
 let inputing = false;
 
-function checkInputing() {
-    if (inputing) {
-        inputQR.value = rus_to_latin(inputQR.value)
-    } else {
-        inputing = false;
-    }
 
-    if (inputQR.value.length === 37) {
-        inputQR.value = inputQR.value + '☯'
-    } else if (inputQR.value.length > 37) {
-        if (inputQR.value.length - inputQR.value.lastIndexOf('☯') === 38) {
-            inputQR.value = inputQR.value + '☯'
+function addSymbolInQR(index, qr) {
+    inputing = true;
+    setTimeout(checkInputing, 2000);
+
+    function checkInputing() {
+        if (inputing) {
+            qr.value = rus_to_latin(qr.value)
+        } else {
+            inputing = false;
+        }
+
+        if (qr.value.length === 37) {
+            qr.value = qr.value + '☯';
+            currOrder[index]['qr'] = qr.value;
+        } else if (qr.value.length > 37) {
+            if (qr.value.length - qr.value.lastIndexOf('☯') === 38) {
+                qr.value = qr.value + '☯';
+                currOrder[index]['qr'] = qr.value;
+            }
         }
     }
-}
 
+}
 
 function rus_to_latin (str) {
     var ru = {
