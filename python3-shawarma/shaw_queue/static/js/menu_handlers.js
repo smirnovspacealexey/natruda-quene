@@ -728,9 +728,10 @@ function ShowModalEdit(index) {
     modal.style.display = "block";
 
     if (currOrder[index]['qr_req']) {
-        title.append('<span style="margin-left: 20px; color: rgba(246,96,2,0.76); font-size: 11pt;">QR обязателен</span>');
+        title.append('<span style="margin-left: 20px; color: rgba(246,96,2,0.76); font-size: 8pt;">QR</span>');
         qr.focus();
         qr.css({"outline": "3px solid", "outline-color": "rgba(246,96,2,0.76)"});
+        qr.attr('placeholder', 'QR код товара (!ОБЯЗАТЕЛЕН)')
     } else {
         note.focus()
     }
