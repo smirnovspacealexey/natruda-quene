@@ -339,7 +339,8 @@ function AddOne(id, title, price) {
                 'title': title,
                 'price': price,
                 'quantity': quantity,
-                'note': note
+                'note': note,
+                'qr': qr
             }
         );
     }
@@ -854,7 +855,9 @@ function ss(index, id) {
     var input = $('#item-note');
     var input_pos = input.position();
     var searchTerm = $('#item-note').val();
+    var QRs = $('#item-qr').val();
     currOrder[index]['note'] = searchTerm;
+    currOrder[index]['qr'] = QRs;
     $.ajaxSetup({
         beforeSend: function (xhr, settings) {
             xhr.setRequestHeader("X-CSRFToken", csrftoken)
@@ -934,7 +937,16 @@ function checkInputing() {
     } else {
         inputing = false;
     }
+
+    if (inputQR.value.length === 37) {
+        inputQR.value = inputQR.value + '☯'
+    } else if (inputQR.value.length > 37) {
+        if (inputQR.value.length - inputQR.value.lastIndexOf('☯') === 38) {
+            inputQR.value = inputQR.value + '☯'
+        }
+    }
 }
+
 
 function rus_to_latin (str) {
     var ru = {
