@@ -730,7 +730,7 @@ function ShowModalEdit(index) {
     if (currOrder[index]['qr_req']) {
         title.append('<span style="margin-left: 20px; color: rgba(246,96,2,0.76); font-size: 11pt;">QR обязателен</span>');
         qr.focus();
-        qr.css("{outline: 3px solid; outline-color: rgba(246,96,2,0.76);}");
+        qr.css({"outline": "3px solid", "outline-color": "rgba(246,96,2,0.76)"});
     } else {
         note.focus()
     }
