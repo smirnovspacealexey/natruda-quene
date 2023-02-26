@@ -340,7 +340,7 @@ function AddOne(id, title, price) {
                 'price': price,
                 'quantity': quantity,
                 'note': note,
-                'qr': qr
+                'qr': '',
             }
         );
     }
