@@ -146,9 +146,10 @@ class Menu(models.Model):
         except:
             return 15
 
-    # def js_qr_req(self):
-    #     if self.QR_required:
-    #         return 'true'
+    def js_qr_req(self):
+        if self.QR_required:
+            return 'true'
+        return 'false'
 
     def __str__(self):
         return u"{}".format(self.title)
