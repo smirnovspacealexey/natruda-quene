@@ -125,6 +125,7 @@ class Menu(models.Model):
     is_by_weight = models.BooleanField(verbose_name="На развес", default=False)
     customer_appropriate = models.BooleanField(verbose_name="Подходит для демонстрации покупателю", default=False)
     icon = models.ImageField(upload_to="img/icons", blank=True, null=True, verbose_name="Иконка")
+    QR_required = models.BooleanField(verbose_name="QR обязателен", default=False)
 
     def get_admin_url(self):
         content_type = ContentType.objects.get_for_model(self.__class__)
