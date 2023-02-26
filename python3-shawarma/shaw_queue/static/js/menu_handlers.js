@@ -939,7 +939,7 @@ function addSymbolInQR(index, qr) {
             inputing = false;
         }
 
-        if (qr.value.length === 37) {
+        if (qr.val().length === 37) {
             qr.val(qr.val() + '☯');
             currOrder[index]['qr'] = qr.value;
         } else if (qr.val().length > 37) {
