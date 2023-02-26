@@ -1,4 +1,4 @@
-<div class="menu-item" category="{{ menu_item.category.eng_title }}" onclick="AddOne({{ menu_item.id }}, '{{ menu_item.title }}', {{ menu_item.price }}, {% if menu_item.QR_required %}'1'{% else %}'0'{% endif %})">
+<div class="menu-item" category="{{ menu_item.category.eng_title }}" onclick="AddOne({{ menu_item.id }}, '{{ menu_item.title }}', {{ menu_item.js_price }}, {% if menu_item.QR_required %}true{% else %}false{% endif %})">
     <div class="menu-item-details">
         <div class="menu-item-title">
             {{ menu_item.title }}
