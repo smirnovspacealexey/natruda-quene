@@ -547,6 +547,7 @@ function ShowModalEdit(index) {
         if(e.keyCode === 9) {
             qr.val(qr.val() + '☯');
             currOrder[index]['qr'] = qr.val();
+            qr.focus();
         }
     });
 
