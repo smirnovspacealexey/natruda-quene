@@ -521,7 +521,7 @@ function ShowModalEdit(index) {
         }
     );
     note.val(currOrder[index]['note']);
-    note.qr(currOrder[index]['qr']);
+    qr.val(currOrder[index]['qr']);
     note.keyup(
         function (event) {
             if (event.keyCode === 13) {
