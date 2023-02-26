@@ -329,7 +329,6 @@ function Remove(index) {
 }
 
 function AddOne(id, title, price, qr_req) {
-    console.log(qr_req)
     var quantity = 1;
     var note = '';
     var index = FindItem(id, note);
@@ -522,6 +521,7 @@ function ShowModalEdit(index) {
         }
     );
     note.val(currOrder[index]['note']);
+    note.qr(currOrder[index]['qr']);
     note.keyup(
         function (event) {
             if (event.keyCode === 13) {
@@ -726,7 +726,7 @@ function ShowModalEdit(index) {
     modal.style.display = "block";
 
     if (currOrder[index]['qr_req']) {
-        title.append('<span style="margin-left: 20px; color: rgba(246,96,2,0.76); font-size: 11pt;">QR обязателен у этого товара</span>');
+        title.append('<span style="margin-left: 20px; color: rgba(246,96,2,0.76); font-size: 11pt;">QR обязателен</span>');
         qr.focus();
     } else {
         note.focus()
