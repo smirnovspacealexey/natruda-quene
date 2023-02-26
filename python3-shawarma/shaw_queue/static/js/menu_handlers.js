@@ -730,10 +730,10 @@ function ShowModalEdit(index) {
     if (currOrder[index]['qr_req']) {
         title.append('<span style="margin-left: 20px; color: rgba(246,96,2,0.76); font-size: 8pt;">QR</span>');
         qr.focus();
-        qr.css({"outline": "3px solid", "outline-color": "rgba(246,96,2,0.76)"});
+        qr.css({"outline": "3px solid rgba(246,96,2,0.76)"});
         qr.attr('placeholder', 'QR код товара (!ОБЯЗАТЕЛЕН)')
     } else {
-        qr.css({"outline": "2px solid", "outline-color": "rgb(0,0,0)"});
+        qr.css({"outline": "0px hidden"});
         qr.attr('placeholder', 'QR код товара')
         note.focus()
     }
