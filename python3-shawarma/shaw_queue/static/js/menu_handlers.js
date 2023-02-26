@@ -726,7 +726,7 @@ function ShowModalEdit(index) {
     modal.style.display = "block";
 
     if (currOrder[index]['qr_req']) {
-        title.append('<sub>QR обязателен у этого товара</sub>');
+        title.append('<sub style="margin-left: 20px;  color: rgba(246,96,2,0.76);">QR обязателен у этого товара</sub>');
         qr.focus();
     } else {
         note.focus()
