@@ -733,7 +733,7 @@ function ShowModalEdit(index) {
         qr.css({"outline": "3px solid rgba(246,96,2,0.76)"});
         qr.attr('placeholder', 'QR код товара (!ОБЯЗАТЕЛЕН)')
     } else {
-        qr.css({"outline": "0px hidden rgba(0,0,0,0.0)"});
+        qr.attr("outline", "0px hidden");
         qr.attr('placeholder', 'QR код товара')
         note.focus()
     }
