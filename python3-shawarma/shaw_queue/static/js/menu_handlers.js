@@ -930,22 +930,22 @@ let inputing = false;
 function addSymbolInQR(index, qr) {
     inputing = true;
     setTimeout(checkInputing, 2000);
-    console.log(qr.value)
-    console.log(qr.value.length)
+    console.log(qr.val())
+    console.log(qr.val().length)
     function checkInputing() {
         if (inputing) {
-            qr.value = rus_to_latin(qr.value)
+            qr.val(rus_to_latin(qr.val()))
         } else {
             inputing = false;
         }
 
         if (qr.value.length === 37) {
-            qr.value = qr.value + '☯';
+            qr.val(qr.val() + '☯');
             currOrder[index]['qr'] = qr.value;
-        } else if (qr.value.length > 37) {
-            if (qr.value.length - qr.value.lastIndexOf('☯') === 38) {
-                qr.value = qr.value + '☯';
-                currOrder[index]['qr'] = qr.value;
+        } else if (qr.val().length > 37) {
+            if (qr.val().length - qr.val().lastIndexOf('☯') === 38) {
+                qr.val(qr.val() + '☯');
+                currOrder[index]['qr'] = qr.val();
             }
         }
     }
