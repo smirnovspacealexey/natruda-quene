@@ -356,7 +356,7 @@ class OrderContent(models.Model):
     canceled_by = models.ForeignKey(Staff, related_name="content_canceler", verbose_name="Canceled By", null=True,
                                     on_delete=models.SET_NULL)
     note = models.CharField(max_length=500, default="")
-    qr = models.CharField(max_length=500, default="")
+    qr = models.TextField(blank=True, null=True)
     quantity = models.FloatField(verbose_name="Quantity", default=1.0, null=False)
 
     def __str__(self):
@@ -394,6 +394,18 @@ class OrderContent(models.Model):
             '''
         else:
             html += '<br/><br/><b>без описания</b><br/>'
+
+        if self.qr:
+            html += f'''
+            <br/><br/>
+            <input hidden type="text" value="{self.note}" id="qr-{self.pk}">
+            <b>QR:</b>&nbsp;&nbsp;       
+            <i>{self.qr}</i>
+            <br/>        
+            <a class="button" onclick="copyText('qr-{self.pk}')">копировать в буфер</a><br/>
+            '''
+        else:
+            html += '<br/><b>без qr</b><br/>'
         return format_html(html)
 
     info.allow_tags = False

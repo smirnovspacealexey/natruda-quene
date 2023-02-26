@@ -3800,10 +3800,11 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
     for item in content:
         item['toppings'] = item.get('toppings', [])
         item['note'] = item.get('note', "")
+        item['qr'] = item.get('qr', "")
         if item['quantity'] - int(item['quantity']) != 0:
             try:
                 new_order_content = OrderContent(order=order, menu_item_id=item['id'], note=item['note'],
-                                                 quantity=item['quantity'])
+                                                 quantity=item['quantity'], qr=item['qr'])
             except:
                 order.delete()
                 data = {
@@ -5942,16 +5943,40 @@ def send_order_to_1c(order, is_return):
     }
     curr_order_content = OrderContent.objects.filter(order=order, menu_item__price__gt=0).values('menu_item__title',
                                                                                                  'menu_item__guid_1c', 'qr').annotate(
-        count=Sum('quantity'))
+        count=Sum('quantity'))  # TODO оптимизировать через переборку средствами питона
     for item in curr_order_content:
-        order_dict['Goods'].append(
-            {
-                'Name': item['menu_item__title'],
-                'Count': round(item['count'], 3),
-                'GUID': item['menu_item__guid_1c'],
-                'QR': item['qr'],
-            }
-        )
+        count = round(item['count'], 3)
+
+        if item['qr']:
+            qrs = item['qr'].split('☯')
+            for qr in qrs:
+                order_dict['Goods'].append(
+                    {
+                        'Name': item['menu_item__title'],
+                        'Count': 1,
+                        'GUID': item['menu_item__guid_1c'],
+                        'QR': qr,
+                    }
+                )
+
+            if len(qrs) - count > 0:
+                order_dict['Goods'].append(
+                    {
+                        'Name': item['menu_item__title'],
+                        'Count': len(qrs) - count,
+                        'GUID': item['menu_item__guid_1c'],
+                        'QR': '',
+                    }
+                )
+        else:
+            order_dict['Goods'].append(
+                {
+                    'Name': item['menu_item__title'],
+                    'Count': count,
+                    'GUID': item['menu_item__guid_1c'],
+                    'QR': '',
+                }
+            )
     try:
         # result = requests.post('http://' + SERVER_1C_IP + ':' + SERVER_1C_PORT + ORDER_URL,
         #                        auth=(SERVER_1C_USER.encode('utf8'), SERVER_1C_PASS),
