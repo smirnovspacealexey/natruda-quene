@@ -329,6 +329,7 @@ function Remove(index) {
 }
 
 function AddOne(id, title, price, qr_req) {
+    console.log(qr_req)
     var quantity = 1;
     var note = '';
     var index = FindItem(id, note);
