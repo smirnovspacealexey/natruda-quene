@@ -948,17 +948,20 @@ function addSymbolInQR(index, qr) {
     console.log(index)
     console.log(qr)
     inputing = true;
+
+    qr.keydown(function(e) {
+        if(e.keyCode === 9) {
+           qr.val(qr.val() + '☯');
+           currOrder[index]['qr'] = qr.val();
+        }
+    });
+
     setTimeout(checkInputing, 2000);
     function checkInputing() {
         if (inputing) {
             qr.val(rus_to_latin(qr.val()))
         } else {
             inputing = false;
-        }
-
-        if (qr.val().includes('\\r\\n')) {
-            qr.val(qr.val().replace('\\r\\n', '☯'));
-            currOrder[index]['qr'] = qr.val();
         }
 
         // if (qr.val().length === 37) {
