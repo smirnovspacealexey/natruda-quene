@@ -539,21 +539,26 @@ function ShowModalEdit(index) {
         }
     );
 
-    console.log('qr.on: ' + index);
     qr.off("input",);
     qr.off("keydown",);
 
     qr.keydown(function(e) {
         if(e.keyCode === 9) {
-            qr.click();
-            qr.val(qr.val() + '☯');
-            currOrder[index]['qr'] = qr.val();
+            setTimeout(tabBack, 50)
+            function tabBack() {
+                qr.focus()
+            }
+            let qr_val = rus_to_latin(qr.val() + '☯')
+            qr.val(qr_val);
+            currOrder[index]['qr'] = qr_val;
         }
     });
 
-    qr.on('input', function() {
-        addSymbolInQR(index, qr)
-    })
+    // qr.on('input', function() {
+    //     addSymbolInQR(index, qr)
+    // })
+
+
     plus.click(
         function () {
             PlusOneItem(index);
@@ -950,34 +955,33 @@ function isScrolledIntoView(elem) {
     return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
 }
 
-let inputing = false;
+// let inputing = false;
 
-
-function addSymbolInQR(index, qr) {
-    console.log(index)
-    console.log(qr)
-    inputing = true;
-
-    setTimeout(checkInputing, 2000);
-    function checkInputing() {
-        if (inputing) {
-            qr.val(rus_to_latin(qr.val()))
-        } else {
-            inputing = false;
-        }
-
-        // if (qr.val().length === 37) {
-        //     qr.val(qr.val() + '☯');
-        //     currOrder[index]['qr'] = qr.val();
-        // } else if (qr.val().length > 37) {
-        //     if (qr.val().length - qr.val().lastIndexOf('☯') === 38) {
-        //         qr.val(qr.val() + '☯');
-        //         currOrder[index]['qr'] = qr.val();
-        //     }
-        // }
-    }
-
-}
+// function addSymbolInQR(index, qr) {
+//     console.log(index)
+//     console.log(qr)
+//     inputing = true;
+//
+//     setTimeout(checkInputing, 2000);
+//     function checkInputing() {
+//         if (inputing) {
+//             qr.val(rus_to_latin(qr.val()))
+//         } else {
+//             inputing = false;
+//         }
+//
+//         // if (qr.val().length === 37) {
+//         //     qr.val(qr.val() + '☯');
+//         //     currOrder[index]['qr'] = qr.val();
+//         // } else if (qr.val().length > 37) {
+//         //     if (qr.val().length - qr.val().lastIndexOf('☯') === 38) {
+//         //         qr.val(qr.val() + '☯');
+//         //         currOrder[index]['qr'] = qr.val();
+//         //     }
+//         // }
+//     }
+//
+// }
 
 function rus_to_latin (str) {
     var ru = {

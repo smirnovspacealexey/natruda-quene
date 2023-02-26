@@ -9,7 +9,7 @@
 <body>
 <div style="margin: 200px">
     <button onclick="addBtn()">добавить</button>
-    <input oninput="addSymbol()" id="myText" style="width: 500px">
+    <input tabindex="+1" oninput="addSymbol()" id="myText" style="width: 500px">
 </div>
 
 
@@ -30,7 +30,8 @@
     }
 
     function addBtn() {
-        input.focus();
+        $('#myText').focus()
+        {#input.focus();#}
         input.value = '';
     }
 
@@ -60,10 +61,13 @@
 
 
     $('#myText').keydown(function(e) {
+        console.log(e.keyCode)
         if(e.keyCode === 9) {
-            alert(e.keyCode)
+            setTimeout(fuck, 50)
         }
     });
+
+    function fuck() {$('#myText').focus();}
 </script>
 </html>
 
