@@ -954,7 +954,10 @@ function addSymbolInQR(index, qr) {
             inputing = false;
         }
 
-        qr.val(qr.val().replace('\\r\\n', '☯'));
+        if (qr.val().includes('\\r\\n')) {
+            qr.val(qr.val().replace('\\r\\n', '☯'));
+            currOrder[index]['qr'] = qr.val();
+        }
 
         // if (qr.val().length === 37) {
         //     qr.val(qr.val() + '☯');
