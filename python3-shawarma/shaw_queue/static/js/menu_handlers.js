@@ -730,7 +730,7 @@ function ShowModalEdit(index) {
     if (currOrder[index]['qr_req']) {
         title.append('<span style="margin-left: 20px; color: rgba(246,96,2,0.76); font-size: 11pt;">QR обязателен</span>');
         qr.focus();
-        qr.css("outline: 2px solid rgba(246,96,2,0.76) !important;");
+        qr.css("outline: 3px solid; outline-color: rgba(246,96,2,0.76);");
     } else {
         note.focus()
     }
@@ -951,15 +951,17 @@ function addSymbolInQR(index, qr) {
             inputing = false;
         }
 
-        if (qr.val().length === 37) {
-            qr.val(qr.val() + '☯');
-            currOrder[index]['qr'] = qr.val();
-        } else if (qr.val().length > 37) {
-            if (qr.val().length - qr.val().lastIndexOf('☯') === 38) {
-                qr.val(qr.val() + '☯');
-                currOrder[index]['qr'] = qr.val();
-            }
-        }
+        qr.val(qr.val().replace('\r', '☯'));
+
+        // if (qr.val().length === 37) {
+        //     qr.val(qr.val() + '☯');
+        //     currOrder[index]['qr'] = qr.val();
+        // } else if (qr.val().length > 37) {
+        //     if (qr.val().length - qr.val().lastIndexOf('☯') === 38) {
+        //         qr.val(qr.val() + '☯');
+        //         currOrder[index]['qr'] = qr.val();
+        //     }
+        // }
     }
 
 }
