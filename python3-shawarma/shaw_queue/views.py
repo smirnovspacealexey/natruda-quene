@@ -3852,7 +3852,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
                     supplement_presence = True
 
                 try:
-                    new_order_content = OrderContent(order=order, menu_item=menu_item, note=item['note'])
+                    new_order_content = OrderContent(order=order, menu_item=menu_item, note=item['note'], qr=item['qr'])
                 except Exception as e:
                     order.delete()
                     data = {
@@ -5946,10 +5946,10 @@ def send_order_to_1c(order, is_return):
         count=Sum('quantity'))  # TODO оптимизировать через переборку средствами питона
     for item in curr_order_content:
         count = round(item['count'], 3)
-
+        logger_debug.info(f'\n\nsend_order_to_1c {item}')
         if item['qr']:
             qrs = item['qr'].split('☯')
-            for qr in qrs:
+            for qr in qrs[:-1]:
                 order_dict['Goods'].append(
                     {
                         'Name': item['menu_item__title'],
@@ -5959,7 +5959,7 @@ def send_order_to_1c(order, is_return):
                     }
                 )
 
-            if len(qrs) - count > 0:
+            if len(qrs) - 1 - count > 0:
                 order_dict['Goods'].append(
                     {
                         'Name': item['menu_item__title'],
