@@ -728,6 +728,7 @@ function ShowModalEdit(index) {
     if (currOrder[index]['qr_req']) {
         title.append('<span style="margin-left: 20px; color: rgba(246,96,2,0.76); font-size: 11pt;">QR обязателен</span>');
         qr.focus();
+        qr.css("outline: 2px solid rgba(246,96,2,0.76);");
     } else {
         note.focus()
     }
@@ -937,6 +938,8 @@ let inputing = false;
 
 
 function addSymbolInQR(index, qr) {
+    console.log(index)
+    console.log(qr)
     inputing = true;
     setTimeout(checkInputing, 2000);
     function checkInputing() {
