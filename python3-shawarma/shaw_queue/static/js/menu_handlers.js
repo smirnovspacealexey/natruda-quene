@@ -951,7 +951,7 @@ function addSymbolInQR(index, qr) {
             inputing = false;
         }
 
-        qr.val(qr.val().replace('\r', '☯'));
+        qr.val(qr.val().replace('\\r\\n', '☯'));
 
         // if (qr.val().length === 37) {
         //     qr.val(qr.val() + '☯');
