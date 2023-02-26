@@ -930,8 +930,6 @@ let inputing = false;
 function addSymbolInQR(index, qr) {
     inputing = true;
     setTimeout(checkInputing, 2000);
-    console.log(qr.val())
-    console.log(qr.val().length)
     function checkInputing() {
         if (inputing) {
             qr.val(rus_to_latin(qr.val()))
@@ -941,7 +939,7 @@ function addSymbolInQR(index, qr) {
 
         if (qr.val().length === 37) {
             qr.val(qr.val() + '☯');
-            currOrder[index]['qr'] = qr.value;
+            currOrder[index]['qr'] = qr.val();
         } else if (qr.val().length > 37) {
             if (qr.val().length - qr.val().lastIndexOf('☯') === 38) {
                 qr.val(qr.val() + '☯');
