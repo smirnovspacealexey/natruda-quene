@@ -328,7 +328,7 @@ function Remove(index) {
     channel.postMessage(JSON.stringify(currOrder));
 }
 
-function AddOne(id, title, price) {
+function AddOne(id, title, price, qr_req) {
     var quantity = 1;
     var note = '';
     var index = FindItem(id, note);
@@ -341,6 +341,7 @@ function AddOne(id, title, price) {
                 'quantity': quantity,
                 'note': note,
                 'qr': '',
+                'qr_req': qr_req,
             }
         );
     }
@@ -722,7 +723,13 @@ function ShowModalEdit(index) {
     var modal = document.getElementById('modal-edit');
 
     modal.style.display = "block";
-    qr.focus();
+
+    if (currOrder[index]['qr_req']) {
+        qr.focus();
+    } else {
+        note.focus()
+    }
+
 }
 
 function CloseModalEdit() {
