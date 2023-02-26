@@ -540,7 +540,15 @@ function ShowModalEdit(index) {
     );
 
     console.log('qr.on: ' + index);
-    qr.off( "input", );
+    qr.off("input",);
+    qr.off("keydown",);
+
+    qr.keydown(function(e) {
+        if(e.keyCode === 9) {
+            qr.val(qr.val() + '☯');
+            currOrder[index]['qr'] = qr.val();
+        }
+    });
 
     qr.on('input', function() {
         addSymbolInQR(index, qr)
@@ -948,13 +956,6 @@ function addSymbolInQR(index, qr) {
     console.log(index)
     console.log(qr)
     inputing = true;
-
-    qr.keydown(function(e) {
-        if(e.keyCode === 9) {
-           qr.val(qr.val() + '☯');
-           currOrder[index]['qr'] = qr.val();
-        }
-    });
 
     setTimeout(checkInputing, 2000);
     function checkInputing() {
