@@ -540,7 +540,7 @@ function ShowModalEdit(index) {
     );
 
     console.log('qr.on: ' + index);
-    qr.off();
+    qr.off( "input", );
 
     qr.on('input', function() {
         addSymbolInQR(index, qr)
