@@ -930,7 +930,8 @@ let inputing = false;
 function addSymbolInQR(index, qr) {
     inputing = true;
     setTimeout(checkInputing, 2000);
-
+    console.log(qr.value)
+    console.log(qr.value.length)
     function checkInputing() {
         if (inputing) {
             qr.value = rus_to_latin(qr.value)
