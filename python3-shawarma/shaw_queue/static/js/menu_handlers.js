@@ -725,7 +725,8 @@ function ShowModalEdit(index) {
 
     modal.style.display = "block";
 
-    if (currOrder[index]['qr_req']) {
+    if (currOrder[index]['qr_req'] === '1') {
+        title.text(title.text() + ' <sub>QR обязателен у этого товара</sub>');
         qr.focus();
     } else {
         note.focus()
