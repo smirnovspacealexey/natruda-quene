@@ -121,6 +121,11 @@
                         <button style="margin-left: 70px" type="button" class="subm small-btn success" data-send-url="{% url 'make_order' %}">
                             Принять
                         </button>
+                        <input type="radio" id="paid_with_sms" value="paid_with_sms" name="paid_with_sms" placeholder="телефон">
+                        <label for="paid_with_sms">Оплатить через СМС</label>
+                          <button type="button" class="subm small-btn success" data-send-url="{% url 'make_order' %}">
+                            отправить
+                        </button>
                     </p>
                     <p>
                         <input type="radio" id="paid_without_cash" value="paid_without_cash" name="payment_choose">
