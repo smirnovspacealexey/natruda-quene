@@ -11,6 +11,14 @@ def parse_to_base(modeladmin, request, queryset):
 parse_to_base.short_description = 'отпарсить в базу'
 
 
+def parse_to_base(modeladmin, request, queryset):
+    excel_base = queryset.first()
+    excel_to_base(excel_base.excel.path)
+
+
+parse_to_base.short_description = 'отпарсить в базу'
+
+
 @admin.register(ExcelBase)
 class ExcelBaseAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'name', 'excel', ]
