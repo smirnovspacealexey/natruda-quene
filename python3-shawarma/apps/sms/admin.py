@@ -27,7 +27,7 @@ resend_sms.short_description = 'повторно отправить смс'
 class MangoSettingsAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'vpbx_api_key', 'vpbx_api_salt', 'from_extension', 'active']
     list_editable = ('vpbx_api_key', 'vpbx_api_salt', 'from_extension', 'active')
-    search_fields = ['name', ]
+    search_fields = ['__str__', ]
     actions = [send_test_sms, ]
 
 
