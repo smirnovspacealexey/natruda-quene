@@ -65,6 +65,20 @@ class ServicePoint(models.Model):
                                                         default=False,
                                                         help_text="Может быть выбрана ТОЛЬКО ОДНА точка.")
 
+    fullname = models.CharField('полное название', max_length=500, default="",
+                                help_text="С указанием города. Важно вводить населенный пункт с указанием номера дома,"
+                                          " но без номера квартиры, подъезда, этажа")
+    building = models.CharField('строение ', max_length=500, default="", help_text="Для доставки")
+    building_name = models.CharField('название апартаментов', max_length=500, default="", help_text="Для доставки")
+    city = models.CharField('город', max_length=500, default="", help_text="Для доставки")
+    country = models.CharField('страна', max_length=500, default="", help_text="Для доставки")
+    comment = models.CharField('комментарий по-умолчанию', max_length=500, default="", help_text="Для доставки")
+    description = models.CharField('описание', max_length=500, default="",
+                                   help_text="Для доставки, Географическая область, уточняющая до глобального соответствия")
+    porch = models.CharField('подъезд', max_length=500, default="", help_text="Для доставки")
+    sflat = models.CharField('Квартира', max_length=500, default="", help_text="Для доставки")
+    sfloor = models.CharField('Этаж', max_length=500, default="1", help_text="Для доставки")
+
     def get_admin_url(self):
         content_type = ContentType.objects.get_for_model(self.__class__)
         return reverse("admin:%s_%s_change" % (content_type.app_label, content_type.model), args=(self.id,))

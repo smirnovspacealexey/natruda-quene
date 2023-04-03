@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'shaw_queue.apps.ShawQueueConfig',
     'apps.main',
     'apps.sms',
+    'apps.delivery',
     'jquery',
 ]
 
