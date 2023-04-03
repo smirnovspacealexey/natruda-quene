@@ -34,7 +34,7 @@ class YandexSettings(models.Model):
 
     emergency_contact_name = models.CharField('emergency_contact_name', max_length=200, default='',
                                               help_text='Имя контактного лица')
-    emergency_contact_phone = models.CharField('emergency_contact_phone', max_length=200, default='',
+    emergency_contact_phone = models.CharField(max_length=200, default='',
                                                help_text='Телефон контактного лица')
 
     optional_return = models.BooleanField('optional_return', default=False,
@@ -42,7 +42,7 @@ class YandexSettings(models.Model):
                                                     ' true - курьер оставляет товар себе,'
                                                     ' false - по умолчанию, требуется вернуть товар')
 
-    referral_source = models.CharField('emergency_contact_phone', max_length=200, default='',
+    referral_source = models.CharField(max_length=200, default='',
                                        help_text='Источник заявки (можно передать наименование CMS, из которой создается запрос)')
 
     skip_confirmation = models.BooleanField('skip_confirmation', default=False,
