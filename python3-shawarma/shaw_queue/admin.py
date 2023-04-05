@@ -8,12 +8,17 @@ from django.contrib import admin
 from django import forms
 
 
-
 def accepted_everything(modeladmin, request, queryset):
     CallData.objects.filter(accepted=False).update(accepted=True)
 
-
 accepted_everything.short_description = 'завершить все звонки'
+
+
+def testdelivery(modeladmin, request, queryset):
+    return
+
+
+testdelivery.short_description = 'сделать тестовый заказ'
 
 
 # Register your models here.
@@ -91,10 +96,17 @@ class MacroProductContentAdmin(admin.ModelAdmin):
     list_editable = ('title', 'customer_appropriate')
     search_fields = ['title', 'menu_title', 'customer_title']
 
+
+@admin.register(ServicePoint)
+class ServicePointAdmin(admin.ModelAdmin):
+    list_display = ['__str__', 'title', 'fullname', 'latitude', 'longitude']
+    list_editable = ('title', 'fullname', 'latitude', 'longitude')
+    search_fields = ['title', 'fullname']
+    actions = [testdelivery, ]
+
 admin.site.register(Staff)
 admin.site.register(StaffCategory)
 admin.site.register(MenuCategory)
-admin.site.register(ServicePoint)
 admin.site.register(Printer)
 admin.site.register(Customer)
 admin.site.register(Delivery)
