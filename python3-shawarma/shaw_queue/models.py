@@ -79,6 +79,8 @@ class ServicePoint(models.Model):
     sflat = models.CharField('Квартира', max_length=500, default="", help_text="Для доставки", blank=True)
     sfloor = models.CharField('Этаж', max_length=500, default="1", help_text="Для доставки", blank=True)
 
+    phone = models.CharField(max_length=200, default='',  help_text='Для доставки')
+
     def get_admin_url(self):
         content_type = ContentType.objects.get_for_model(self.__class__)
         return reverse("admin:%s_%s_change" % (content_type.app_label, content_type.model), args=(self.id,))
