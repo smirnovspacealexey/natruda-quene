@@ -35,7 +35,7 @@ def delivery_request(order, source, destination, history=None):
                 "cost_currency": yandex_settings.currency,
                 "cost_value": str(item.menu_item.price),
                 "droppof_point": 2,
-                "extra_id": order.daily_number,
+                "extra_id": str(order.daily_number),
                 "pickup_point": 1,
                 "quantity": item.quantity,
                 "size": {
@@ -94,7 +94,7 @@ def delivery_request(order, source, destination, history=None):
                     "currency_sign": yandex_settings.currency_sign,
                     "value": order.total
                 },
-                "external_order_id": order.daily_number,
+                "external_order_id": str(order.daily_number),
                 "pickup_code": history.six_numbers,
                 "point_id": 1,
                 "skip_confirmation": yandex_settings.skip_confirmation,
@@ -131,7 +131,7 @@ def delivery_request(order, source, destination, history=None):
                     "currency_sign": yandex_settings.currency_sign,
                     "value": order.total
                 },
-                "external_order_id":  order.daily_number,
+                "external_order_id":  str(order.daily_number),
                 "point_id": 2,
                 "skip_confirmation": yandex_settings.skip_confirmation,
                 "type": "destination",
