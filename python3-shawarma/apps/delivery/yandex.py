@@ -144,7 +144,7 @@ def delivery_request(order, source, destination, history=None):
         "skip_emergency_notify": yandex_settings.skip_emergency_notify
     }
 
-    res = requests.post(f'{url}create?request_id={history.request_id}', data=data, headers=headers)
+    res = requests.post(f'{url}create?request_id={history.request_id}', json=data, headers=headers)
     response = json.loads(res.content.decode("utf-8"))
     print(res.status_code)
     print(response)
