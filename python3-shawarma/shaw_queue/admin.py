@@ -38,7 +38,8 @@ def testdelivery(modeladmin, request, queryset):
                     "phone": yandex_settings.test_phone,
 
     }
-    delivery_request(Order.objects.last(), queryset.first(), destination)
+    order_content = OrderContent.objects.last()
+    delivery_request(order_content.order, queryset.first(), destination)
 
 
 testdelivery.short_description = 'сделать тестовый заказ'
