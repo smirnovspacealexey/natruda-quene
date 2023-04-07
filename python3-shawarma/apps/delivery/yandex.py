@@ -51,7 +51,7 @@ def delivery_request(order, source, destination, history=None):
     data = {
         "client_requirements": {
             "assign_robot": yandex_settings.assign_robot,
-            "pro_courier": yandex_settings.taxi_class,
+            "pro_courier": yandex_settings.pro_courier,
             "taxi_class": yandex_settings.taxi_class,
             "cargo_options": cargo_options
         },
