@@ -21,7 +21,7 @@ def testdelivery(modeladmin, request, queryset):
     destination = {
                     "fullname": "Челябинск, Университетская Набережная 63",
                     "building": "63",
-                    # "building_name": "Alex",
+                    "building_name": "",
                     "city": "Челябинск",
                     "comment": "ТЕСТОВЫЙ ЗАКАЗ НЕ ВЫПОЛНЯТЬ. ТЕСТИРУЕМ АПИ",
                     "country": "Россия",
