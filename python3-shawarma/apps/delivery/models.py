@@ -59,6 +59,8 @@ class YandexSettings(models.Model):
     email = models.CharField(max_length=200, default="", help_text='Email')
 
     test_phone = models.CharField(max_length=200, default='', help_text='Телефон для тестового заказа')
+    latitude = models.FloatField(verbose_name="тестовая Широта", default=55.196829, blank=False, null=False)
+    longitude = models.FloatField(verbose_name="тестовая Долгота", default=61.395762, blank=False, null=False)
 
     def __str__(self):
         return self.name if self.name else f'id{self.pk}'

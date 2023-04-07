@@ -35,7 +35,7 @@ def delivery_request(order, source, destination, history=None):
                 "cost_currency": yandex_settings.currency,
                 "cost_value": str(item.menu_item.price),
                 "droppof_point": 2,
-                "extra_id": str(order.daily_number),
+                "extra_id": item.pk,
                 "pickup_point": 1,
                 "quantity": item.quantity,
                 "size": {
@@ -103,10 +103,10 @@ def delivery_request(order, source, destination, history=None):
             },
             {
                 "address": {
-                    # "coordinates": [
-                    #     37.307115,
-                    #     55.634146
-                    # ],
+                    "coordinates": [
+                        yandex_settings.longitude,  # Longitude
+                        yandex_settings.latitude   # Latitude
+                    ],
                     "fullname": destination["fullname"],
                     "building": destination["building"],
                     "building_name": destination["building_name"],
@@ -122,7 +122,7 @@ def delivery_request(order, source, destination, history=None):
                     "sfloor": destination["sfloor"]
                 },
                 "contact": {
-                    "email": destination['email'],
+                    # "email": destination['email'],
                     "name": destination['name'],
                     "phone": destination['phone']
                 },
