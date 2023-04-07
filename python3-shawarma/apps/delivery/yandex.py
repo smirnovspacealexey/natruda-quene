@@ -15,6 +15,8 @@ url = 'https://b2b.taxi.yandex.net/b2b/cargo/integration/v2/claims/'
 
 def delivery_request(order, source, destination, history=None):
     yandex_settings = YandexSettings.current()
+    headers = {'Accept-Language': 'ru', 'Authorization': yandex_settings.token}
+
     if not history:
         history = DeliveryHistory.objects.create()
 
@@ -142,7 +144,7 @@ def delivery_request(order, source, destination, history=None):
         "skip_emergency_notify": yandex_settings.skip_emergency_notify
     }
 
-    res = requests.post(f'{url}create?request_id={history.request_id}', data=data)
+    res = requests.post(f'{url}create?request_id={history.request_id}', data=data, headers=headers)
     response = json.loads(res.content.decode("utf-8"))
     print(res.status_code)
     print(response)
