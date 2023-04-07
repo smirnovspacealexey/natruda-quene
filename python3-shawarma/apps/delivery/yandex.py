@@ -3,6 +3,10 @@ from shaw_queue.models import ServicePoint
 import requests
 import json
 from apps.sms.backend import send_sms
+import logging
+
+logger_debug = logging.getLogger('debug_logger')
+
 
 url = 'https://b2b.taxi.yandex.net/b2b/cargo/integration/v2/claims/'
 
@@ -143,4 +147,6 @@ def delivery_request(order, source, destination, history=None):
     print(res.status_code)
     print(response)
     # if res.status_code == 200:
+
+    logger_debug.info(f'delivery_request {res.status_code} \n {response}')
 
