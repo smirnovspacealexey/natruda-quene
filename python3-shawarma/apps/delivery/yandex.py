@@ -15,7 +15,7 @@ url = 'https://b2b.taxi.yandex.net/b2b/cargo/integration/v2/claims/'
 
 def delivery_request(order, source, destination, history=None):
     yandex_settings = YandexSettings.current()
-    headers = {'Accept-Language': 'ru', 'Authorization': yandex_settings.token}
+    headers = {'Accept-Language': 'ru', 'Authorization': Bearer + ' ' + yandex_settings.token}
 
     if not history:
         history = DeliveryHistory.objects.create()
