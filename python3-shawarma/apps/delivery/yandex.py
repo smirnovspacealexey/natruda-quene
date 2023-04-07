@@ -150,5 +150,5 @@ def delivery_request(order, source, destination, history=None):
     print(response)
     # if res.status_code == 200:
 
-    logger_debug.info(f'delivery_request {res.status_code} \n {response}')
+    logger_debug.info(f'delivery_request {headers} \n {data} \n {res.status_code} \n {response}')
 
