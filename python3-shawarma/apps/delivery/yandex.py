@@ -92,7 +92,7 @@ def delivery_request(order, source, destination, history=None):
                 "external_order_cost": {
                     "currency": yandex_settings.currency,
                     "currency_sign": yandex_settings.currency_sign,
-                    "value": order.total
+                    "value": str(order.total)
                 },
                 "external_order_id": str(order.daily_number),
                 "pickup_code": history.six_numbers,
@@ -129,7 +129,7 @@ def delivery_request(order, source, destination, history=None):
                 "external_order_cost": {
                     "currency": yandex_settings.currency,
                     "currency_sign": yandex_settings.currency_sign,
-                    "value": order.total
+                    "value": str(order.total)
                 },
                 "external_order_id":  str(order.daily_number),
                 "point_id": 2,
