@@ -56,6 +56,10 @@ class YandexSettings(models.Model):
     skip_door_to_door = models.BooleanField(default=False, help_text='Отказ от доставки до двери (выключить опцию "От двери до двери").')
     skip_emergency_notify = models.BooleanField(default=False, help_text='Не отправлять нотификации emergency контакту')
 
+    email = models.CharField(max_length=200, default="", help_text='Email')
+
+    test_phone = models.CharField(max_length=200, default='', help_text='Телефон для тестового заказа')
+
     def __str__(self):
         return self.name if self.name else f'id{self.pk}'
 
@@ -78,13 +82,20 @@ class YandexSettings(models.Model):
 
 
 class DeliveryHistory(models.Model):
-    uuid = models.CharField(max_length=200, default=get_uuid())
-    six_numbers = models.CharField('код для курьера', max_length=200, default=get_six_numbers())
-
+    uuid = models.CharField(max_length=200, default='')
+    six_numbers = models.CharField('код для курьера', max_length=200, default="")
 
     @property
     def request_id(self):
         return self.uuid + '-' + str(self.pk)
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        if self.six_numbers == '':
+            self.six_numbers = get_six_numbers()
+
+        if self.uuid == '':
+            self.uuid = get_uuid()
+        super().save()
 
 
 

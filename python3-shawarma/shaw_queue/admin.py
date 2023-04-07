@@ -5,6 +5,7 @@ from .models import Menu, Staff, Order, StaffCategory, \
     ServiceAreaPolyCoord, MacroProduct, MacroProductContent, ProductOption, ProductVariant, SizeOption, ContentOption, \
     Server1C, CookingTime, OrderContent, CookingTimerOrderContent
 from django.contrib import admin
+from apps.delivery.backend import delivery_request
 from django import forms
 
 
@@ -15,7 +16,29 @@ accepted_everything.short_description = 'завершить все звонки'
 
 
 def testdelivery(modeladmin, request, queryset):
-    return
+    from apps.delivery.models import YandexSettings
+    yandex_settings = YandexSettings.current()
+    destination = {
+                    "fullname": "Челябинск, Университетская Набережная 63",
+                    "building": "63",
+                    # "building_name": "Alex",
+                    "city": "Челябинск",
+                    "comment": "ТЕСТОВЫЙ ЗАКАЗ НЕ ВЫПОЛНЯТЬ. ТЕСТИРУЕМ АПИ",
+                    "country": "Россия",
+                    "description": "Челябинск, Россия",
+                    "door_code": "",
+                    "door_code_extra": "",
+                    "doorbell_name": "",
+                    "porch": "1",
+                    "sflat": "1",
+                    "sfloor": "1",
+
+                    "email": '',
+                    "name": 'Alex',
+                    "phone": yandex_settings.test_phone,
+
+    }
+    delivery_request(Order.objects.last(), queryset, destination)
 
 
 testdelivery.short_description = 'сделать тестовый заказ'
