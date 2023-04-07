@@ -35,7 +35,7 @@ def delivery_request(order, source, destination, history=None):
                 "cost_currency": yandex_settings.currency,
                 "cost_value": str(item.menu_item.price),
                 "droppof_point": 2,
-                "extra_id": item.pk,
+                "extra_id": str(item.pk),
                 "pickup_point": 1,
                 "quantity": item.quantity,
                 "size": {
@@ -150,5 +150,5 @@ def delivery_request(order, source, destination, history=None):
     print(response)
     # if res.status_code == 200:
 
-    logger_debug.info(f'delivery_request {headers} \n {data} \n {res.status_code} \n {response}')
+    logger_debug.info(f'delivery_request {order, order.pk} \n\n{headers} \n {data} \n {res.status_code} \n {response}')
 
