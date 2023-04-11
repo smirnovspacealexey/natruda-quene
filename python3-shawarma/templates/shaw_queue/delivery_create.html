@@ -29,11 +29,11 @@
             let address = $('#address');
             let coordinate_input = $('#coordinate_input');
             $.ajax({
-                url: "https://geocode-maps.yandex.ru/1.x/?apikey=269a2016-35b4-43c7-8328-18a84ff550e7&format=json&geocode=" + address.val() + "&results=1",
+                url: "https://geocode-maps.yandex.ru/1.x/?apikey=269a2016-35b4-43c7-8328-18a84ff550e7&format=json&geocode=Челябинск, " + address.val() + "&results=1",
                 type: "GET",
                 success: function (data) {
                     let coordinate = data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos
-                    iframemap.attr('src', 'https://yandex.ru/map-widget/v1/?ll=Челябинск, ' + coordinate + '.&z=14')
+                    iframemap.attr('src', 'https://yandex.ru/map-widget/v1/?ll=' + coordinate + '.&z=14')
                     coordinate_input.val(coordinate)
 
                 },
