@@ -6847,3 +6847,16 @@ def test(request):
     }
     return HttpResponse(template.render(context, request))
 
+
+@csrf_exempt
+def delivery(request):
+    from apps.delivery.models import YandexSettings
+    from ymaps import SearchClient
+    geocoder_key = YandexSettings.geocoder()
+    geocoder_client = SearchClient(geocoder_key)
+
+    template = loader.get_template('shaw_queue/delivery_create.html')
+    context = {
+    }
+    return HttpResponse(template.render(context, request))
+

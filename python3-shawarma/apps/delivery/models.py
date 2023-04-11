@@ -17,6 +17,7 @@ def get_six_numbers():
 class YandexSettings(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
     token = models.CharField(verbose_name='OAuth-токен', max_length=200)
+    geocoder_key = models.CharField(verbose_name='ключ геокодера', default=None, null=True, blank=True, max_length=200)
     active = models.BooleanField('active', default=True)
 
     assign_robot = models.BooleanField('assign_robot', default=False,
@@ -79,6 +80,14 @@ class YandexSettings(models.Model):
         current = YandexSettings.current()
         if current:
             return current.token
+        else:
+            return ''
+
+    @staticmethod
+    def geocoder():
+        current = YandexSettings.current()
+        if current:
+            return current.geocoder_key
         else:
             return ''
 

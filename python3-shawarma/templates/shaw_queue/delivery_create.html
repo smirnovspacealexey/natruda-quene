@@ -1,0 +1,29 @@
+{% extends "shaw_queue/base.html" %}
+<title>Меню</title>
+{% block aditional_static %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'queue/loader.css' %}">
+    <script type="text/javascript" src="{% static 'js/menu_handlers.js' %}"></script>
+{% endblock %}
+{% block content %}
+    <iframe src="https://yandex.ru/map-widget/v1/?ll=61.4291500.1540200.&z=12" width="560" height="250" frameborder="1" allowfullscreen="true"></iframe>
+    <br>
+    <br>
+    <p>Адрес</p>
+    <input type="text" value="" class="live-search-box" id="item-note" style="width: 550px;">
+
+    <input disabled value="61.4291500 55.1540200">
+    <br>
+    <br>
+    <button type="button" class="small-btn success" onclick="SMS()">
+        отправить СМС
+    </button>
+    <script>
+        function SMS() {
+            alert('СМС не отправилось')
+        }
+    </script>
+    <br>
+    <br>
+    <a class="small-btn" href="/shaw_queue/menu/">назад</a>
+{% endblock %}

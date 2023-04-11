@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'apps.sms',
     'apps.delivery',
     'jquery',
+    'ymaps',
 ]
 
 MIDDLEWARE = [
