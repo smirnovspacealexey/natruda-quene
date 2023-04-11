@@ -6,13 +6,14 @@
     <script type="text/javascript" src="{% static 'js/menu_handlers.js' %}"></script>
 {% endblock %}
 {% block content %}
-    <iframe src="https://yandex.ru/map-widget/v1/?ll=61.4291500.1540200.&z=12" width="560" height="250" frameborder="1" allowfullscreen="true"></iframe>
+    <iframe id="map" src="https://yandex.ru/map-widget/v1/?ll=61.4291500 55.1540200.&z=11" width="560" height="250" frameborder="1" allowfullscreen="true"></iframe>
     <br>
     <br>
     <p>Адрес</p>
-    <input type="text" value="" class="live-search-box" id="item-note" style="width: 550px;">
-
-    <input disabled value="61.4291500 55.1540200">
+    <input type="text" value="" class="live-search-box" id="address" style="width: 550px;">
+    <button class="small-btn" onclick="getCoordinate()">ОК</button>
+    <br>
+    <input id="coordinate_input" disabled value="61.326502 55.17317">
     <br>
     <br>
     <button type="button" class="small-btn success" onclick="SMS()">
@@ -21,6 +22,27 @@
     <script>
         function SMS() {
             alert('СМС не отправилось')
+        }
+
+        function getCoordinate() {
+            let iframemap = $('#map');
+            let address = $('#address');
+            let coordinate_input = $('#coordinate_input');
+            alert("https://geocode-maps.yandex.ru/1.x/?apikey=269a2016-35b4-43c7-8328-18a84ff550e7&format=json&geocode=" + address.val() + "&results=1")
+            $.ajax({
+                url: "https://geocode-maps.yandex.ru/1.x/?apikey=269a2016-35b4-43c7-8328-18a84ff550e7&format=json&geocode=" + address.val() + "&results=1",
+                type: "GET",
+                success: function (data) {
+                    let coordinate = data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos
+                    iframemap.attr('src', 'https://yandex.ru/map-widget/v1/?ll=' + coordinate + '.&z=14')
+                    coordinate_input.val(coordinate)
+                    alert(data.response)
+
+                },
+                error: function (xhr, errmsg, err) {
+                    alert("Что-то не так: " + errmsg);
+                }
+            });
         }
     </script>
     <br>
