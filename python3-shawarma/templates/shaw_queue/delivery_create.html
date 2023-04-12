@@ -29,7 +29,8 @@
                 alert('СМС не отправилось')
             }
 
-            function getCoordinate() {
+            function getCoordinate(coords=null) {
+
                 let address = $('#address');
                 let coordinate_input = $('#coordinate_input');
                 $.ajax({
@@ -39,10 +40,17 @@
                         if (data.response.GeoObjectCollection.metaDataProperty.GeocoderResponseMetaData.results === 0) {
                             alert('Нет результатов')
                         }
-                        console.log(data.response)
-                        let coordinates = data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos
-                        changePosition(coordinates.split(' ', 2), address.val())
-                        coordinate_input.val(coordinates)
+                        {#console.log(data.response)#}
+                        let coordinates
+                        if (coords) {
+                            coordinates = coords
+                            coordinate_input.val([coords[0].toFixed(6), coords[1].toFixed(6)].join(' '))
+                        } else {
+                            coordinates = data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos
+                            coordinate_input.val(coordinates)
+                            coordinates = coordinates.split(' ', 2)
+                        }
+                        changePosition(coordinates, address.val())
                     },
                     error: function (xhr, errmsg, err) {
                         alert("Что-то не так: " + errmsg);
@@ -56,6 +64,7 @@
             let zoom = 11
             let duration = 700
             let limit_positions = 15
+            let doZoom = true
 
             function init() {
                 myMap = new ymaps.Map("ymap", {
@@ -64,7 +73,14 @@
                 }, {
                     searchControlProvider: 'yandex#search'
                 });
+
+                myMap.events.add('click', function (e) {
+                    var coords = e.get('coords');
+                    doZoom = false
+                    getCoordinate([coords[1], coords[0]])
+                });
             }
+
             function changePosition(coordinates, description) {
                 if (limit_positions === 0) {
                     alert('лимит запросов')
@@ -78,20 +94,24 @@
                     preset: 'islands#greenStretchyIcon'
                 });
                 myMap.geoObjects.add(myPlacemark);
-
-                myMap.setZoom(zoom, {duration: duration});
+                if(doZoom) {
+                    myMap.setZoom(zoom, {duration: duration});
+                }
                 setTimeout(() => {
                     myMap.panTo(coordinates, {duration: 700})
                 }, duration);
 
                 setTimeout(() => {
-                     myMap.setCenter(coordinates)
-                    myMap.setZoom(15, {duration: 700});
+                    myMap.setCenter(coordinates)
+                    if(doZoom) {
+                        myMap.setZoom(15, {duration: 700});
+                        limit_positions = limit_positions - 1;
+                    }
+                    zoom = 13
+                    duration = 300
+                    doZoom = true
                 }, duration + 700);
 
-                zoom = 13
-                duration = 300
-                limit_positions = limit_positions - 1
             }
 
         </script>
