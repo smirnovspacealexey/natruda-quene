@@ -6,44 +6,97 @@
     <script type="text/javascript" src="{% static 'js/menu_handlers.js' %}"></script>
 {% endblock %}
 {% block content %}
-    <iframe id="map" src="https://yandex.ru/map-widget/v1/?ll=61.4291500 55.1540200.&z=11" width="560" height="250" frameborder="1" allowfullscreen="true"></iframe>
-    <br>
-    <br>
-    <p>Адрес</p>
-    <input type="text" value="" class="live-search-box" id="address" style="width: 550px;">
-    <button class="small-btn" onclick="getCoordinate()">ОК</button>
-    <br>
-    <input id="coordinate_input" disabled value="61.326502 55.17317">
-    <br>
-    <br>
-    <button type="button" class="small-btn success" onclick="SMS()">
-        отправить СМС
-    </button>
-    <script>
-        function SMS() {
-            alert('СМС не отправилось')
-        }
+    <div style="margin-left: 50px; margin-top: 20px">
+        <div id="ymap" style="width: 100%; height: 400px; width: 560px"></div>
 
-        function getCoordinate() {
-            let iframemap = $('#map');
-            let address = $('#address');
-            let coordinate_input = $('#coordinate_input');
-            $.ajax({
-                url: "https://geocode-maps.yandex.ru/1.x/?apikey=269a2016-35b4-43c7-8328-18a84ff550e7&format=json&geocode=Челябинск, " + address.val() + "&results=1",
-                type: "GET",
-                success: function (data) {
-                    let coordinate = data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos
-                    iframemap.attr('src', 'https://yandex.ru/map-widget/v1/?ll=' + coordinate + '.&z=14')
-                    coordinate_input.val(coordinate)
+        <br>
+        <br>
+        <p>Адрес</p>
+        <input type="text" value="" class="live-search-box" id="address" style="width: 550px;">
+        <input id="coordinate_input" disabled value="61.326502 55.17317"><br>
+        <button class="small-btn" onclick="getCoordinate()">ОК</button>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button type="button" class="small-btn success" onclick="SMS()">
+            отправить СМС
+        </button>
 
-                },
-                error: function (xhr, errmsg, err) {
-                    alert("Что-то не так: " + errmsg);
+        <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+        <script>
+            function SMS() {
+                alert('СМС не отправилось')
+            }
+
+            function getCoordinate() {
+                let address = $('#address');
+                let coordinate_input = $('#coordinate_input');
+                $.ajax({
+                    url: "https://geocode-maps.yandex.ru/1.x/?apikey={{ geocoder_key }}&format=json&geocode=Челябинск, " + address.val() + "&results=1",
+                    type: "GET",
+                    success: function (data) {
+                        if (data.response.GeoObjectCollection.metaDataProperty.GeocoderResponseMetaData.results === 0) {
+                            alert('Нет результатов')
+                        }
+                        console.log(data.response)
+                        let coordinates = data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos
+                        changePosition(coordinates.split(' ', 2), address.val())
+                        coordinate_input.val(coordinates)
+                    },
+                    error: function (xhr, errmsg, err) {
+                        alert("Что-то не так: " + errmsg);
+                    }
+                });
+            }
+
+            ymaps.ready(init);
+            let myMap
+            let myPlacemark
+            let zoom = 11
+            let duration = 700
+            let limit_positions = 15
+
+            function init() {
+                myMap = new ymaps.Map("ymap", {
+                    center: [55.1540200, 61.3891500],
+                    zoom: zoom
+                }, {
+                    searchControlProvider: 'yandex#search'
+                });
+            }
+            function changePosition(coordinates, description) {
+                if (limit_positions === 0) {
+                    alert('лимит запросов')
+                    return
                 }
-            });
-        }
-    </script>
-    <br>
-    <br>
-    <a class="small-btn" href="/shaw_queue/menu/">назад</a>
+                coordinates = [parseFloat(coordinates[1]), parseFloat(coordinates[0])]
+                myMap.geoObjects.remove(myPlacemark)
+                myPlacemark = new ymaps.Placemark(coordinates, {
+                    iconCaption: description
+                }, {
+                    preset: 'islands#greenStretchyIcon'
+                });
+                myMap.geoObjects.add(myPlacemark);
+
+                myMap.setZoom(zoom, {duration: duration});
+                setTimeout(() => {
+                    myMap.panTo(coordinates, {duration: 700})
+                }, duration);
+
+                setTimeout(() => {
+                     myMap.setCenter(coordinates)
+                    myMap.setZoom(15, {duration: 700});
+                }, duration + 700);
+
+                zoom = 13
+                duration = 300
+                limit_positions = limit_positions - 1
+            }
+
+        </script>
+        <br>
+        <br>
+        <a class="small-btn" href="/shaw_queue/menu/">назад</a>
+    </div>
 {% endblock %}

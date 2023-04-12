@@ -6857,6 +6857,7 @@ def delivery(request):
 
     template = loader.get_template('shaw_queue/delivery_create.html')
     context = {
+        'geocoder_key' : geocoder_key
     }
     return HttpResponse(template.render(context, request))
 
