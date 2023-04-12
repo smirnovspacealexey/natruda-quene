@@ -1,14 +1,17 @@
 from django.contrib import admin
 from .models import MangoSettings, SMSHistory
 from time import gmtime, strftime
+import logging
 
+logger_debug = logging.getLogger('debug_logger')
 
 def send_test_sms(modeladmin, request, queryset):
     from .mango import send_sms
     for mango_settings in queryset:
-        send_sms(mango_settings.test_phone,
+        res = send_sms(mango_settings.test_phone,
                  f'TEST SMS {strftime("%d-%m-%Y %H:%M:%S", gmtime())}', 'test',
                  mango_settings.vpbx_api_key, mango_settings.vpbx_api_salt, mango_settings.from_extension)
+        logger_debug.info(f'send_test_sms \n{res}')
 
 
 send_test_sms.short_description = 'отправить тестовую СМС'
