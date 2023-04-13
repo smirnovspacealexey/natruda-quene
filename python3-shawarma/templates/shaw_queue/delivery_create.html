@@ -61,7 +61,7 @@
                             coordinate_input.val(coordinates)
                             coordinates = coordinates.split(' ', 2)
                         }
-                        changePosition(coordinates, address.val())
+                        changePosition(coordinates)
                     },
                     error: function (xhr, errmsg, err) {
                         alert("Что-то не так: " + errmsg);
@@ -89,9 +89,10 @@
                 });
 
                 let centerPlacemark = new ymaps.Placemark([55.168280, 61.386348], {
-                    iconCaption: ''
+                    iconContent: '🌯',
+
                 }, {
-                    preset: 'islands#nightIcon'
+                    preset: 'islands#darkOrangeIcon',
                 });
                 myMap.geoObjects.add(centerPlacemark);
 
@@ -103,7 +104,7 @@
                 });
             }
 
-            function changePosition(coordinates, description) {
+            function changePosition(coordinates) {
                 get_distance([55.168280, 61.386348], coordinates)
 
                 if (limit_positions === 0) {
@@ -113,9 +114,9 @@
                 coordinates = [parseFloat(coordinates[1]), parseFloat(coordinates[0])]
                 myMap.geoObjects.remove(myPlacemark)
                 myPlacemark = new ymaps.Placemark(coordinates, {
-                    iconCaption: description
+                    iconContent: '🥣',
                 }, {
-                    preset: 'islands#greenStretchyIcon'
+                    preset: 'islands#greenIcon'
                 });
                 myMap.geoObjects.add(myPlacemark);
                 if(doZoom) {
@@ -150,25 +151,17 @@
                         [coordinates2[1], coordinates2[0]]
                     ]
                 }, {
-                    boundsAutoApply: true
+                    wayPointVisible: false,
+                    boundsAutoApply: false
                 });
 
-                // Добавление маршрута на карту.
-                myMap.geoObjects.add(multiRoute);
-                // Подписка на событие обновления данных маршрута.
                 multiRoute.model.events.add('requestsuccess', function() {
-                    // Получение ссылки на активный маршрут.
-                    // В примере используется автомобильный маршрут,
-                    // поэтому метод getActiveRoute() вернет объект multiRouter.driving.Route.
                     var activeRoute = multiRoute.getActiveRoute();
-                    // Вывод информации о маршруте.
                     distance = activeRoute.properties.get("distance").value
                     console.log("Длина: " + distance);
                     console.log("Время прохождения: " + activeRoute.properties.get("duration").text);
                 });
-                // Добавление маршрута на карту.
                 myMap.geoObjects.add(multiRoute);
-                return distance
             }
 
             function get_price(value) {
