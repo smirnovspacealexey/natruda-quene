@@ -14,6 +14,39 @@ def get_six_numbers():
     return str(random.randint(100000, 999999))
 
 
+class DeliveryDistance(models.Model):
+    meters = models.IntegerField(verbose_name="метров", default=0)
+    roubles = models.IntegerField(verbose_name="цена", default=0)
+
+    def __str__(self):
+        return f'{self.meters}m: {self.roubles}rub'
+
+
+class DeliverySettings(models.Model):
+    distances = models.ManyToManyField(DeliveryDistance, verbose_name="дистанции", blank=True)
+    active = models.BooleanField('active', default=True)
+
+    @staticmethod
+    def current():
+        return DeliverySettings.objects.filter(active=True).last()
+
+    @staticmethod
+    def get_js():
+        ds = DeliverySettings.current()
+        if not ds:
+            return ''
+
+        js = ''
+        for distance in ds.distances.all().order_by('meters'):
+            js += f'if ({distance.meters} > value) {{return {distance.roubles}}};'
+        return js
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        if self.active:
+            type(self).objects.exclude(pk=self.pk).update(active=False)
+        super().save()
+
+
 class YandexSettings(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
     token = models.CharField(verbose_name='OAuth-токен', max_length=200)
