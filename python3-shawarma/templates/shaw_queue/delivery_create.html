@@ -254,15 +254,15 @@
         </div>
 
         <div class="right45">
-            <input id="delivery_price" disabled="" value="цена доставки:0₽ км: 0" style="width: 400px">
-            <input id="full_price" disabled="" value="общая цена за заказ: 0₽">
+            <input id="delivery_price" disabled="" value="цена доставки: 0₽ км: 0" style="width: 400px">
+            <input id="full_price" disabled="" value="общая цена за заказ: {{ order_price }}₽">
         </div>
 
         <div class="form">
             <input disabled="" value="* - обязательные поля" style="margin-bottom: 50px">
             <div class="description left75">
                 <label for="description"></label>
-                <input type="text" placeholder="*Улица, дом" name="address" id="address" style="width: 100%">
+                <input type="text" placeholder="*Улица, дом" name="description" id="description" style="width: 100%">
             </div>
             <div class="right15">
                 <button class="form_button" onclick="getCoordinate()">на карте</button>
@@ -326,11 +326,65 @@
     <script src="https://api-maps.yandex.ru/2.1/?apikey={{ geocoder_key }}&lang=ru_RU" type="text/javascript"></script>
     <script>
         function SMS() {
+            if (data['phone'] === null) {
+                alert('Заполните телефон!')
+            } else if (data['description'] === null) {
+                alert('Заполните улицу и дом!')
+            } else if (data['coordinates'] === null) {
+                alert('Укажите точку доставки на карте!')
+            } else if (data['full_price'] === null) {
+                alert('Что-то не так( \nПопробуйте перезагрузить страницу')
+            } else if (data['delivery_price'] === null) {
+                alert('Что-то не так( \nПопробуйте перезагрузить страницу')
+            }
+
+
+
             alert('СМС не отправилось')
+        }
+
+        let data = {
+            'delivery_price': null,
+            'full_price': null,
+            'description': null,
+            'coordinates': null,
+            'porch': null,
+            'door_code': null,
+            'sfloor': null,
+            'sflat': null,
+            'comment': null,
+            'phone': null,
+            'name': null,
         }
 
         let delivery_price = $('#delivery_price');
         let full_price = $('#full_price');
+
+        $('#name').change(function() {
+            data['name'] = $(this).val()
+        });
+        $('#phone').change(function() {
+            data['phone'] = $(this).val()
+        });
+        $('#comment').change(function() {
+            data['comment'] = $(this).val()
+        });
+        $('#porch').change(function() {
+            data['porch'] = $(this).val()
+        });
+        $('#sflat').change(function() {
+            data['sflat'] = $(this).val()
+        });
+        $('#sfloor').change(function() {
+            data['sfloor'] = $(this).val()
+        });
+        $('#door_code').change(function() {
+            data['door_code'] = $(this).val()
+        });
+        $('#description').change(function() {
+            data['description'] = $(this).val()
+        });
+
 
         $(document).ready(function () {
             $("#phone").mask("+7(999)999-99-99");
@@ -342,10 +396,10 @@
                 left: 0,
                 behavior: 'smooth'
             });
-            let address = $('#address');
+            let description = $('#description');
             let coordinate_input = $('#coordinate_input');
             $.ajax({
-                url: "https://geocode-maps.yandex.ru/1.x/?apikey={{ geocoder_key }}&format=json&geocode=Челябинск, " + address.val() + "&results=1",
+                url: "https://geocode-maps.yandex.ru/1.x/?apikey={{ geocoder_key }}&format=json&geocode=Челябинск, " + description.val() + "&results=1",
                 type: "GET",
                 success: function (data) {
                     if (data.response.GeoObjectCollection.metaDataProperty.GeocoderResponseMetaData.results === 0) {
@@ -380,33 +434,34 @@
         let doZoom = true
         let distance
 
-        let order_price = 0
+        let order_price = {{ order_price }}
 
-        function init() {
-            myMap = new ymaps.Map("ymap", {
-                center: [55.1540200, 61.3891500],
-                zoom: zoom
-            }, {
-                searchControlProvider: 'yandex#search'
-            });
+            function init() {
+                myMap = new ymaps.Map("ymap", {
+                    center: [55.1540200, 61.3891500],
+                    zoom: zoom
+                }, {
+                    searchControlProvider: 'yandex#search'
+                });
 
-            let centerPlacemark = new ymaps.Placemark([55.168280, 61.386348], {
-                iconContent: '🌯',
+                let centerPlacemark = new ymaps.Placemark([55.168280, 61.386348], {
+                    iconContent: '🌯',
 
-            }, {
-                preset: 'islands#darkOrangeIcon',
-            });
-            myMap.geoObjects.add(centerPlacemark);
+                }, {
+                    preset: 'islands#darkOrangeIcon',
+                });
+                myMap.geoObjects.add(centerPlacemark);
 
 
-            myMap.events.add('click', function (e) {
-                var coords = e.get('coords');
-                doZoom = false
-                getCoordinate([coords[1], coords[0]])
-            });
-        }
+                myMap.events.add('click', function (e) {
+                    var coords = e.get('coords');
+                    doZoom = false
+                    getCoordinate([coords[1], coords[0]])
+                });
+            }
 
         function changePosition(coordinates) {
+            data['coordinates'] = coordinates
             get_distance([55.168280, 61.386348], coordinates)
 
             if (limit_positions === 0) {
@@ -445,6 +500,8 @@
                 let res_full_price = res_distance_price + order_price
                 delivery_price.val('цена доставки: ' + res_distance_price + '₽  км: ' +  (distance/1000).toFixed(1))
                 full_price.val('общая цена за заказ: ' + res_full_price + '₽')
+                data['full_price'] = res_full_price
+                data['delivery_price'] = res_distance_price
             }, 1000);
 
         }

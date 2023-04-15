@@ -6852,10 +6852,12 @@ def test(request):
 def delivery(request):
     from apps.delivery.models import YandexSettings, DeliverySettings
     from ymaps import SearchClient
+    order_price = request.GET.get('price', 0)
     geocoder_key = YandexSettings.geocoder()
     geocoder_client = SearchClient(geocoder_key)
     template = loader.get_template('shaw_queue/delivery_create.html')
     context = {
+        'order_price': order_price,
         'geocoder_key': geocoder_key,
         'delivery_js': DeliverySettings.get_js()
     }

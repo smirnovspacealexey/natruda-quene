@@ -163,14 +163,22 @@
                 </div>
                 <div class="shadowed">
                     <p>
-                        <label for="paid_with_sms">Оплатить через СМС</label>
-                        <input style="padding: 7px;" type="text" id="paid_with_sms" name="paid_with_sms" placeholder="+7...">
-                        <br/>
-                        <br/>
-                        <a class="small-btn success" href="/shaw_queue/delivery/create">
-                            ввести адрес
+                        <br>
+                        <label for="paid_with_sms">Доставка с оплатой через СМС</label>
+                        <br>
+                        <br>
+                        <a id="delivery_sms" class="small-btn success" href="{% url 'delivery-sms' %}?price=0">
+                            Заполнить форму
                         </a>
+                        <br>
+                        <br>
+                        <script>
+                                    $(document).ready(function () {
+             CalculateTotal()
+        })
 
+
+                        </script>
                     </p>
                 </div>
             </tr>
