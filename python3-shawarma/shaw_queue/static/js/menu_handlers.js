@@ -844,7 +844,6 @@ function CalculateTotal() {
         let res = Number(total.toFixed(2))
         let delivery_sms_href = delivery_sms.attr('href')
         delivery_sms_href = delivery_sms_href.slice(0, delivery_sms_href.indexOf('=') + 1) + res
-        alert(delivery_sms_href)
         delivery_sms.attr('href', delivery_sms_href)
         $(this).text(res);
     });
