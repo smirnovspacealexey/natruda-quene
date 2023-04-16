@@ -111,22 +111,22 @@ def delivery_request(source, destination, history=None, order=None, order_items=
                             yandex_settings.latitude   # Latitude
                         ],
                         "fullname": destination["fullname"],
-                        "building": destination["building"],
-                        "building_name": destination["building_name"],
+                        # "building": destination["building"],
+                        # "building_name": destination["building_name"],
                         "city": destination["city"],
                         "comment": destination["comment"],
                         "country": destination["country"],
                         "description": destination["description"],
-                        "door_code": destination["door_code"],
-                        "door_code_extra": destination["door_code_extra"],
-                        "doorbell_name": destination["doorbell_name"],
-                        "porch": destination["porch"],
-                        "sflat": destination["sflat"],
-                        "sfloor": destination["sfloor"]
+                        "door_code": destination.get('door_code', ''),
+                        # "door_code_extra": destination["door_code_extra"],
+                        # "doorbell_name": destination["doorbell_name"],
+                        "porch": destination.get('porch', ''),
+                        "sflat": destination.get('sflat', ''),
+                        "sfloor": destination.get('sfloor', '')
                     },
                     "contact": {
                         # "email": destination['email'],
-                        "name": destination['name'],
+                        "name": destination.get('name', ''),
                         "phone": destination['phone']
                     },
                     "external_order_cost": {
