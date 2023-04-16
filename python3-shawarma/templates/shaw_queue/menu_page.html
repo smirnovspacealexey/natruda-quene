@@ -175,19 +175,19 @@
                         <br>
                         <br>
                         <script>
-                            function addOrderToCookie() {
-                                cookieCurrOrder=JSON.stringify(currOrder);
-                                $.cookie('currOrder',cookieCurrOrder );
-                            }
-                            $(document).ready(function () {
-                                let cookieCurrOrder=$.cookie('currOrder');
-                                currOrder = eval(cookieCurrOrder);
-                                if (currOrder) {
-                                    DrawOrderTable()
-                                    CalculateTotal()
-                                }
-                                document.cookie = "current_order=;max-age=-1";
-                            })
+                            {#function addOrderToCookie() {#}
+                            {#    cookieCurrOrder=JSON.stringify(currOrder);#}
+                            {#    $.cookie('currOrder',cookieCurrOrder );#}
+                            {#}#}
+                            {#$(document).ready(function () {#}
+                            {#    let cookieCurrOrder=$.cookie('currOrder');#}
+                            {#    currOrder = eval(cookieCurrOrder);#}
+                            {#    if (currOrder) {#}
+                            {#        DrawOrderTable()#}
+                            {#        CalculateTotal()#}
+                            {#    }#}
+                            {#    document.cookie = "current_order=;max-age=-1";#}
+                            {# })#}
                         </script>
                     </p>
                 </div>
