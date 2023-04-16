@@ -184,7 +184,7 @@
                             let cookieCurrOrder = JSON.stringify(currOrder);
                             alert(cookieCurrOrder)
                             $.cookie('currOrder', cookieCurrOrder, { path: '/' });
-                            alert($.cookie('currOrder'))
+                            alert($.cookie('currOrder', { path: '/' }))
                             $.cookie('currOrder', currOrder, { path: '/' });
                             alert($.cookie('currOrder'))
 
