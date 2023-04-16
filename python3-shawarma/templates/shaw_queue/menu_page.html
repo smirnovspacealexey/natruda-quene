@@ -180,6 +180,14 @@
                     <br>
                     <script>
                         function addOrderToCookie() {
+
+                            $.cookie('huy', 'говно', { path: '/' });
+                            alert($.cookie('huy'))
+
+                            $.cookie('huy', 'говно',);
+                            alert($.cookie('huy'))
+
+
                             alert(currOrder)
                             let cookieCurrOrder = JSON.stringify(currOrder);
                             alert(cookieCurrOrder)
