@@ -4,6 +4,8 @@
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'queue/loader.css' %}">
     <script type="text/javascript" src="{% static 'js/menu_handlers.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.cookie.js' %}"></script>
+
 {% endblock %}
 {% block content %}
     <input hidden id="menu-urls" data-status-refresh-url="{% url 'status_refresh' %}" data-search-comment="{% url 'search_comment' %}">
@@ -179,7 +181,7 @@
                             }
                             $(document).ready(function () {
                                 let cookieCurrOrder=$.cookie('currOrder');
-                                currOrder = eval(currOrder);
+                                currOrder = eval(cookieCurrOrder);
                                 if (currOrder) {
                                     DrawOrderTable()
                                     CalculateTotal()
