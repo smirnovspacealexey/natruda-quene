@@ -71,6 +71,7 @@ function SendOrder() {
         var payment_choose = $('[name=payment_choose]:checked');
         var loading_indiactor = $('#loading-indicator');
         var is_modal = $('#is-modal');
+        var delivery_daily_number = $('#delivery_daily_number');
         var confirmation = confirm("Подтвердить заказ?");
         var form = $('.subm');
 
@@ -90,6 +91,7 @@ function SendOrder() {
             var order_data = {
                 "order_content": JSON.stringify(currOrder),
                 "payment": $('[name=payment_choose]:checked').val(),
+                "delivery_daily_number": delivery_daily_number.val(),
                 "cook_choose": $('[name=cook_choose]:checked').val(),
                 "discount": $('[name=discount]:checked').val() ? parseFloat($('[name=discount]:checked').val()) : 0,
                 "is_preorder": preorder_checkbox.prop("checked") ? 1 : 0,

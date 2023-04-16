@@ -3612,6 +3612,7 @@ def cooks_content_info_ajax(request):
 def make_order(request):
     order_id = request.POST.get('order_id', None)
     delivery_order_pk = request.POST.get('delivery_order_pk', None)
+    delivery_daily_number = request.POST.get('delivery_daily_number', None)
     is_preorder = True if int(request.POST.get('is_preorder', 0)) == 1 else False
     is_pickup = True if int(request.POST.get('is_pickup', 0)) == 1 else False
     servery_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
@@ -3660,13 +3661,13 @@ def make_order(request):
     if result['success']:
         service_point = result['service_point']
         return JsonResponse(data=make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash,
-                                                 servery, service_point, discount, is_preorder, is_pickup))
+                                                 servery, service_point, discount, is_preorder, is_pickup, delivery_daily_number=delivery_daily_number))
     else:
         return JsonResponse(result)
 
 
 def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, servery,
-                    service_point, discount=0, is_preorder=False, is_pickup=False, from_site=False, with1c=True, delivery_pickup=False):
+                    service_point, discount=0, is_preorder=False, is_pickup=False, from_site=False, with1c=True, delivery_pickup=False, delivery_daily_number=None):
     file = open('log/cook_choose.log', 'a')
     logger_debug = logging.getLogger('debug_logger')  # del me
     logger_debug.info(f'-----\n{content}\n\n{servery}\n\n{service_point}\n\n')  # del me
@@ -3689,7 +3690,9 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
         client.captureException()
         return data
     order_next_number = 0
-    if order_last_daily_number:
+    if delivery_daily_number:
+        order_next_number = int(delivery_daily_number[1:])
+    elif order_last_daily_number:
         if order_last_daily_number['daily_number__max'] is not None:
             order_next_number = order_last_daily_number['daily_number__max'] + 1
         else:
@@ -6851,10 +6854,8 @@ def test(request):
 @csrf_exempt
 def delivery(request):
     from apps.delivery.models import YandexSettings, DeliverySettings
-    from ymaps import SearchClient
     order_price = request.GET.get('price', 0)
     geocoder_key = YandexSettings.geocoder()
-    geocoder_client = SearchClient(geocoder_key)
     template = loader.get_template('shaw_queue/delivery_create.html')
     context = {
         'order_price': order_price,
@@ -6862,4 +6863,71 @@ def delivery(request):
         'delivery_js': DeliverySettings.get_js()
     }
     return HttpResponse(template.render(context, request))
+
+
+@csrf_exempt
+def api_delivery(request):
+    from apps.delivery.models import YandexSettings, DeliverySettings, DeliveryHistory
+    from apps.delivery.backend import delivery_request
+    from apps.sms.backend import send_sms
+    from urllib.parse import unquote_plus
+
+    order_items = unquote_plus(request.COOKIES.get('currOrder', ''), encoding="utf-8")
+    order_items = list(json.loads(order_items))
+
+    source = ServicePoint.objects.filter(id=2).last()
+    data = request.POST
+
+    phone = data.get('phone', '')
+    phone = phone.replace('(', "").replace(')', "").replace('-', "")
+
+    destination = {
+        "fullname": 'Челябинск' + data.get('fullname', ''),
+        "city": "Челябинск",
+        "comment": "ТЕСТОВЫЙ ЗАКАЗ НЕ ВЫПОЛНЯТЬ. ТЕСТИРУЕМ АПИ",
+        "country": "Россия",
+        "description": "Челябинск, Россия",
+        "phone": phone,
+
+    }
+
+    name = data.get('name', '')
+    door_code = data.get('door_code', '')
+    porch = data.get('porch', '')
+    sflat = data.get('sflat', '')
+    sfloor = data.get('sfloor', '')
+
+    if name:
+        destination.update({'name': name})
+    if door_code:
+        destination.update({'door_code': door_code})
+    if porch:
+        destination.update({'porch': porch})
+    if sflat:
+        destination.update({'sflat': sflat})
+    if sfloor:
+        destination.update({'sfloor': sfloor})
+
+    full_price = data.get('full_price', None)
+
+    daily_number, six_numbers = delivery_request(source, destination, order_items=order_items, price=full_price)
+    if daily_number:
+        data = {
+            'success': True,
+            'daily_number': daily_number,
+            'six_numbers': six_numbers,
+        }
+
+        success, result = send_sms(phone, f'Ваш заказ {daily_number}. Сумма: {full_price}. Ссылка на оплату <----->')
+
+        if success:
+            JsonResponse(data)
+        else:
+            raise ConnectionError
+
+    else:
+        raise ConnectionError
+
+    return JsonResponse(data)
+
 

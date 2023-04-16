@@ -11,6 +11,7 @@ urlpatterns = [
     path('ajax/buyer_queue/new', views.buyer_queue_ajax_new, name='buyer_queue_ajax_new'),  # del me after, Im copy
 
     path('delivery/create/', views.delivery, name='delivery-sms'),
+    path('api/delivery/create/', views.api_delivery, name='api-delivery-sms'),
 
     url(r'^$', views.welcomer, name='welcomer'),
     url(r'^reload_menu', views.get_1c_menu, name='reload_menu'),

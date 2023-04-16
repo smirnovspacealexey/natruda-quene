@@ -5,6 +5,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'queue/loader.css' %}">
     <script type="text/javascript" src="{% static 'js/menu_handlers.js' %}"></script>
     <script src="{% static 'js/jquery.maskedinput.js' %}" type="text/javascript"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.cookie.js' %}"></script>
 
     <style>
         @import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
@@ -260,9 +261,9 @@
 
         <div class="form">
             <input disabled="" value="* - обязательные поля" style="margin-bottom: 50px">
-            <div class="description left75">
-                <label for="description"></label>
-                <input type="text" placeholder="*Улица, дом" name="description" id="description" style="width: 100%">
+            <div class="fullname left75">
+                <label for="fullname"></label>
+                <input type="text" placeholder="*Улица, дом" name="fullname" id="fullname" style="width: 100%">
             </div>
             <div class="right15">
                 <button class="form_button" onclick="getCoordinate()">на карте</button>
@@ -328,7 +329,7 @@
         function SMS() {
             if (data['phone'] === null) {
                 alert('Заполните телефон!')
-            } else if (data['description'] === null) {
+            } else if (data['fullname'] === null) {
                 alert('Заполните улицу и дом!')
             } else if (data['coordinates'] === null) {
                 alert('Укажите точку доставки на карте!')
@@ -336,17 +337,31 @@
                 alert('Что-то не так( \nПопробуйте перезагрузить страницу')
             } else if (data['delivery_price'] === null) {
                 alert('Что-то не так( \nПопробуйте перезагрузить страницу')
+            } else if (data['pk_delivery'] === null) {
+                alert('Что-то не так( \nПопробуйте перезагрузить страницу')
+            } else {
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url 'api-delivery-sms' %}',
+                    data: data,
+                    dataType: 'json',
+                    success: function (res) {
+                        $.cookie('is_delivery','true', { path: '/' });
+                        $.cookie('daily_number',res['daily_number'], { path: '/' });
+                        alert('СМС ушла')
+                    },
+                    error: function (xhr, errmsg, err) {
+                        alert('СМС не отправилось')
+                    }
+                });
             }
 
-
-
-            alert('СМС не отправилось')
         }
 
         let data = {
             'delivery_price': null,
             'full_price': null,
-            'description': null,
+            'fullname': null,
             'coordinates': null,
             'porch': null,
             'door_code': null,
@@ -355,6 +370,7 @@
             'comment': null,
             'phone': null,
             'name': null,
+            'pk_delivery': null,
         }
 
         let delivery_price = $('#delivery_price');
@@ -381,8 +397,8 @@
         $('#door_code').change(function() {
             data['door_code'] = $(this).val()
         });
-        $('#description').change(function() {
-            data['description'] = $(this).val()
+        $('#fullname').change(function() {
+            data['fullname'] = $(this).val()
         });
 
 
@@ -396,10 +412,10 @@
                 left: 0,
                 behavior: 'smooth'
             });
-            let description = $('#description');
+            let fullname = $('#fullname');
             let coordinate_input = $('#coordinate_input');
             $.ajax({
-                url: "https://geocode-maps.yandex.ru/1.x/?apikey={{ geocoder_key }}&format=json&geocode=Челябинск, " + description.val() + "&results=1",
+                url: "https://geocode-maps.yandex.ru/1.x/?apikey={{ geocoder_key }}&format=json&geocode=Челябинск, " + fullname.val() + "&results=1",
                 type: "GET",
                 success: function (data) {
                     if (data.response.GeoObjectCollection.metaDataProperty.GeocoderResponseMetaData.results === 0) {

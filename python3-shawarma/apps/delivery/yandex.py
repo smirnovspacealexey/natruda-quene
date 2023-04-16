@@ -1,5 +1,5 @@
 from .models import DeliveryHistory, YandexSettings
-from shaw_queue.models import ServicePoint
+from shaw_queue.models import ServicePoint, Menu
 import requests
 import json
 from apps.sms.backend import send_sms
@@ -13,12 +13,12 @@ url = 'https://b2b.taxi.yandex.net/b2b/cargo/integration/v2/claims/'
 'https://3dsec.sberbank.ru/payment/merchants/sbersafe_sberid/payment_ru.html?mdOrder=696e0967-a32c-7785-875d-62c928b640d7'
 
 
-def delivery_request(order, source, destination, history=None):
+def delivery_request(source, destination, history=None, order=None, order_items=None, price=None):
     yandex_settings = YandexSettings.current()
     headers = {'Accept-Language': 'ru', 'Authorization': 'Bearer ' + yandex_settings.token}
 
     if not history:
-        history = DeliveryHistory.objects.create()
+        history = DeliveryHistory.objects.create(full_price=price)
 
     cargo_options = []
     if yandex_settings.thermobag:
@@ -29,22 +29,23 @@ def delivery_request(order, source, destination, history=None):
 
     items = []
 
-    for item in order.ordercontent_set.all():
+    for item in order_items:
+        menu_item = Menu.objects.filter(pk=item['id'])
         items.append(
             {
                 "cost_currency": yandex_settings.currency,
-                "cost_value": str(item.menu_item.price),
+                "cost_value": str(menu_item.price),
                 "droppof_point": 2,
-                "extra_id": str(item.pk),
+                "extra_id": str(item['id']),
                 "pickup_point": 1,
-                "quantity": item.quantity,
+                "quantity": item['quantity'],
                 "size": {
                     "height": 0.05,
                     "length": 0.1,
                     "width": 0.1
                 },
-                "title": item.menu_item.title,
-                "weight": item.menu_item.category.weight / 1000
+                "title": menu_item.title,
+                "weight": menu_item.category.weight / 1000
             }
         )
 
@@ -92,9 +93,9 @@ def delivery_request(order, source, destination, history=None):
                 "external_order_cost": {
                     "currency": yandex_settings.currency,
                     "currency_sign": yandex_settings.currency_sign,
-                    "value": str(order.total)
+                    "value": str(price)
                 },
-                "external_order_id": str(order.daily_number),
+                "external_order_id": history.daily_number,
                 "pickup_code": history.six_numbers,
                 "point_id": 1,
                 "skip_confirmation": yandex_settings.skip_confirmation,
@@ -129,9 +130,9 @@ def delivery_request(order, source, destination, history=None):
                 "external_order_cost": {
                     "currency": yandex_settings.currency,
                     "currency_sign": yandex_settings.currency_sign,
-                    "value": str(order.total)
+                    "value": str(price)
                 },
-                "external_order_id":  str(order.daily_number),
+                "external_order_id":  history.daily_number,
                 "point_id": 2,
                 "skip_confirmation": yandex_settings.skip_confirmation,
                 "type": "destination",
@@ -148,7 +149,10 @@ def delivery_request(order, source, destination, history=None):
     response = json.loads(res.content.decode("utf-8"))
     print(res.status_code)
     print(response)
-    # if res.status_code == 200:
+    if res.status_code == 200:
+        return history.daily_number, history.six_numbers
+    else:
+        return None, None
 
-    logger_debug.info(f'delivery_request {order, order.pk} \n\n{headers} \n {data} \n {res.status_code} \n {response}')
+    # logger_debug.info(f'delivery_request {order, order.pk} \n\n{headers} \n {data} \n {res.status_code} \n {response}')
 

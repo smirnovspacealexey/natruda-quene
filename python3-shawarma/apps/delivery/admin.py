@@ -23,8 +23,8 @@ class DeliverySettingsAdmin(admin.ModelAdmin):
 
 @admin.register(DeliveryDistance)
 class DeliveryDistanceAdmin(admin.ModelAdmin):
-    list_display = ['__str__', 'meters', 'roubles']
-    list_editable = ('meters', 'roubles')
+    list_display = ['__str__', 'meters', 'roubles', 'menu_item']
+    list_editable = ('meters', 'roubles', 'menu_item')
     search_fields = ['meters', 'roubles']
 
 

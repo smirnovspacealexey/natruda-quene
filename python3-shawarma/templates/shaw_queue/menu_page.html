@@ -165,32 +165,49 @@
                 </div>
                 <div class="shadowed">
                     <p>
-                        <br>
-                        <label for="paid_with_sms">Доставка с оплатой через СМС</label>
-                        <br>
-                        <br>
-                        <a id="delivery_sms" class="small-btn success" onclick="addOrderToCookie()" href="{% url 'delivery-sms' %}?price=0">
-                            Заполнить форму
-                        </a>
-                        <br>
-                        <br>
-                        <script>
-                        // возвращаем из куков параметры заказа при выходе из формы доставки
-                            function addOrderToCookie() {
-                                let cookieCurrOrder = JSON.stringify(currOrder);
-                                $.cookie('currOrder',cookieCurrOrder );
+                    <p>
+                        <input type="radio" id="cook_delivery" checked name="cook_choose" value="delivery">
+                        <label for="cook_auto">Доставка</label>
+                        <input type="text" id="delivery_daily_number" checked name="delivery_daily_number" value="">
+                    </p>
+                    <label for="paid_with_sms">Доставка с оплатой через СМС</label>
+                    <br>
+                    <br>
+                    <a id="delivery_sms" class="small-btn success" onclick="addOrderToCookie()" href="{% url 'delivery-sms' %}?price=0">
+                        Заполнить форму
+                    </a>
+                    <br>
+                    <br>
+                    <script>
+                        function addOrderToCookie() {
+                            let cookieCurrOrder = JSON.stringify(currOrder);
+                            $.cookie('currOrder', cookieCurrOrder, { path: '/' });
+                        }
+                        $(document).ready(function () {
+                            cookieCurrOrder = $.cookie('currOrder');
+                            is_delivery = $.cookie('is_delivery');
+                            daily_number = $.cookie('daily_number');
+                            resCurrOrder = eval(cookieCurrOrder);
+                            if (resCurrOrder) {
+                                currOrder = resCurrOrder
+                                DrawOrderTable()
+                                CalculateTotal()
                             }
-                            $(document).ready(function () {
-                                cookieCurrOrder = $.cookie('currOrder');
-                                resCurrOrder = eval(cookieCurrOrder);
-                                if (resCurrOrder) {
-                                    currOrder = resCurrOrder
-                                    DrawOrderTable()
-                                    CalculateTotal()
+
+                            setTimeout(() => {
+                                if (is_delivery) {
+                                    $('#cook_delivery').click()
                                 }
-                                document.cookie = "currOrder=;max-age=-1";
-                            })
-                        </script>
+                                if (daily_number) {
+                                    $('#delivery_daily_number').val('Д' + daily_number)
+                                }
+                            }, 1000);
+
+                            $.cookie("currOrder", null, { path: '/' });
+                            $.cookie("is_delivery", null, { path: '/' });
+                            $.cookie("daily_number", null, { path: '/' });
+                        })
+                    </script>
                     </p>
                 </div>
             </tr>

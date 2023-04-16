@@ -1,5 +1,6 @@
 from django.utils import timezone
 from django.db import models
+from shaw_queue.models import Menu, Order
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 import uuid
@@ -17,6 +18,7 @@ def get_six_numbers():
 class DeliveryDistance(models.Model):
     meters = models.IntegerField(verbose_name="метров", default=0)
     roubles = models.IntegerField(verbose_name="цена", default=0)
+    menu_item = models.ForeignKey(Menu, on_delete=models.CASCADE, verbose_name="Menu Item", null=True, blank=True)
 
     def __str__(self):
         return f'{self.meters}m: {self.roubles}rub'
@@ -38,7 +40,7 @@ class DeliverySettings(models.Model):
 
         js = ''
         for distance in ds.distances.all().order_by('meters'):
-            js += f'if ({distance.meters} > value) {{return {distance.roubles}}};'
+            js += f'if ({distance.meters} > value) {{data["pk_delivery"] = {distance.menu_item.pk}; return {distance.roubles}}};'
         return js
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
@@ -57,7 +59,7 @@ class YandexSettings(models.Model):
                                        help_text="Пытаться ли назначить заказ на ровер (шестиколесный робот)")
 
     pro_courier = models.BooleanField('pro_courier', default=False,
-                                       help_text='Опция "Профи" для тарифов "Экспресс" и "Курьер"')
+                                      help_text='Опция "Профи" для тарифов "Экспресс" и "Курьер"')
 
     taxi_class = models.CharField('taxi_class', default='courier', max_length=200,
                                   choices=[('courier', 'courier'), ('express', 'express'), ('cargo', 'cargo'), ],
@@ -80,7 +82,7 @@ class YandexSettings(models.Model):
                                        help_text='Источник заявки (можно передать наименование CMS, из которой создается запрос)')
 
     skip_confirmation = models.BooleanField('skip_confirmation', default=False,
-                                       help_text='Пропускать подтверждение через SMS в данной точке. False - подтверждение требуется')
+                                            help_text='Пропускать подтверждение через SMS в данной точке. False - подтверждение требуется')
 
     currency = models.CharField(max_length=200, default="RUB", help_text='Валюта расчёта')
     currency_sign = models.CharField(max_length=200, default="₽", help_text='Знак валюты')
@@ -128,6 +130,21 @@ class YandexSettings(models.Model):
 class DeliveryHistory(models.Model):
     uuid = models.CharField(max_length=200, default='')
     six_numbers = models.CharField('код для курьера', max_length=200, default="")
+    daily_number = models.CharField('daily_number', max_length=50, default="")
+
+    # delivery_price = models.IntegerField(verbose_name="delivery_price", default=0)
+    full_price = models.IntegerField(verbose_name="full_price", default=0)
+    # description = models.CharField('description', max_length=500, default="")
+    # coordinates = models.CharField('coordinates', max_length=100, default="")
+    # porch = models.CharField('porch', max_length=100, default="")
+    # door_code = models.CharField('door_code', max_length=100, default="")
+    # sfloor = models.CharField('sfloor', max_length=100, default="")
+    # sflat = models.CharField('sflat', max_length=100, default="")
+    # comment = models.TextField(blank=True, null=True)
+    # phone = models.CharField('phone', max_length=100, default="")
+    # name = models.CharField('name', max_length=100, default="")
+    # delivery_menu = models.ForeignKey(Menu, on_delete=models.SET_NULL, verbose_name="delivery_menu", null=True, blank=True)
+    # items = models.TextField(blank=True, null=True)
 
     @property
     def request_id(self):
@@ -139,6 +156,18 @@ class DeliveryHistory(models.Model):
 
         if self.uuid == '':
             self.uuid = get_uuid()
+
+        if self.daily_number == '':
+            daily_number = None
+
+            while daily_number is None:
+                daily_number = get_six_numbers()
+                if Order.objects.filter(open_time__contains=timezone.now().date(), close_time__isnull=True,
+                                        is_canceled=False, is_ready=False, is_delivery=True, daily_number=daily_number).exists():
+                    daily_number = None
+
+            self.daily_number = daily_number
+
         super().save()
 
 
