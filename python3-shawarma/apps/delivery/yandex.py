@@ -30,7 +30,7 @@ def delivery_request(source, destination, history=None, order=None, order_items=
     items = []
 
     for item in order_items:
-        menu_item = Menu.objects.filter(pk=item['id'])
+        menu_item = Menu.objects.filter(pk=item['id']).last()
         items.append(
             {
                 "cost_currency": yandex_settings.currency,

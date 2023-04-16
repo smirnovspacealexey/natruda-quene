@@ -6873,6 +6873,7 @@ def api_delivery(request):
     from urllib.parse import unquote_plus
 
     order_items = unquote_plus(request.COOKIES.get('currOrder', ''), encoding="utf-8")
+    print(order_items)
     order_items = list(json.loads(order_items))
 
     source = ServicePoint.objects.filter(id=2).last()

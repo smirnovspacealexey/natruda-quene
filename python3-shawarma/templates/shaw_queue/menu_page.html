@@ -173,6 +173,7 @@
                     <label for="paid_with_sms">Доставка с оплатой через СМС</label>
                     <br>
                     <br>
+{#                    <span id="delivery_sms" class="small-btn success" onclick="addOrderToCookie()">#}
                     <a id="delivery_sms" class="small-btn success" onclick="addOrderToCookie()" href="{% url 'delivery-sms' %}?price=0">
                         Заполнить форму
                     </a>
@@ -180,22 +181,19 @@
                     <br>
                     <script>
                         function addOrderToCookie() {
-
-
-
-                            alert(currOrder)
                             let cookieCurrOrder = JSON.stringify(currOrder);
-
-                             alert(typeof cookieCurrOrder)
-
-                            alert(cookieCurrOrder)
                             $.cookie('currOrder', cookieCurrOrder, { path: '/' });
-                            alert($.cookie('currOrder', { path: '/' }))
-                            $.cookie('currOrder', currOrder, { path: '/' });
-                            alert($.cookie('currOrder'))
 
                         }
                         $(document).ready(function () {
+
+                            {#currOrder = [{"id":320,"title":"Бурум говядина станд","price":350,"quantity":1,"note":"","qr":"","qr_req":false}, ]#}
+                            {#DrawOrderTable()#}
+                            {#CalculateTotal()#}
+
+
+
+
                             cookieCurrOrder = $.cookie('currOrder');
                             is_delivery = $.cookie('is_delivery');
                             daily_number = $.cookie('daily_number');
