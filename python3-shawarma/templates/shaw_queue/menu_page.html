@@ -175,6 +175,7 @@
                         <br>
                         <br>
                         <script>
+                        // возвращаем из куков параметры заказа при выходе из формы доставки
                             function addOrderToCookie() {
                                 let cookieCurrOrder = JSON.stringify(currOrder);
                                 $.cookie('currOrder',cookieCurrOrder );
@@ -183,11 +184,11 @@
                                 cookieCurrOrder = $.cookie('currOrder');
                                 resCurrOrder = eval(cookieCurrOrder);
                                 if (resCurrOrder) {
-                                    CurrOrder = resCurrOrder
+                                    currOrder = resCurrOrder
                                     DrawOrderTable()
                                     CalculateTotal()
                                 }
-                                document.cookie = "current_order=;max-age=-1";
+                                document.cookie = "currOrder=;max-age=-1";
                             })
                         </script>
                     </p>
