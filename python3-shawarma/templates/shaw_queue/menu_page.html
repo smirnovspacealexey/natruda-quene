@@ -182,9 +182,12 @@
                         function addOrderToCookie() {
                             alert(currOrder)
                             let cookieCurrOrder = JSON.stringify(currOrder);
+                            alert(cookieCurrOrder)
                             $.cookie('currOrder', cookieCurrOrder, { path: '/' });
-
                             alert($.cookie('currOrder'))
+                            $.cookie('currOrder', currOrder, { path: '/' });
+                            alert($.cookie('currOrder'))
+
                         }
                         $(document).ready(function () {
                             cookieCurrOrder = $.cookie('currOrder');
