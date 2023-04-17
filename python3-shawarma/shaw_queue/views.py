@@ -6900,8 +6900,8 @@ def api_delivery(request):
     sflat = data.get('sflat', '')
     sfloor = data.get('sfloor', '')
     coordinates = data.get('coordinates[]', '')
-    longitude = float(coordinates[0])
-    latitude = float(coordinates[1])
+    longitude = float(coordinates[1])
+    latitude = float(coordinates[0])
     destination.update({'longitude': longitude})
     destination.update({'latitude': latitude})
 
