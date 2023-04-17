@@ -6867,79 +6867,82 @@ def delivery(request):
 
 @csrf_exempt
 def api_delivery(request):
-    from apps.delivery.models import YandexSettings, DeliverySettings, DeliveryHistory
-    from apps.delivery.backend import delivery_request
-    from apps.sms.backend import send_sms
-    from apps.sber.backend import Sber
-    from urllib.parse import unquote_plus
+    try:
+        from apps.delivery.models import YandexSettings, DeliverySettings, DeliveryHistory
+        from apps.delivery.backend import delivery_request
+        from apps.sms.backend import send_sms
+        from apps.sber.backend import Sber
+        from urllib.parse import unquote_plus
 
-    order_items = unquote_plus(request.COOKIES.get('currOrder', ''), encoding="utf-8")
-    print(order_items)
-    print()
-    order_items = list(json.loads(order_items))
+        order_items = unquote_plus(request.COOKIES.get('currOrder', ''), encoding="utf-8")
+        print(order_items)
+        print()
+        order_items = list(json.loads(order_items))
 
-    source = ServicePoint.objects.filter(id=2).last()
-    data = request.POST
-    print(data)
+        source = ServicePoint.objects.filter(id=2).last()
+        data = request.POST
+        print(data)
 
-    phone = data.get('phone', '')
-    phone = phone.replace('(', "").replace(')', "").replace('-', "")
+        phone = data.get('phone', '')
+        phone = phone.replace('(', "").replace(')', "").replace('-', "")
 
-    destination = {
-        "fullname": 'Челябинск, ' + data.get('fullname', ''),
-        "city": "Челябинск",
-        "comment": data.get("comment", ''),
-        "country": "Россия",
-        "description": "Челябинск, Россия",
-        "phone": phone,
+        destination = {
+            "fullname": 'Челябинск, ' + data.get('fullname', ''),
+            "city": "Челябинск",
+            "comment": data.get("comment", ''),
+            "country": "Россия",
+            "description": "Челябинск, Россия",
+            "phone": phone,
 
-    }
-
-    name = data.get('name', '')
-    door_code = data.get('door_code', '')
-    porch = data.get('porch', '')
-    sflat = data.get('sflat', '')
-    sfloor = data.get('sfloor', '')
-    coordinates = dict(data)['coordinates[]']
-    print(coordinates)
-    longitude = float(coordinates[0])
-    latitude = float(coordinates[1])
-
-    destination.update({'longitude': longitude})
-    destination.update({'latitude': latitude})
-
-    if name:
-        destination.update({'name': name})
-    if door_code:
-        destination.update({'door_code': door_code})
-    if porch:
-        destination.update({'porch': porch})
-    if sflat:
-        destination.update({'sflat': sflat})
-    if sfloor:
-        destination.update({'sfloor': sfloor})
-
-    full_price = data.get('full_price', None)
-
-    daily_number, six_numbers = delivery_request(source, destination, order_items=order_items, price=full_price)
-    if daily_number:
-        data = {
-            'success': True,
-            'daily_number': daily_number,
-            'six_numbers': six_numbers,
         }
-        sber = Sber()
-        res = sber.registrate_order(full_price, daily_number)
-        success, result = send_sms(phone, f'Ваш заказ {daily_number}. Сумма: {full_price}. Ссылка на оплату <----->')
 
-        if success:
-            JsonResponse(data)
+        name = data.get('name', '')
+        door_code = data.get('door_code', '')
+        porch = data.get('porch', '')
+        sflat = data.get('sflat', '')
+        sfloor = data.get('sfloor', '')
+        coordinates = dict(data)['coordinates[]']
+        print(coordinates)
+        longitude = float(coordinates[0])
+        latitude = float(coordinates[1])
+
+        destination.update({'longitude': longitude})
+        destination.update({'latitude': latitude})
+
+        if name:
+            destination.update({'name': name})
+        if door_code:
+            destination.update({'door_code': door_code})
+        if porch:
+            destination.update({'porch': porch})
+        if sflat:
+            destination.update({'sflat': sflat})
+        if sfloor:
+            destination.update({'sfloor': sfloor})
+
+        full_price = data.get('full_price', None)
+
+        daily_number, six_numbers = delivery_request(source, destination, order_items=order_items, price=full_price)
+        if daily_number:
+            data = {
+                'success': True,
+                'daily_number': daily_number,
+                'six_numbers': six_numbers,
+            }
+            sber = Sber()
+            res = sber.registrate_order(full_price, daily_number)
+            success, result = send_sms(phone, f'Ваш заказ {daily_number}. Сумма: {full_price}. Ссылка на оплату <----->')
+
+            if success:
+                JsonResponse(data)
+            else:
+                raise ConnectionError
+
         else:
             raise ConnectionError
 
-    else:
-        raise ConnectionError
-
-    return JsonResponse(data)
+        return JsonResponse(data)
+    except:
+        logger_debug.info(f'ERROR: {traceback.format_exc()}')
 
 
