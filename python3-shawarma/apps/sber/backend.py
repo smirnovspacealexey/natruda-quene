@@ -38,8 +38,10 @@ class Sber:
             'amount': amount,
             'orderNumber': order_id,
             'taxSystem': self.tax_system,
-            'returnUrl': HOST_SITE + reverse('successful_payment'),
-            'failUrl': HOST_SITE + reverse('failed_payment'),
+            'returnUrl': HOST_SITE,
+            'failUrl': HOST_SITE,
+            # 'returnUrl': HOST_SITE + reverse('successful_payment'),
+            # 'failUrl': HOST_SITE + reverse('failed_payment'),
 
         }
 
