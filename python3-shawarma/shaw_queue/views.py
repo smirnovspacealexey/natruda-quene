@@ -3654,6 +3654,7 @@ def make_order(request):
             'success': False,
             'message': 'Something wrong happened while getting servery!'
         }
+        logger_debug.info(f'make_order ERROR: {traceback.format_exc()}')
         client.captureException()
         return JsonResponse(data)
 
