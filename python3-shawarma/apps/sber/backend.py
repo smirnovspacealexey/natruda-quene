@@ -31,7 +31,6 @@ class Sber:
             return False, f'Сумма заказа меньше {self.min_amount/100}'
 
         url = self.host + 'payment/rest/register.do'
-        print(HOST_SITE + reverse('successful_payment'))
         data = {
             "userName": self.login,
             "password": self.password,
