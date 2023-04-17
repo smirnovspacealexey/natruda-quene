@@ -6899,9 +6899,11 @@ def api_delivery(request):
     porch = data.get('porch', '')
     sflat = data.get('sflat', '')
     sfloor = data.get('sfloor', '')
-    coordinates = data.get('coordinates[]', '')
-    longitude = float(coordinates[1])
-    latitude = float(coordinates[0])
+    coordinates = dict(data)['coordinates[]']
+    print(coordinates)
+    longitude = float(coordinates[0])
+    latitude = float(coordinates[1])
+
     destination.update({'longitude': longitude})
     destination.update({'latitude': latitude})
 
