@@ -6931,7 +6931,13 @@ def api_delivery(request):
             }
             sber = Sber()
             res = sber.registrate_order(full_price, daily_number)
-            success, result = send_sms(phone, f'Ваш заказ {daily_number}. Сумма: {full_price}. Ссылка на оплату <----->')
+
+            if res[0]:
+                sber_url = res[1]['formUrl']
+            else:
+                raise ConnectionError
+
+            success, result = send_sms(phone, f'Ваш заказ {daily_number}. Сумма: {full_price}. Ссылка на оплату {sber_url}')
 
             if success:
                 JsonResponse(data)
