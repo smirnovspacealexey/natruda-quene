@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'shaw_queue.apps.ShawQueueConfig',
     'apps.main',
     'apps.sms',
+    'apps.sber',
     'apps.delivery',
     'jquery',
     'ymaps',
@@ -299,6 +300,7 @@ RAVEN_CONFIG = {
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 HOST = 'http://shawarma.natruda'
+HOST_SITE = 'https://natruda.ru'
 
 
 try:

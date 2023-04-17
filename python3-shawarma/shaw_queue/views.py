@@ -6870,6 +6870,7 @@ def api_delivery(request):
     from apps.delivery.models import YandexSettings, DeliverySettings, DeliveryHistory
     from apps.delivery.backend import delivery_request
     from apps.sms.backend import send_sms
+    from apps.sber.backend import Sber
     from urllib.parse import unquote_plus
 
     order_items = unquote_plus(request.COOKIES.get('currOrder', ''), encoding="utf-8")
@@ -6927,7 +6928,8 @@ def api_delivery(request):
             'daily_number': daily_number,
             'six_numbers': six_numbers,
         }
-
+        sber = Sber()
+        res = sber.registrate_order(full_price, daily_number)
         success, result = send_sms(phone, f'Ваш заказ {daily_number}. Сумма: {full_price}. Ссылка на оплату <----->')
 
         if success:
