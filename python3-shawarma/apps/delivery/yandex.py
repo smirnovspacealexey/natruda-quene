@@ -107,8 +107,8 @@ def delivery_request(source, destination, history=None, order=None, order_items=
                 {
                     "address": {
                         "coordinates": [
-                            yandex_settings.longitude,  # Longitude
-                            yandex_settings.latitude   # Latitude
+                            destination["longitude"],  # Longitude
+                            destination["latitude"]   # Latitude
                         ],
                         "fullname": destination["fullname"],
                         # "building": destination["building"],

@@ -6874,18 +6874,20 @@ def api_delivery(request):
 
     order_items = unquote_plus(request.COOKIES.get('currOrder', ''), encoding="utf-8")
     print(order_items)
+    print()
     order_items = list(json.loads(order_items))
 
     source = ServicePoint.objects.filter(id=2).last()
     data = request.POST
+    print(data)
 
     phone = data.get('phone', '')
     phone = phone.replace('(', "").replace(')', "").replace('-', "")
 
     destination = {
-        "fullname": 'Челябинск' + data.get('fullname', ''),
+        "fullname": 'Челябинск, ' + data.get('fullname', ''),
         "city": "Челябинск",
-        "comment": "ТЕСТОВЫЙ ЗАКАЗ НЕ ВЫПОЛНЯТЬ. ТЕСТИРУЕМ АПИ",
+        "comment": data.get("comment", ''),
         "country": "Россия",
         "description": "Челябинск, Россия",
         "phone": phone,
@@ -6897,6 +6899,11 @@ def api_delivery(request):
     porch = data.get('porch', '')
     sflat = data.get('sflat', '')
     sfloor = data.get('sfloor', '')
+    coordinates = data.get('coordinates[]', '')
+    longitude = float(coordinates[0])
+    latitude = float(coordinates[1])
+    destination.update({'longitude': longitude})
+    destination.update({'latitude': latitude})
 
     if name:
         destination.update({'name': name})
