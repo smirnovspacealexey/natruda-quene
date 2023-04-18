@@ -6940,6 +6940,7 @@ def api_delivery(request):
                 else:
                     raise ConnectionError
             except:
+                logger_debug.info(f'ERROR: {traceback.format_exc()}')
                 sber_url = 'http://www.sberbank.ru/ru/s_m_business/bankingservice/sberpay'
 
             success, result = send_sms(phone, f'Ваш заказ {daily_number}. Сумма: {full_price}. Ссылка на оплату {sber_url}')
