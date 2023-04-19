@@ -18,7 +18,7 @@ class Sber:
             if sber_settings.in_test:
                 self.host = 'https://3dsec.sberbank.ru/'
             else:
-                self.host = 'https://securepayments.sberbank.ru/'
+                self.host = 'https://securecardpayment.ru/'
             print(self.login, self.password)
         else:
             raise Exception('need SberSettings active object')
