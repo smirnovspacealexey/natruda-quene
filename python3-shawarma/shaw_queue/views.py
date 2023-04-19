@@ -6934,7 +6934,7 @@ def api_delivery(request):
             try:
                 sber = Sber()
                 res = sber.registrate_order(full_price, daily_number)
-
+                logger_debug.info(f'res: {res}')
                 if res[0]:
                     sber_url = res[1]['formUrl']
                 else:
