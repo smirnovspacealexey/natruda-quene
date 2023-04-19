@@ -16,7 +16,7 @@ class Sber:
             self.max_amount = sber_settings.max_amount * 100
             self.tax_system = sber_settings.tax_system
             if sber_settings.in_test:
-                self.host = 'https://3dsec.sberbank.ru/'
+                self.host = 'https://secure-payment-gateway.ru/'
             else:
                 self.host = 'https://securecardpayment.ru/'
             print(self.login, self.password)
