@@ -369,7 +369,6 @@
                         })
                         cookieCurrOrder = JSON.stringify(currOrder);
                         $.cookie('currOrder', cookieCurrOrder, { path: '/' });
-
                         alert('СМС ушла')
                     },
                     error: function (xhr, errmsg, err) {
@@ -426,16 +425,6 @@
 
 
         $(document).ready(function () {
-            let cookieCurrOrder = $.cookie('currOrder');
-            let resCurrOrder = JSON.parse(cookieCurrOrder);
-            alert(resCurrOrder[0].id)
-
-
-
-
-
-
-
             $("#phone").mask("+7(999)999-99-99");
             let deliveryData = JSON.parse(sessionStorage.getItem('deliveryData'));
             if (deliveryData) {
