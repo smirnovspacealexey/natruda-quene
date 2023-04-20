@@ -428,7 +428,7 @@
         $(document).ready(function () {
             let cookieCurrOrder = $.cookie('currOrder');
 
-            let resCurrOrder = eval(cookieCurrOrder);
+            let resCurrOrder = JSON.parse(cookieCurrOrder);
             alert(resCurrOrder)
 
 
