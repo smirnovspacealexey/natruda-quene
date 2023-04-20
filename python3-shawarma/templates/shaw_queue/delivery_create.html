@@ -357,7 +357,7 @@
                         save_data_to_storage = false
                         sessionStorage.removeItem('deliveryData')
 
-                        let cookieCurrOrder = $.cookie('currOrder', { path: '/' });
+                        let cookieCurrOrder = $.cookie('currOrder');
                         let resCurrOrder = eval(cookieCurrOrder);
                         alert(resCurrOrder)
                         resCurrOrder.push({
