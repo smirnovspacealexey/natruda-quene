@@ -186,10 +186,10 @@
 
                         }
                         $(document).ready(function () {
-                            cookieCurrOrder = $.cookie('currOrder');
-                            is_delivery = $.cookie('is_delivery');
-                            daily_number = $.cookie('daily_number');
-                            resCurrOrder = eval(cookieCurrOrder);
+                            let cookieCurrOrder = $.cookie('currOrder');
+                            let is_delivery = $.cookie('is_delivery');
+                            let daily_number = $.cookie('daily_number');
+                            let resCurrOrder = eval(cookieCurrOrder);
                             if (resCurrOrder) {
                                 alert(resCurrOrder)
                                 alert(daily_number)
