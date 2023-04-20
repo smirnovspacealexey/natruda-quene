@@ -358,7 +358,7 @@
                         sessionStorage.removeItem('deliveryData')
 
                         let cookieCurrOrder = $.cookie('currOrder');
-                        alert(JSON.parse(cookieCurrOrder))
+                        alert(eval(cookieCurrOrder))
                         let resCurrOrder = eval(cookieCurrOrder);
                         alert(resCurrOrder)
                         resCurrOrder.push({
