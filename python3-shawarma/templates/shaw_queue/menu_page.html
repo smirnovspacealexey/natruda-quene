@@ -182,13 +182,14 @@
                     <script>
                         function addOrderToCookie() {
                             let cookieCurrOrder = JSON.stringify(currOrder);
-                            sessionStorage.setItem('currOrder', cookieCurrOrder);
+                            $.cookie('currOrder', cookieCurrOrder, { path: '/' });
+
                         }
                         $(document).ready(function () {
-                            cookieCurrOrder = sessionStorage.getItem('currOrder');
-                            is_delivery = sessionStorage.getItem('is_delivery');
-                            daily_number = sessionStorage.getItem('daily_number');
-                            resCurrOrder = eval(sessionStorage.getItem('cookieCurrOrder'));
+                            cookieCurrOrder = $.cookie('currOrder');
+                            is_delivery = $.cookie('is_delivery');
+                            daily_number = $.cookie('daily_number');
+                            resCurrOrder = eval(cookieCurrOrder);
                             if (resCurrOrder) {
                                 currOrder = resCurrOrder
                                 DrawOrderTable()
@@ -204,9 +205,9 @@
                                 }
                             }, 1000);
 
-                            sessionStorage.removeItem('currOrder')
-                            sessionStorage.removeItem('is_delivery')
-                            sessionStorage.removeItem('daily_number')
+                            $.cookie("currOrder", null, { path: '/' });
+                            $.cookie("is_delivery", null, { path: '/' });
+                            $.cookie("daily_number", null, { path: '/' });
                         })
                     </script>
                     </p>

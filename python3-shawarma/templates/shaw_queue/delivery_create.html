@@ -352,12 +352,14 @@
                     data: data,
                     dataType: 'json',
                     success: function (res) {
-                        sessionStorage.setItem('is_delivery','true');
-                        sessionStorage.setItem('daily_number', res['daily_number']);
+                        $.cookie('is_delivery','true', { path: '/' });
+                        $.cookie('daily_number',res['daily_number'], { path: '/' });
                         save_data_to_storage = false
                         sessionStorage.removeItem('deliveryData')
-                        let cookieCurrOrder = sessionStorage.getItem('currOrder');
-                        let resCurrOrder = eval(cookieCurrOrder);
+
+                        let cookieCurrOrder = $.cookie('currOrder');
+                        resCurrOrder = eval(cookieCurrOrder);
+                        alert(resCurrOrder)
                         resCurrOrder.push({
                             'id': res['pk'],
                             'title': res['title'],
@@ -365,8 +367,8 @@
                             'quantity': res['quantity'],
                             'note': res['note'],
                         })
-                        cookieCurrOrder = JSON.stringify(resCurrOrder);
-                        sessionStorage.setItem('currOrder', cookieCurrOrder);
+                        cookieCurrOrder = JSON.stringify(currOrder);
+                        $.cookie('currOrder', cookieCurrOrder, { path: '/' });
 
                         alert('СМС ушла')
                     },
