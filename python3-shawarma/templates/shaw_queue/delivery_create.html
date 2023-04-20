@@ -358,7 +358,7 @@
                         sessionStorage.removeItem('deliveryData')
 
                         let cookieCurrOrder = $.cookie('currOrder', { path: '/' });
-                        let resCurrOrder = cookieCurrOrder;
+                        let resCurrOrder = eval(cookieCurrOrder);
                         alert(resCurrOrder)
                         resCurrOrder.push({
                             'id': res['pk'],
@@ -426,6 +426,17 @@
 
 
         $(document).ready(function () {
+            let cookieCurrOrder = $.cookie('currOrder');
+
+            let resCurrOrder = eval(cookieCurrOrder);
+            alert(resCurrOrder)
+
+
+
+
+
+
+
             $("#phone").mask("+7(999)999-99-99");
             let deliveryData = JSON.parse(sessionStorage.getItem('deliveryData'));
             if (deliveryData) {
