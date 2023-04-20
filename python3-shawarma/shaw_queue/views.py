@@ -3691,9 +3691,8 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
         client.captureException()
         return data
     order_next_number = 0
-    if delivery_daily_number:
-        order_next_number = int(delivery_daily_number[1:])
-    elif order_last_daily_number:
+
+    if order_last_daily_number:
         if order_last_daily_number['daily_number__max'] is not None:
             order_next_number = order_last_daily_number['daily_number__max'] + 1
         else:
@@ -3702,12 +3701,13 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
         if order_id:
             order = Order.objects.get(id=order_id)
             OrderContent.objects.filter(order=order).delete()
+            order.delivery_daily_number = int(delivery_daily_number[1:])
             order.is_paid = is_paid
             order.paid_with_cash = paid_with_cash
             order.discount = discount
         else:
             order = Order(open_time=timezone.now(), daily_number=order_next_number, is_paid=is_paid,
-                          paid_with_cash=paid_with_cash, status_1c=0, discount=discount,
+                          paid_with_cash=paid_with_cash, status_1c=0, discount=discount, delivery_daily_number=int(delivery_daily_number[1:]),
                           is_preorder=is_preorder, is_pickup=is_pickup, from_site=from_site, pickup=delivery_pickup)
     except:
         data = {
@@ -6940,7 +6940,7 @@ def api_delivery(request):
                 else:
                     raise ConnectionError
 
-                success, result = send_sms(phone, f'Ваш заказ {daily_number}. Сумма: {full_price}. Ссылка на оплату {sber_url}')
+                success, result = send_sms(phone, f'#{daily_number}. {full_price}р. Ссылка на оплату {sber_url}')
 
                 if success:
                     JsonResponse(data)

@@ -309,7 +309,7 @@
 
             <div style="margin-top: 100px">
                 <div class="left45">
-                    <a class="form_button" href="/shaw_queue/menu/">назад</a>
+                    <a class="form_button" href="/shaw_queue/menu/" onclick="addDataToCookie()">назад</a>
                 </div>
 
                 <button style="padding: 30px" class="form_button" onclick="SMS()">
@@ -326,6 +326,12 @@
 
     <script src="https://api-maps.yandex.ru/2.1/?apikey={{ geocoder_key }}&lang=ru_RU" type="text/javascript"></script>
     <script>
+        function addDataToCookie() {
+            if (save_data_to_storage) {
+                sessionStorage.setItem('deliveryData', JSON.stringify(data));
+            }
+        }
+
         function SMS() {
             if (data['phone'] === null) {
                 alert('Заполните телефон!')
@@ -348,6 +354,8 @@
                     success: function (res) {
                         $.cookie('is_delivery','true', { path: '/' });
                         $.cookie('daily_number',res['daily_number'], { path: '/' });
+                        save_data_to_storage = false
+                        sessionStorage.removeItem('deliveryData')
                         alert('СМС ушла')
                     },
                     error: function (xhr, errmsg, err) {
@@ -373,6 +381,7 @@
             'pk_delivery': null,
         }
 
+        let save_data_to_storage = true;
         let delivery_price = $('#delivery_price');
         let full_price = $('#full_price');
 
@@ -404,6 +413,14 @@
 
         $(document).ready(function () {
             $("#phone").mask("+7(999)999-99-99");
+            let deliveryData = JSON.parse(sessionStorage.getItem('deliveryData'));
+            if (deliveryData) {
+                data = deliveryData
+                for (key in data) {
+                    $('#' + key).val(data[key])
+                }
+                $('#coordinate_input').val([data['coordinates'][0].toFixed(6), data['coordinates'][1].toFixed(6)].join(' '))
+            }
         })
 
         function getCoordinate(coords=null) {

@@ -292,6 +292,7 @@ class Servery(models.Model):
 
 class Order(models.Model):
     daily_number = models.IntegerField(verbose_name="Daily Number")
+    delivery_daily_number = models.IntegerField(verbose_name="Delivery Daily Number", null=True, blank=True, default=None)
     open_time = models.DateTimeField(verbose_name="Open Time")
     close_time = models.DateTimeField(verbose_name="Close Time", null=True)
     with_shawarma = models.BooleanField(verbose_name="With Shawarma", default=False)
@@ -351,8 +352,8 @@ class Order(models.Model):
         delivery_order = self.deliveryorder_set.last()
         if self.from_site:
             return (str(delivery_order.daily_number) + 'C' if delivery_order else 'C') + str(self.daily_number % 100)
-        elif self.is_delivery:
-            return 'Д' + str(self.daily_number % 100)
+        elif self.delivery_daily_number:
+            return 'Д' + str(self.delivery_daily_number % 100)
         return str(self.daily_number % 100)
 
     class Meta:

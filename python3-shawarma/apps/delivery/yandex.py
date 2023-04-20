@@ -11,8 +11,6 @@ logger_debug = logging.getLogger('debug_logger')
 
 url = 'https://b2b.taxi.yandex.net/b2b/cargo/integration/v2/claims/'
 
-'https://3dsec.sberbank.ru/payment/merchants/sbersafe_sberid/payment_ru.html?mdOrder=696e0967-a32c-7785-875d-62c928b640d7'
-
 
 def delivery_request(source, destination, history=None, order=None, order_items=None, price=None):
     try:
