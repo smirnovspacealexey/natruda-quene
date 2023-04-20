@@ -189,7 +189,7 @@
                             let cookieCurrOrder = $.cookie('currOrder');
                             let is_delivery = $.cookie('is_delivery');
                             let daily_number = $.cookie('daily_number');
-                            let resCurrOrder = cookieCurrOrder;
+                            let resCurrOrder = eval(cookieCurrOrder);
                             if (resCurrOrder) {
                                 alert(resCurrOrder)
                                 alert(daily_number)
