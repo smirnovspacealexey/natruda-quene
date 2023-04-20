@@ -181,11 +181,55 @@
                     <br>
                     <script>
                         function addOrderToCookie() {
+                            alert(typeof currOrder)
+                            alert(currOrder)
                             let cookieCurrOrder = JSON.stringify(currOrder);
                             $.cookie('currOrder', cookieCurrOrder, { path: '/' });
 
                         }
                         $(document).ready(function () {
+
+
+
+
+
+{##}
+{##}
+{#                            currOrder = [#}
+{#    {#}
+{#        "id": 460,#}
+{#        "title": "Домашний хлеб",#}
+{#        "price": 30,#}
+{#        "quantity": 2,#}
+{#        "note": "",#}
+{#        "qr": "",#}
+{#        "qr_req": false#}
+{#    },#}
+{#    {#}
+{#        "id": 378,#}
+{#        "title": "Креветки в кляре 3 шт",#}
+{#        "price": 180,#}
+{#        "quantity": 3,#}
+{#        "note": "",#}
+{#        "qr": "",#}
+{#        "qr_req": false#}
+{#    }#}
+{#]#}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                             let cookieCurrOrder = $.cookie('currOrder');
                             let is_delivery = $.cookie('is_delivery');
                             let daily_number = $.cookie('daily_number');
