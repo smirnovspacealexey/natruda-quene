@@ -2,6 +2,8 @@ from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.utils import timezone
 from shaw_queue.models import Order
+from shaw_queue.views import send_order_to_1c
+from apps.delivery.backend import delivery_confirm
 import logging
 
 logger_debug = logging.getLogger('debug_logger')
@@ -16,8 +18,12 @@ def sber_result(request):
                                      is_ready=False, is_delivery=True, delivery_daily_number=int(daily_number))
         order.is_paid = True
         order.save()
+        data = send_order_to_1c(order, False)
+        delivery_history = order.deliveryhistory_set.last()
 
-        logger_debug.info(f'sber_result order \n{order}')
+        delivery_confirm(delivery_history)
+
+        logger_debug.info(f'sber_result order \n{order}\n {data}')
 
     return JsonResponse(data={'success': True})
 

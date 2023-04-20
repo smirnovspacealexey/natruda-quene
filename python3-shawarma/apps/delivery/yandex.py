@@ -154,7 +154,25 @@ def delivery_request(source, destination, history=None, order=None, order_items=
         else:
             return None, None
     except:
-        logger_debug.info(f'ERROR: {traceback.format_exc()}')
+        logger_debug.info(f'delivery_request ERROR: {traceback.format_exc()}')
 
     # logger_debug.info(f'delivery_request {order, order.pk} \n\n{headers} \n {data} \n {res.status_code} \n {response}')
 
+
+def delivery_confirm(history):
+    try:
+        yandex_settings = YandexSettings.current()
+        headers = {'Accept-Language': 'ru', 'Authorization': 'Bearer ' + yandex_settings.token}
+
+        data = {
+            "version": 1
+        }
+        res = requests.post(f'{url}claims/accept?claim_id={history.request_id}', json=data, headers=headers)
+
+        if res.status_code == 200:
+            history.confirm = True
+            history.save()
+
+        logger_debug.info(f'delivery_request res: {res}')
+    except:
+        logger_debug.info(f'confirm ERROR: {traceback.format_exc()}')

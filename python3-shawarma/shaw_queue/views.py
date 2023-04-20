@@ -6809,18 +6809,18 @@ def excel(request):
 
     try:
         salary_sheets = {
-                         'Menu': get_titles_ids_links(Menu),
-                         'MenuCategory': get_titles_ids_links(MenuCategory),
-                         'MacroProduct': get_titles_ids_links(MacroProduct),
-                         'ContentOption': get_titles_ids_links(ContentOption),
-                         'MacroProductContent': get_titles_ids_links(MacroProductContent),
-                         'ProductVariant': get_titles_ids_links(ProductVariant),
-                         'ProductOption': get_titles_ids_links(ProductOption),
-                         'SizeOption': get_titles_ids_links(SizeOption),
+            'Menu': get_titles_ids_links(Menu),
+            'MenuCategory': get_titles_ids_links(MenuCategory),
+            'MacroProduct': get_titles_ids_links(MacroProduct),
+            'ContentOption': get_titles_ids_links(ContentOption),
+            'MacroProductContent': get_titles_ids_links(MacroProductContent),
+            'ProductVariant': get_titles_ids_links(ProductVariant),
+            'ProductOption': get_titles_ids_links(ProductOption),
+            'SizeOption': get_titles_ids_links(SizeOption),
 
-                         'Servery': get_titles_ids_links(Servery),
-                         'ServicePoint': get_titles_ids_links(ServicePoint),
-                         }
+            'Servery': get_titles_ids_links(Servery),
+            'ServicePoint': get_titles_ids_links(ServicePoint),
+        }
 
         link = f'excels/{time.strftime("%Y-%m-%d %H`%M`%S")}.xlsx'
         writer = pd.ExcelWriter(MEDIA_ROOT + '/' + link, engine='xlsxwriter')
@@ -6923,12 +6923,21 @@ def api_delivery(request):
 
         full_price = data.get('full_price', None)
 
+        menu_item_delivery = Menu.objects.filter(pk=int(data.get('pk_delivery', '0')))
+
+
         daily_number, six_numbers = delivery_request(source, destination, order_items=order_items, price=full_price)
         if daily_number:
             data = {
                 'success': True,
                 'daily_number': daily_number,
                 'six_numbers': six_numbers,
+
+                'id': menu_item_delivery.pk,
+                'title': menu_item_delivery.title,
+                'price': menu_item_delivery.price,
+                'quantity': 1,
+                'note': menu_item_delivery.note,
             }
 
             try:

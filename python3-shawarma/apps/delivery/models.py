@@ -131,9 +131,10 @@ class DeliveryHistory(models.Model):
     uuid = models.CharField(max_length=200, default='')
     six_numbers = models.CharField('код для курьера', max_length=200, default="")
     daily_number = models.CharField('daily_number', max_length=50, default="")
-
-    # delivery_price = models.IntegerField(verbose_name="delivery_price", default=0)
     full_price = models.IntegerField(verbose_name="full_price", default=0)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)
+    confirm = models.BooleanField(default=False, help_text='заявка подтверждена')
+    # delivery_price = models.IntegerField(verbose_name="delivery_price", default=0)
     # description = models.CharField('description', max_length=500, default="")
     # coordinates = models.CharField('coordinates', max_length=100, default="")
     # porch = models.CharField('porch', max_length=100, default="")

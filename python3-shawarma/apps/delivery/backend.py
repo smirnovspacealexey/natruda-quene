@@ -1,1 +1,1 @@
-from .yandex import delivery_request
+from .yandex import delivery_request, delivery_confirm

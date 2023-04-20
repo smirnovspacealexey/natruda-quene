@@ -356,6 +356,18 @@
                         $.cookie('daily_number',res['daily_number'], { path: '/' });
                         save_data_to_storage = false
                         sessionStorage.removeItem('deliveryData')
+                        cookieCurrOrder = $.cookie('currOrder');
+                        resCurrOrder = eval(cookieCurrOrder);
+                        resCurrOrder.push({
+                            'id': res['pk'],
+                            'title': res['title'],
+                            'price': res['price'],
+                            'quantity': res['quantity'],
+                            'note': res['note'],
+                        })
+                        let cookieCurrOrder = JSON.stringify(resCurrOrder);
+                        $.cookie('currOrder', cookieCurrOrder, { path: '/' });
+
                         alert('СМС ушла')
                     },
                     error: function (xhr, errmsg, err) {
