@@ -181,15 +181,8 @@
                     <br>
                     <script>
                         function addOrderToCookie() {
-                            let govno = []
-                            alert(typeof govno)
-
-                            alert(typeof currOrder)
-                            {#alert(currOrder[0])#}
-                            {#let cookieCurrOrder = JSON.stringify(currOrder);#}
-                            {#$.cookie('currOrder', cookieCurrOrder, { path: '/' });#}
-
-
+                            let cookieCurrOrder = JSON.stringify(currOrder);
+                            $.cookie('currOrder', cookieCurrOrder, { path: '/' });
                         }
                         $(document).ready(function () {
 
