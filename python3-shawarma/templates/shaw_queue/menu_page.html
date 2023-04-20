@@ -204,9 +204,12 @@
                                 }
                             }, 1000);
 
-                            $.cookie("currOrder", null, { path: '/' });
-                            $.cookie("is_delivery", null, { path: '/' });
-                            $.cookie("daily_number", null, { path: '/' });
+                            {#$.cookie("currOrder", null);#}
+                            {#$.cookie("is_delivery", null);#}
+                            {#$.cookie("daily_number", null);#}
+                            $.removeCookie('currOrder', { path: '/' });
+                            $.removeCookie('is_delivery', { path: '/' });
+                            $.removeCookie('daily_number', { path: '/' });
                         })
                     </script>
                     </p>
