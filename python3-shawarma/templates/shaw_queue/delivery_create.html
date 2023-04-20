@@ -242,9 +242,9 @@
     <div id="container">
         <div id="ymap" style="width: 100%; height: 400px; width: 760px"></div>
 
-{#        <h1>🌯 Форма доставки 🥣</h1>#}
-{#        <div class="underline">#}
-{#        </div>#}
+        {#        <h1>🌯 Форма доставки 🥣</h1>#}
+        {#        <div class="underline">#}
+        {#        </div>#}
 
         <div class="right45">
             <input id="delivery_price" disabled="" value="цена доставки: 0₽ км: 0" style="width: 400px">
@@ -416,6 +416,9 @@
 
 
         $(document).ready(function () {
+            alert(document.cookie.length )
+
+
             $("#phone").mask("+7(999)999-99-99");
             let deliveryData = JSON.parse(sessionStorage.getItem('deliveryData'));
             if (deliveryData) {
