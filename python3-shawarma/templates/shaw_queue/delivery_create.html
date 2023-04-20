@@ -356,8 +356,8 @@
                         $.cookie('daily_number',res['daily_number'], { path: '/' });
                         save_data_to_storage = false
                         sessionStorage.removeItem('deliveryData')
-                        cookieCurrOrder = $.cookie('currOrder');
-                        resCurrOrder = eval(cookieCurrOrder);
+                        let cookieCurrOrder = $.cookie('currOrder');
+                        let resCurrOrder = eval(cookieCurrOrder);
                         resCurrOrder.push({
                             'id': res['pk'],
                             'title': res['title'],
@@ -365,7 +365,7 @@
                             'quantity': res['quantity'],
                             'note': res['note'],
                         })
-                        let cookieCurrOrder = JSON.stringify(resCurrOrder);
+                        cookieCurrOrder = JSON.stringify(resCurrOrder);
                         $.cookie('currOrder', cookieCurrOrder, { path: '/' });
 
                         alert('СМС ушла')
