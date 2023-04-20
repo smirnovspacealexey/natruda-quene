@@ -6949,8 +6949,8 @@ def api_delivery(request):
                 else:
                     raise ConnectionError
 
-                success, result = send_sms(phone, f'#{daily_number}. {full_price}р. Ссылка на оплату {sber_url}')
-
+                # success, result = send_sms(phone, f'#{daily_number}. {full_price}р. Ссылка на оплату {sber_url}')
+                success = True
                 if success:
                     JsonResponse(data)
                 else:
