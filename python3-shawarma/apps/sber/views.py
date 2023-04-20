@@ -1,5 +1,5 @@
 from django.template import loader
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.utils import timezone
 from shaw_queue.models import Order
 import logging
@@ -18,3 +18,6 @@ def sber_result(request):
         order.save()
 
         logger_debug.info(f'sber_result order \n{order}')
+
+    return JsonResponse(data={'success': True})
+
