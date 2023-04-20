@@ -427,10 +427,8 @@
 
         $(document).ready(function () {
             let cookieCurrOrder = $.cookie('currOrder');
-            alert(cookieCurrOrder)
-            alert(cookieCurrOrder[0])
-            {#let resCurrOrder = eval(cookieCurrOrder);#}
-            {#alert(resCurrOrder)#}
+            let resCurrOrder = eval(cookieCurrOrder);
+            alert(resCurrOrder[0].id)
 
 
 
