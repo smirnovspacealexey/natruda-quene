@@ -6928,7 +6928,7 @@ def api_delivery(request):
 
         menu_item_delivery = Menu.objects.filter(pk=int(data.get('pk_delivery', '0'))).last()
 
-        daily_number, six_numbers = delivery_request(source, destination, order_items=order_items, price=int(round(full_price)))
+        daily_number, six_numbers = delivery_request(source, destination, order_items=order_items, price=int(round(float(full_price))))
         if daily_number:
             data = {
                 'success': True,
