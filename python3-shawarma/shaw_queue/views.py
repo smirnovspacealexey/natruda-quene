@@ -28,6 +28,7 @@ from shawarma.settings import TIME_ZONE, LISTNER_URL, LISTNER_PORT, PRINTER_URL,
     CAROUSEL_IMG_DIR, CAROUSEL_IMG_URL, SMTP_LOGIN, SMTP_PASSWORD, SMTP_FROM_ADDR, SMTP_TO_ADDR, TIME_ZONE, \
     DADATA_TOKEN, \
     LOCAL_TEST, MEDIA_ROOT, MEDIA_URL, HOST
+from apps.delivery.models import YandexSettings, DeliverySettings
 from raven.contrib.django.raven_compat.models import client
 from random import sample
 from itertools import chain
@@ -867,6 +868,8 @@ def menu(request):
     delivery_mode = json.loads(request.GET.get('delivery_mode', 'false'))
     order_id = int(request.GET.get('order_id', -1))
     device_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
+    geocoder_key = YandexSettings.geocoder()
+
     if DEBUG_SERVERY:
         device_ip = '127.0.0.1'
     try:
@@ -896,7 +899,9 @@ def menu(request):
                 'staff_category': StaffCategory.objects.get(staff__user=request.user),
                 'menu_items': menu_items,
                 'menu_categories': MenuCategory.objects.order_by('weight'),
-                'delivery_mode': delivery_mode
+                'delivery_mode': delivery_mode,
+                'geocoder_key': geocoder_key,
+                'delivery_js': DeliverySettings.get_js()
             }
         except:
             data = {
@@ -6875,14 +6880,13 @@ def api_delivery(request):
         from apps.sber.backend import Sber
         from urllib.parse import unquote_plus
 
-        order_items = unquote_plus(request.COOKIES.get('currOrder', ''), encoding="utf-8")
-        print(order_items)
-        print()
-        order_items = list(json.loads(order_items))
+        # order_items = unquote_plus(request.COOKIES.get('currOrder', ''), encoding="utf-8")
 
         source = ServicePoint.objects.filter(id=2).last()
         data = request.POST
-        print(data)
+        order_items = data.get('order', '')
+        order_items = list(json.loads(order_items))
+        print(order_items[0])
 
         phone = data.get('phone', '')
         phone = phone.replace('(', "").replace(')', "").replace('-', "")
@@ -6894,7 +6898,6 @@ def api_delivery(request):
             "country": "Россия",
             "description": "Челябинск, Россия",
             "phone": phone,
-
         }
 
         name = data.get('name', '')
@@ -6925,8 +6928,7 @@ def api_delivery(request):
 
         menu_item_delivery = Menu.objects.filter(pk=int(data.get('pk_delivery', '0'))).last()
 
-
-        daily_number, six_numbers = delivery_request(source, destination, order_items=order_items, price=full_price)
+        daily_number, six_numbers = delivery_request(source, destination, order_items=order_items, price=int(round(full_price)))
         if daily_number:
             data = {
                 'success': True,
