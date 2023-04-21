@@ -177,6 +177,9 @@
                     <button id="delivery_sms" class="small-btn success" onclick="deliveryForm()">
                         Заполнить форму
                     </button>
+                    <button hidden="hidden" id="delivery_sms_hide" class="small-btn" onclick="deliveryFormHide()">
+                        скрыть форму
+                    </button>
                     <br>
                     <br>
                     </p>
@@ -433,6 +436,14 @@
         function deliveryForm() {
             $('#cook_delivery').click()
             $('#deliveryForm').show()
+            $('#delivery_sms_hide').show()
+            $('#delivery_sms').hide()
+        }
+
+        function deliveryFormHide() {
+            $('#deliveryForm').hide()
+            $('#delivery_sms_hide').hide()
+            $('#delivery_sms').show()
         }
 
         function SMS() {
