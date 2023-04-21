@@ -6429,7 +6429,7 @@ def define_service_point(ip: str) -> dict:
     except MultipleObjectsReturned:
         data = {
             'success': False,
-            'message': 'Множество экземпляров точек возвращено!'
+            'message': 'Множество экземпляров точек возвращено! ip {}'.format(ip_blocks)
         }
         logger.error('Множество точек возвращено для ip {}!'.format(ip_blocks))
         client.captureException()
