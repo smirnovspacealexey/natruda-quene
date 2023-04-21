@@ -837,16 +837,12 @@ function CloseModalStatus() {
 }
 
 function CalculateTotal() {
-    let delivery_sms = $('#delivery_sms')
     total = 0;
     for (var i = 0; i < currOrder.length; i++) {
         total += currOrder[i]['price'] * currOrder[i]['quantity'];
     }
     $('p.totalDisplay').each(function () {
         let res = Number(total.toFixed(2))
-        let delivery_sms_href = delivery_sms.attr('href')
-        delivery_sms_href = delivery_sms_href.slice(0, delivery_sms_href.indexOf('=') + 1) + res
-        delivery_sms.attr('href', delivery_sms_href)
         $(this).text(res);
     });
 }
