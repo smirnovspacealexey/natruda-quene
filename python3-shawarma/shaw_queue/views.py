@@ -1822,7 +1822,14 @@ def current_queue_ajax(request):
                                                      ).order_by(
             'open_time')
 
-        current_day_orders = regular_orders | today_delivery_orders
+        today_yandex_delivery_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
+                                              close_time__isnull=True,
+                                              is_canceled=False, is_delivery=True, delivery_daily_number__isnull=False,
+                                              is_ready=False, servery__service_point=result['service_point']).order_by(
+            'open_time')   #  Для яндекс доставки
+
+        current_day_orders = regular_orders | today_delivery_orders | today_yandex_delivery_orders
+
         # print(current_day_orders)
         serveries = Servery.objects.filter(service_point=result['service_point'])
         serveries_dict = {}
