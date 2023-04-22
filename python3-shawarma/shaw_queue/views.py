@@ -2590,7 +2590,7 @@ def order_content(request, order_id):
                                                             menu_item__productvariant__size_option__isnull=False)  # OrderContent.objects.filter(content_item__in=content_items)
     template = loader.get_template('shaw_queue/order_content.html')
     delivery_order = None
-    if order_info.is_delivery:
+    if order_info.is_delivery and not order_info.delivery_daily_number:  # not order_info.delivery_daily_number - для яндекс доставки
         try:
             delivery_order = DeliveryOrder.objects.get(order=order_info)
 
