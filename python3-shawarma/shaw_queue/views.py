@@ -1534,7 +1534,14 @@ def current_queue(request):
                                                      # deliveryorder__delivered_timepoint__contains=timezone.now().date()
                                                      ).order_by(
             'open_time')
-        current_day_orders = regular_orders | today_delivery_orders
+
+
+        today_yandex_delivery_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
+                                              close_time__isnull=True,
+                                              is_canceled=False, is_delivery=True, delivery_daily_number__isnull=False,
+                                              is_ready=False, servery__service_point=result['service_point']).order_by(
+            'open_time')   #  Для яндекс доставки
+        current_day_orders = regular_orders | today_delivery_orders | today_yandex_delivery_orders
 
         logger_debug.info(f'current_queue regular_orders: {regular_orders}\n')
         logger_debug.info(f'current_queue today_delivery_orders: {today_delivery_orders}\n')
