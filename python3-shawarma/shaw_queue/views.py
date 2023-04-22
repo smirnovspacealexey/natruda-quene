@@ -3615,61 +3615,64 @@ def cooks_content_info_ajax(request):
 @login_required()
 @permission_required('shaw_queue.add_order')
 def make_order(request):
-    order_id = request.POST.get('order_id', None)
-    delivery_order_pk = request.POST.get('delivery_order_pk', None)
-    delivery_daily_number = request.POST.get('delivery_daily_number', None)
-    is_preorder = True if int(request.POST.get('is_preorder', 0)) == 1 else False
-    is_pickup = True if int(request.POST.get('is_pickup', 0)) == 1 else False
-    servery_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
-    if DEBUG_SERVERY:
-        servery_ip = '127.0.0.1'
-    result = define_service_point(servery_ip)
-    content = json.loads(request.POST['order_content'])
-    payment = request.POST['payment']
-    cook_choose = request.POST['cook_choose']
-    discount = request.POST.get('discount', 0)
-
-    is_paid = False
-    paid_with_cash = False
-    if payment != 'not_paid':
-        if payment == 'paid_with_cash':
-            paid_with_cash = True
-            is_paid = True
-        else:
-            is_paid = True
-
-    if len(content) == 0:
-        data = {
-            'success': False,
-            'message': 'Order is empty!'
-        }
-        return JsonResponse(data)
-
     try:
-        servery = Servery.objects.get(ip_address=servery_ip)
-    except MultipleObjectsReturned:
-        data = {
-            'success': False,
-            'message': 'Multiple serveries returned!'
-        }
-        client.captureException()
-        return JsonResponse(data)
-    except:
-        data = {
-            'success': False,
-            'message': 'Something wrong happened while getting servery!'
-        }
-        logger_debug.info(f'make_order ERROR: {traceback.format_exc()}')
-        client.captureException()
-        return JsonResponse(data)
+        order_id = request.POST.get('order_id', None)
+        delivery_order_pk = request.POST.get('delivery_order_pk', None)
+        delivery_daily_number = request.POST.get('delivery_daily_number', None)
+        is_preorder = True if int(request.POST.get('is_preorder', 0)) == 1 else False
+        is_pickup = True if int(request.POST.get('is_pickup', 0)) == 1 else False
+        servery_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
+        if DEBUG_SERVERY:
+            servery_ip = '127.0.0.1'
+        result = define_service_point(servery_ip)
+        content = json.loads(request.POST['order_content'])
+        payment = request.POST['payment']
+        cook_choose = request.POST['cook_choose']
+        discount = request.POST.get('discount', 0)
 
-    order_next_number = 0
-    if result['success']:
-        service_point = result['service_point']
-        return JsonResponse(data=make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash,
-                                                 servery, service_point, discount, is_preorder, is_pickup, delivery_daily_number=delivery_daily_number))
-    else:
-        return JsonResponse(result)
+        is_paid = False
+        paid_with_cash = False
+        if payment != 'not_paid':
+            if payment == 'paid_with_cash':
+                paid_with_cash = True
+                is_paid = True
+            else:
+                is_paid = True
+
+        if len(content) == 0:
+            data = {
+                'success': False,
+                'message': 'Order is empty!'
+            }
+            return JsonResponse(data)
+
+        try:
+            servery = Servery.objects.get(ip_address=servery_ip)
+        except MultipleObjectsReturned:
+            data = {
+                'success': False,
+                'message': 'Multiple serveries returned!'
+            }
+            client.captureException()
+            return JsonResponse(data)
+        except:
+            data = {
+                'success': False,
+                'message': 'Something wrong happened while getting servery!'
+            }
+            logger_debug.info(f'make_order ERROR: {traceback.format_exc()}')
+            client.captureException()
+            return JsonResponse(data)
+
+        order_next_number = 0
+        if result['success']:
+            service_point = result['service_point']
+            return JsonResponse(data=make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash,
+                                                     servery, service_point, discount, is_preorder, is_pickup, delivery_daily_number=delivery_daily_number))
+        else:
+            return JsonResponse(result)
+    except:
+        logger_debug.info(f'ERROR {traceback.format_exc()}')  # del me
 
 
 def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, servery,
@@ -3678,180 +3681,156 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
     logger_debug = logging.getLogger('debug_logger')  # del me
     logger_debug.info(f'-----\n{content}\n\n{servery}\n\n{service_point}\n\n')  # del me
     try:
-        order_last_daily_number = Order.objects.filter(open_time__contains=timezone.now().date(),
-                                                       servery__service_point=service_point).aggregate(
-            Max('daily_number'))
-    except EmptyResultSet:
-        data = {
-            'success': False,
-            'message': 'Empty set of orders returned!'
-        }
-        client.captureException()
-        return data
-    except:
-        data = {
-            'success': False,
-            'message': 'Something wrong happened while getting set of orders!'
-        }
-        client.captureException()
-        return data
-    order_next_number = 0
-
-    if order_last_daily_number:
-        if order_last_daily_number['daily_number__max'] is not None:
-            order_next_number = order_last_daily_number['daily_number__max'] + 1
-        else:
-            order_next_number = 1
-    try:
-        if order_id:
-            order = Order.objects.get(id=order_id)
-            OrderContent.objects.filter(order=order).delete()
-            order.delivery_daily_number = int(delivery_daily_number[1:]) if delivery_daily_number else None
-            order.is_paid = is_paid
-            order.paid_with_cash = paid_with_cash
-            order.discount = discount
-        else:
-            order = Order(open_time=timezone.now(), daily_number=order_next_number, is_paid=is_paid,
-                          paid_with_cash=paid_with_cash, status_1c=0, discount=discount, delivery_daily_number=int(delivery_daily_number[1:]) if delivery_daily_number else None,
-                          is_preorder=is_preorder, is_pickup=is_pickup, from_site=from_site, pickup=delivery_pickup)
-    except:
-        data = {
-            'success': False,
-            'message': 'Something wrong happened while creating new order!'
-        }
-        client.captureException()
-        return data
-
-    # cooks = Staff.objects.filter(user__last_login__contains=timezone.now().date(), staff_category__title__iexact='Cook')
-    data = {
-        "daily_number": order.daily_number,
-        "display_number": order.daily_number % 100
-    }
-    has_cook_content = False
-    for item in content:
-        menu_item = Menu.objects.get(id=item['id'])
-        if menu_item.can_be_prepared_by.title == 'Cook':
-            has_cook_content = True
-            break
-    if has_cook_content and cook_choose != 'delivery':
+        pass
         try:
-            cooks = Staff.objects.filter(available=True, staff_category__title__iexact='Cook',
-                                         service_point=service_point)
-            cooks = sample(list(cooks), len(cooks))
-        except:
-            data.update({
+            order_last_daily_number = Order.objects.filter(open_time__contains=timezone.now().date(),
+                                                           servery__service_point=service_point).aggregate(
+                Max('daily_number'))
+        except EmptyResultSet:
+            data = {
                 'success': False,
-                'message': 'Something wrong happened while getting set of cooks!'
-            })
+                'message': 'Empty set of orders returned!'
+            }
             client.captureException()
+            logger_debug.info(f'ERROR {traceback.format_exc()}')  # del me
             return data
-
-        if len(cooks) == 0:
-            data.update({
+        except:
+            data = {
                 'success': False,
-                'message': 'Нет доступных поваров!'
-            })
+                'message': 'Something wrong happened while getting set of orders!'
+            }
+            client.captureException()
+            logger_debug.info(f'ERROR {traceback.format_exc()}')  # del me
             return data
-    if has_cook_content and cook_choose != 'delivery':
-        if cook_choose == 'auto':
-            min_index = 0
-            min_count = 100
-            # file.write("Заказ №{}\n".format(order.daily_number))
-            for cook_index in range(0, len(cooks)):
-                try:
-                    cooks_order_content = OrderContent.objects.filter(order__prepared_by=cooks[cook_index],
-                                                                      order__open_time__contains=timezone.now().date(),
-                                                                      order__is_canceled=False,
-                                                                      order__close_time__isnull=True,
-                                                                      order__is_ready=False,
-                                                                      menu_item__can_be_prepared_by__title__iexact='Cook')
-                except:
-                    data.update({
-                        'success': False,
-                        'message': 'Something wrong happened while getting cook\'s content!'
-                    })
-                    return data
+        order_next_number = 0
 
-                file.write("{}: {}\n".format(cooks[cook_index], len(cooks_order_content)))
+        if order_last_daily_number:
+            if order_last_daily_number['daily_number__max'] is not None:
+                order_next_number = order_last_daily_number['daily_number__max'] + 1
+            else:
+                order_next_number = 1
+        try:
+            if order_id:
+                order = Order.objects.get(id=order_id)
+                OrderContent.objects.filter(order=order).delete()
+                order.delivery_daily_number = int(delivery_daily_number[1:]) if delivery_daily_number else None
+                order.is_paid = is_paid
+                order.paid_with_cash = paid_with_cash
+                order.discount = discount
+            else:
+                order = Order(open_time=timezone.now(), daily_number=order_next_number, is_paid=is_paid,
+                              paid_with_cash=paid_with_cash, status_1c=0, discount=discount, delivery_daily_number=int(delivery_daily_number[1:]) if delivery_daily_number else None,
+                              is_preorder=is_preorder, is_pickup=is_pickup, from_site=from_site, pickup=delivery_pickup)
+        except:
+            data = {
+                'success': False,
+                'message': 'Something wrong happened while creating new order!'
+            }
+            client.captureException()
+            logger_debug.info(f'ERROR {traceback.format_exc()}')  # del me
+            return data
 
-                if min_count > len(cooks_order_content):
-                    min_count = len(cooks_order_content)
-                    min_index = cook_index
-
-            file.write("Выбранный повар: {}\n".format(cooks[min_index]))
-            order.prepared_by = cooks[min_index]
-        else:
-            if cook_choose != 'none':
-                try:
-                    order.prepared_by = Staff.objects.get(id=int(cook_choose))
-                except MultipleObjectsReturned:
-                    data.update({
-                        'success': False,
-                        'message': 'Multiple staff returned while binding cook to order!'
-                    })
-                    client.captureException()
-                    return data
-                except:
-                    data.update({
-                        'success': False,
-                        'message': 'Something wrong happened while getting set of orders!'
-                    })
-                    client.captureException()
-                    return data
-    content_to_send = []
-    order.servery = servery
-    order.is_delivery = True if cook_choose == 'delivery' else False
-    order.save()
-    total = 0
-    content_presence = False
-    shashlyk_presence = False
-    supplement_presence = False
-    for item in content:
-        item['toppings'] = item.get('toppings', [])
-        item['note'] = item.get('note', "")
-        item['qr'] = item.get('qr', "")
-        if item['quantity'] - int(item['quantity']) != 0:
+        # cooks = Staff.objects.filter(user__last_login__contains=timezone.now().date(), staff_category__title__iexact='Cook')
+        data = {
+            "daily_number": order.daily_number,
+            "display_number": order.daily_number % 100
+        }
+        has_cook_content = False
+        for item in content:
+            menu_item = Menu.objects.get(id=int(item['id']))
+            if menu_item.can_be_prepared_by.title == 'Cook':
+                has_cook_content = True
+                break
+        if has_cook_content and cook_choose != 'delivery':
             try:
-                new_order_content = OrderContent(order=order, menu_item_id=item['id'], note=item['note'],
-                                                 quantity=item['quantity'], qr=item['qr'])
+                cooks = Staff.objects.filter(available=True, staff_category__title__iexact='Cook',
+                                             service_point=service_point)
+                cooks = sample(list(cooks), len(cooks))
             except:
-                order.delete()
-                data = {
+                data.update({
                     'success': False,
-                    'message': 'Something wrong happened while adding order item!'
-                }
+                    'message': 'Something wrong happened while getting set of cooks!'
+                })
                 client.captureException()
                 return data
-            new_order_content.save()
-            menu_item = Menu.objects.get(id=item['id'])
-            if menu_item.can_be_prepared_by.title == 'Cook':
-                content_presence = True
-            if menu_item.can_be_prepared_by.title == 'Shashlychnik':
-                shashlyk_presence = True
-            if menu_item.can_be_prepared_by.title == 'Operator':
-                supplement_presence = True
-            total += menu_item.price * item['quantity']
-            for topping in item['toppings']:
+
+            if len(cooks) == 0:
+                data.update({
+                    'success': False,
+                    'message': 'Нет доступных поваров!'
+                })
+                return data
+        if has_cook_content and cook_choose != 'delivery':
+            if cook_choose == 'auto':
+                min_index = 0
+                min_count = 100
+                # file.write("Заказ №{}\n".format(order.daily_number))
+                for cook_index in range(0, len(cooks)):
+                    try:
+                        cooks_order_content = OrderContent.objects.filter(order__prepared_by=cooks[cook_index],
+                                                                          order__open_time__contains=timezone.now().date(),
+                                                                          order__is_canceled=False,
+                                                                          order__close_time__isnull=True,
+                                                                          order__is_ready=False,
+                                                                          menu_item__can_be_prepared_by__title__iexact='Cook')
+                    except:
+                        data.update({
+                            'success': False,
+                            'message': 'Something wrong happened while getting cook\'s content!'
+                        })
+                        return data
+
+                    file.write("{}: {}\n".format(cooks[cook_index], len(cooks_order_content)))
+
+                    if min_count > len(cooks_order_content):
+                        min_count = len(cooks_order_content)
+                        min_index = cook_index
+
+                file.write("Выбранный повар: {}\n".format(cooks[min_index]))
+                order.prepared_by = cooks[min_index]
+            else:
+                if cook_choose != 'none':
+                    try:
+                        order.prepared_by = Staff.objects.get(id=int(cook_choose))
+                    except MultipleObjectsReturned:
+                        data.update({
+                            'success': False,
+                            'message': 'Multiple staff returned while binding cook to order!'
+                        })
+                        client.captureException()
+                        return data
+                    except:
+                        data.update({
+                            'success': False,
+                            'message': 'Something wrong happened while getting set of orders!'
+                        })
+                        client.captureException()
+                        return data
+        content_to_send = []
+        order.servery = servery
+        order.is_delivery = True if cook_choose == 'delivery' else False
+        order.save()
+        total = 0
+        content_presence = False
+        shashlyk_presence = False
+        supplement_presence = False
+        for item in content:
+            item['toppings'] = item.get('toppings', [])
+            item['note'] = item.get('note', "")
+            item['qr'] = item.get('qr', "")
+            if item['quantity'] - int(item['quantity']) != 0:
                 try:
-                    new_item_topping = OrderContent(order=order, menu_item_id=topping['id'])
+                    new_order_content = OrderContent(order=order, menu_item_id=item['id'], note=item['note'],
+                                                     quantity=item['quantity'], qr=item['qr'])
                 except:
                     order.delete()
                     data = {
                         'success': False,
-                        'message': 'Something wrong happened while adding topping {}!'.format(topping['title'])
+                        'message': 'Something wrong happened while adding order item!'
                     }
                     client.captureException()
                     return data
-                new_item_topping.save()
-                new_order_content_option = OrderContentOption(content_item=new_order_content,
-                                                              content_item_option=new_item_topping)
-                new_order_content_option.save()
-                topping_menu_item = Menu.objects.get(id=topping['id'])
-                total += topping_menu_item.price
-
-
-        else:
-            for i in range(0, int(item['quantity'])):
+                new_order_content.save()
                 menu_item = Menu.objects.get(id=item['id'])
                 if menu_item.can_be_prepared_by.title == 'Cook':
                     content_presence = True
@@ -3859,20 +3838,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
                     shashlyk_presence = True
                 if menu_item.can_be_prepared_by.title == 'Operator':
                     supplement_presence = True
-
-                try:
-                    new_order_content = OrderContent(order=order, menu_item=menu_item, note=item['note'], qr=item['qr'])
-                except Exception as e:
-                    order.delete()
-                    data = {
-                        'success': False,
-                        'message': 'Something wrong happened while creating new order!'
-                    }
-                    client.captureException()
-                    return data
-                new_order_content.save()
-                total += menu_item.price
-
+                total += menu_item.price * item['quantity']
                 for topping in item['toppings']:
                     try:
                         new_item_topping = OrderContent(order=order, menu_item_id=topping['id'])
@@ -3891,53 +3857,97 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
                     topping_menu_item = Menu.objects.get(id=topping['id'])
                     total += topping_menu_item.price
 
-        content_to_send.append(
-            {
-                'item_id': item['id'],
-                'quantity': item['quantity']
-            }
-        )
-    order.total = total
-    order.with_shawarma = content_presence
-    order.with_shashlyk = shashlyk_presence
-    order.content_completed = not content_presence
-    order.shashlyk_completed = not shashlyk_presence
-    order.supplement_completed = not supplement_presence
-    order.save()
-    if order.is_paid:
-        print("Sending request to " + order.servery.ip_address)
-        print(order)
-        if FORCE_TO_LISTNER:
-            data = send_order_to_listner(order)
-        elif with1c and not order.from_site:
-            data = send_order_to_1c(order, False)
-            if not data["success"]:
-                if order_id:
-                    order.is_paid = False
-                else:
-                    print("Deleting order.")
-                    order.delete()
+
+            else:
+                for i in range(0, int(item['quantity'])):
+                    menu_item = Menu.objects.get(id=item['id'])
+                    if menu_item.can_be_prepared_by.title == 'Cook':
+                        content_presence = True
+                    if menu_item.can_be_prepared_by.title == 'Shashlychnik':
+                        shashlyk_presence = True
+                    if menu_item.can_be_prepared_by.title == 'Operator':
+                        supplement_presence = True
+
+                    try:
+                        new_order_content = OrderContent(order=order, menu_item=menu_item, note=item['note'], qr=item['qr'])
+                    except Exception as e:
+                        order.delete()
+                        data = {
+                            'success': False,
+                            'message': 'Something wrong happened while creating new order!'
+                        }
+                        client.captureException()
+                        return data
+                    new_order_content.save()
+                    total += menu_item.price
+
+                    for topping in item['toppings']:
+                        try:
+                            new_item_topping = OrderContent(order=order, menu_item_id=topping['id'])
+                        except:
+                            order.delete()
+                            data = {
+                                'success': False,
+                                'message': 'Something wrong happened while adding topping {}!'.format(topping['title'])
+                            }
+                            client.captureException()
+                            return data
+                        new_item_topping.save()
+                        new_order_content_option = OrderContentOption(content_item=new_order_content,
+                                                                      content_item_option=new_item_topping)
+                        new_order_content_option.save()
+                        topping_menu_item = Menu.objects.get(id=topping['id'])
+                        total += topping_menu_item.price
+
+            content_to_send.append(
+                {
+                    'item_id': item['id'],
+                    'quantity': item['quantity']
+                }
+            )
+        order.total = total
+        order.with_shawarma = content_presence
+        order.with_shashlyk = shashlyk_presence
+        order.content_completed = not content_presence
+        order.shashlyk_completed = not shashlyk_presence
+        order.supplement_completed = not supplement_presence
+        order.save()
+        if order.is_paid:
+            print("Sending request to " + order.servery.ip_address)
+            print(order)
+            if FORCE_TO_LISTNER:
+                data = send_order_to_listner(order)
+            elif with1c and not order.from_site:
+                data = send_order_to_1c(order, False)
+                if not data["success"]:
+                    if order_id:
+                        order.is_paid = False
+                    else:
+                        print("Deleting order.")
+                        order.delete()
+            else:
+                data["success"] = True
+
+            print("Request sent.")
+            if data.get("success"):
+                data["total"] = order.total
+                data["content"] = json.dumps(content_to_send)
+                data["message"] = ''
+                data["daily_number"] = order.daily_number % 100
+                data["guid"] = order.guid_1c
+                data["pk"] = order.pk
+                order.is_paid = True
+                order.save()
         else:
             data["success"] = True
-
-        print("Request sent.")
-        if data.get("success"):
             data["total"] = order.total
             data["content"] = json.dumps(content_to_send)
             data["message"] = ''
             data["daily_number"] = order.daily_number % 100
-            data["guid"] = order.guid_1c
             data["pk"] = order.pk
-            order.is_paid = True
-            order.save()
-    else:
-        data["success"] = True
-        data["total"] = order.total
-        data["content"] = json.dumps(content_to_send)
-        data["message"] = ''
-        data["daily_number"] = order.daily_number % 100
-        data["pk"] = order.pk
-    return data
+        return data
+    except:
+        logger_debug.info(f'ERROR {traceback.format_exc()}')  # del me
 
 
 # @csrf_exempt
