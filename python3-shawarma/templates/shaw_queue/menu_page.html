@@ -469,11 +469,13 @@
                     dataType: 'json',
                     success: function (res) {
                         currOrder.push({
-                            'id': res['pk'],
+                            'id': res['id'],
                             'title': res['title'],
                             'price': res['price'],
                             'quantity': res['quantity'],
                             'note': res['note'],
+                            'qr_req': false,
+                            'qr': '',
                         })
 
                         DrawOrderTable()
