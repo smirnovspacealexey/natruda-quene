@@ -369,6 +369,13 @@ class Order(models.Model):
             ('can_close', 'User can close order.'),
         )
 
+    @property
+    def six_numbers_for_yandex(self):
+        delivery_history = self.deliveryhistory_set.last()
+        if delivery_history:
+            return delivery_history.six_numbers
+        return '-'
+
 
 class OrderContent(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
