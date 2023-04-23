@@ -42,7 +42,7 @@ class Command(BaseCommand):
        #     except:
        #         pass
        try:
-           res = requests.get('https://natruda.ru/')
+           res = requests.get('https://natruda.ru/test')
            logger_debug.info(f'res\n {res}\n')
            print(res)
 
