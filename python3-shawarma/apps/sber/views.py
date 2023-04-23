@@ -5,10 +5,12 @@ from shaw_queue.models import Order
 from shaw_queue.views import send_order_to_1c
 from apps.delivery.backend import delivery_confirm
 import logging
+from django.views.decorators.csrf import csrf_exempt
 
 logger_debug = logging.getLogger('debug_logger')
 
 
+@csrf_exempt
 def sber_result(request):
     daily_number = request.GET.get('daily_number')
     logger_debug.info(f'sber_result \n{request.GET}')
