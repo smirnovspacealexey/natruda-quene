@@ -167,7 +167,7 @@ def delivery_confirm(history):
         data = {
             "version": 1
         }
-        res = requests.post(f'{url}claims/accept?claim_id={history.request_id}', json=data, headers=headers)
+        res = requests.post(f'{url}/accept?claim_id={history.daily_number}', json=data, headers=headers)
 
         if res.status_code == 200:
             history.confirm = True
@@ -176,3 +176,4 @@ def delivery_confirm(history):
         logger_debug.info(f'delivery_request res: {res}')
     except:
         logger_debug.info(f'confirm ERROR: {traceback.format_exc()}')
+
