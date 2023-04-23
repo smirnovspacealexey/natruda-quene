@@ -167,9 +167,9 @@
                 <div class="shadowed">
                     <p>
                     <p>
-                        <input type="radio" id="cook_delivery" checked name="cook_choose" value="delivery">
+                        <input type="radio" id="cook_delivery" name="cook_choose" value="delivery">
                         <label for="cook_auto">Доставка</label>
-                        <input type="text" id="delivery_daily_number" checked name="delivery_daily_number" value="">
+                        <input type="text" id="delivery_daily_number" name="delivery_daily_number" value="">
                     </p>
                     <label for="paid_with_sms">Доставка с оплатой через СМС</label>
                     <br>
@@ -677,6 +677,34 @@
         function get_price(value) {
             {{ delivery_js|safe }}
         }
+
+        function cleanDeliveryForm() {
+            data = {
+                'delivery_price': null,
+                'full_price': null,
+                'fullname': null,
+                'coordinates': null,
+                'porch': null,
+                'door_code': null,
+                'sfloor': null,
+                'sflat': null,
+                'comment': null,
+                'phone': null,
+                'name': null,
+                'pk_delivery': null,
+            }
+
+        }
+
+        for (key in data) {
+            $('#' + key).val(data[key])
+        }
+
+        $('#cook_none').click()
+        $('#not_paid').click()
+        zoom = 11
+        $('#delivery_daily_number')[0].reset()
+
     </script>
 
 {% endblock %}

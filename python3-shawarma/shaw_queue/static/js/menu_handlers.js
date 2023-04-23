@@ -142,6 +142,7 @@ function SendOrder() {
                                 }
                                 OK.focus();
                                 loading_indiactor.hide();
+                                cleanDeliveryForm();
                             }
 
                         }
