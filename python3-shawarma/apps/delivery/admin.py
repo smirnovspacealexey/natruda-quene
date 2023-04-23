@@ -10,7 +10,9 @@ class YandexSettingsAdmin(admin.ModelAdmin):
     search_fields = ['__str__', ]
 
 
-admin.site.register(DeliveryHistory)
+@admin.register(DeliveryHistory)
+class DeliveryHistoryAdmin(admin.ModelAdmin):
+    list_display = ['uuid', 'six_numbers', 'daily_number', 'full_price', 'order', 'confirm']
 
 
 @admin.register(DeliverySettings)
