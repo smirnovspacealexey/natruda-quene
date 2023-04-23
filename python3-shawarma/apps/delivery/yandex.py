@@ -150,6 +150,8 @@ def delivery_request(source, destination, history=None, order=None, order_items=
         print(res.status_code)
         print(response)
         if res.status_code == 200:
+            history.claim_id = response['id']
+            history.save()
             return history.daily_number, history.six_numbers
         else:
             return None, None
@@ -167,7 +169,7 @@ def delivery_confirm(history):
         data = {
             "version": 1
         }
-        res = requests.post(f'{url}/accept?claim_id={history.daily_number}', json=data, headers=headers)
+        res = requests.post(f'{url}/accept?claim_id={history.claim_id}', json=data, headers=headers)
 
         if res.status_code == 200:
             history.confirm = True

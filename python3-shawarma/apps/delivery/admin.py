@@ -12,7 +12,7 @@ class YandexSettingsAdmin(admin.ModelAdmin):
 
 @admin.register(DeliveryHistory)
 class DeliveryHistoryAdmin(admin.ModelAdmin):
-    list_display = ['uuid', 'six_numbers', 'daily_number', 'full_price', 'order', 'confirm']
+    list_display = ['uuid', 'six_numbers', 'daily_number', 'full_price', 'order', 'confirm', 'claim_id']
 
 
 @admin.register(DeliverySettings)
