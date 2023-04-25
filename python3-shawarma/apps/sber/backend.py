@@ -39,6 +39,21 @@ class Sber:
             'taxSystem': self.tax_system,
             'returnUrl': HOST_SITE,
             'failUrl': HOST_SITE,
+            # 'orderBundle': {"customerDetails": {"phone": "9888888888", "inn": "", "email": "email@mail.com"},
+            #               "cartItems": {"items": [{"positionId": 1,
+            #                                        "name": "Трость опорная, регулируемая по высоте, без устройства противоскольжения",
+            #                                        "itemDetails": {"itemDetailsParams": [{"name": "fes_truCode",
+            #                                                                               "value": "329921120.06001010100000000643"}]},
+            #                                        "quantity": {"value": "3.00", "measure": "шт."},
+            #                                        "itemCode": "270_235.00", "itemPrice": 40000,
+            #                                        "tax": {"taxType": 0, "taxSum": 0}},
+            #                                       {"positionId": 2, "name": "Трость белая тактильная цельная",
+            #                                        "itemDetails": {"itemDetailsParams": [{"name": "fes_truCode",
+            #                                                                               "value": "329921120.06002020100000000643"}]},
+            #                                        "quantity": {"value": "3.00", "measure": "шт."},
+            #                                        "itemCode": "270_244.00", "itemPrice": 23500,
+            #                                        "tax": {"taxType": 0, "taxSum": 0}}]}}
+
             # 'returnUrl': HOST_SITE + reverse('successful_payment'),
             # 'failUrl': HOST_SITE + reverse('failed_payment'),
 

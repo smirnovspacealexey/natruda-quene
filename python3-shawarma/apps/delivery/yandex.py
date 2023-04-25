@@ -44,7 +44,7 @@ def delivery_request(source, destination, history=None, order=None, order_items=
                         "length": 0.1,
                         "width": 0.1
                     },
-                    "title": menu_item.title,
+                    "title": menu_item.customer_title,
                     "weight": menu_item.category.weight / 1000
                 }
             )
