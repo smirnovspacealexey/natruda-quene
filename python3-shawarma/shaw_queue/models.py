@@ -294,7 +294,7 @@ class Order(models.Model):
     daily_number = models.IntegerField(verbose_name="Daily Number")
     delivery_daily_number = models.IntegerField(verbose_name="Delivery Daily Number", null=True, blank=True, default=None)
     open_time = models.DateTimeField(verbose_name="Open Time")
-    close_time = models.DateTimeField(verbose_name="Close Time", null=True)
+    close_time = models.DateTimeField(verbose_name="Close Time", blank=True, null=True)
     with_shawarma = models.BooleanField(verbose_name="With Shawarma", default=False)
     with_shashlyk = models.BooleanField(verbose_name="With Shashlyk", default=False)
     content_completed = models.BooleanField(verbose_name="Content Completed", default=False)
