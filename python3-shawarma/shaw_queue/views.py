@@ -3947,7 +3947,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
                 data["total"] = order.total
                 data["content"] = json.dumps(content_to_send)
                 data["message"] = ''
-                data["daily_number"] = order.daily_number % 100
+                data["daily_number"] = 'Д' + str(order.delivery_daily_number) if order.delivery_daily_number else order.daily_number % 100
                 data["guid"] = order.guid_1c
                 data["pk"] = order.pk
                 order.is_paid = True
@@ -3957,7 +3957,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
             data["total"] = order.total
             data["content"] = json.dumps(content_to_send)
             data["message"] = ''
-            data["daily_number"] = order.daily_number % 100
+            data["daily_number"] = 'Д' + str(order.delivery_daily_number) if order.delivery_daily_number else order.daily_number % 100
             data["pk"] = order.pk
         return data
     except:
