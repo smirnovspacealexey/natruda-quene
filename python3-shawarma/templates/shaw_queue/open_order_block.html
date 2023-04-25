@@ -23,7 +23,7 @@
                                             {% endif %}
                                             {% if open_order.order.from_site %} fromSite {% endif %}
                                         {% endif %}">
-                <a style="position: absolute" href="{% url 'order_content' open_order.order.id %}">№ {% if open_order.delivery_daily_number %}{{ open_order.delivery_daily_number }}{% else %}{{ open_order.display_number }}{% endif %}</a>№
+                <a style="position: absolute" href="{% url 'order_content' open_order.order.id %}">№ {% if open_order.delivery_daily_number %}Д{{ open_order.delivery_daily_number }}{% else %}{{ open_order.display_number }}{% endif %}</a>№
             </div>
             <div class="order-cook-part {% if open_order.order.from_site %} fromSite{% endif %}
                                         {% if open_order.order.is_preorder %}
