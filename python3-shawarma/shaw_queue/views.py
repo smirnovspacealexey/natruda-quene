@@ -2216,7 +2216,14 @@ def c_i_a(request):
                                                            is_canceled=False,
                                                            close_time__isnull=True).filter(
             Q(start_shawarma_cooking=True) | Q(start_shawarma_preparation=True)).order_by('open_time')
-        other_orders = regular_other_orders | today_delivery_other_orders
+
+        today_yandex_delivery_other_orders = Order.objects.filter(prepared_by=staff, open_time__isnull=False, is_delivery=True,
+                                                                  open_time__contains=timezone.now().date(),
+                                                                  is_canceled=False,
+                                                                  close_time__isnull=True).filter(
+            Q(start_shawarma_cooking=True) | Q(start_shawarma_preparation=True)).order_by('open_time')
+
+        other_orders = regular_other_orders | today_delivery_other_orders | today_yandex_delivery_other_orders
 
         regular_free_orders = Order.objects.filter(prepared_by__isnull=True, open_time__isnull=False,
                                                    start_shawarma_cooking=True, is_delivery=False,
@@ -2231,7 +2238,15 @@ def c_i_a(request):
                                                           servery__service_point=result['service_point'],
                                                           close_time__isnull=True).filter(
             Q(start_shawarma_cooking=True) | Q(start_shawarma_preparation=True)).order_by('open_time')
-        free_orders = regular_free_orders | today_delivery_free_orders
+
+        today_yandex_delivery_free_orders = Order.objects.filter(prepared_by__isnull=True, open_time__isnull=False,
+                                                                 is_delivery=True,
+                                                                 open_time__contains=timezone.now().date(),
+                                                                 is_canceled=False,
+                                                                 servery__service_point=result['service_point'],
+                                                                 close_time__isnull=True).filter(
+            Q(start_shawarma_cooking=True) | Q(start_shawarma_preparation=True)).order_by('open_time')
+        free_orders = regular_free_orders | today_delivery_free_orders | today_yandex_delivery_free_orders
         # other_orders = Order.objects.filter(prepared_by=staff, open_time__isnull=False, start_shawarma_preparation=True,
         #                                     open_time__contains=timezone.now().date(),
         #                                     is_canceled=False, close_time__isnull=True).filter(
@@ -2251,7 +2266,14 @@ def c_i_a(request):
                                                             is_grilling=False,
                                                             close_time__isnull=True).filter(
                 Q(start_shawarma_cooking=True) | Q(start_shawarma_preparation=True)).order_by('open_time')
-            new_order = regular_new_order | today_delivery_new_order
+            today_yandex_delivery_new_order = Order.objects.filter(prepared_by=staff, open_time__isnull=False,
+                                                            is_delivery=True,
+                                                            open_time__contains=timezone.now().date(),
+                                                            is_canceled=False, content_completed=False,
+                                                            is_grilling=False,
+                                                            close_time__isnull=True).filter(
+                Q(start_shawarma_cooking=True) | Q(start_shawarma_preparation=True)).order_by('open_time')
+            new_order = regular_new_order | today_delivery_new_order | today_yandex_delivery_new_order
             # new_order = Order.objects.filter(prepared_by=staff, open_time__isnull=False,
             #                                  open_time__contains=timezone.now().date(),
             #                                  is_canceled=False, content_completed=False, is_grilling=False,
