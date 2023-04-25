@@ -1537,9 +1537,9 @@ def current_queue(request):
 
 
         today_yandex_delivery_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
-                                              close_time__isnull=True,
-                                              is_canceled=False, is_delivery=True, delivery_daily_number__isnull=False,
-                                              is_ready=False, servery__service_point=result['service_point']).order_by(
+                                                            close_time__isnull=True,
+                                                            is_canceled=False, is_delivery=True, delivery_daily_number__isnull=False,
+                                                            is_ready=False, servery__service_point=result['service_point']).order_by(
             'open_time')   #  Для яндекс доставки
         current_day_orders = regular_orders | today_delivery_orders | today_yandex_delivery_orders
 
@@ -1823,9 +1823,9 @@ def current_queue_ajax(request):
             'open_time')
 
         today_yandex_delivery_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
-                                              close_time__isnull=True,
-                                              is_canceled=False, is_delivery=True, delivery_daily_number__isnull=False,
-                                              is_ready=False, servery__service_point=result['service_point']).order_by(
+                                                            close_time__isnull=True,
+                                                            is_canceled=False, is_delivery=True, delivery_daily_number__isnull=False,
+                                                            is_ready=False, servery__service_point=result['service_point']).order_by(
             'open_time')   #  Для яндекс доставки
 
         current_day_orders = regular_orders | today_delivery_orders | today_yandex_delivery_orders
@@ -2614,7 +2614,7 @@ def order_content(request, order_id):
         try:
             context = {
                 'order_info': order_info,
-                'display_number': order_info.daily_number % 100,
+                'display_number': order_info.delivery_daily_number if order_info.delivery_daily_number else order_info.daily_number % 100,
                 'maker': order_info.prepared_by,
                 'staff_category': StaffCategory.objects.get(staff__user=request.user),
                 'order_content': [{
