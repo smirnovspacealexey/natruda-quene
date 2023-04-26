@@ -2122,7 +2122,15 @@ def cook_interface(request):
                                                            is_canceled=False,
                                                            servery__service_point=result['service_point'],
                                                            close_time__isnull=True).order_by('open_time')
-        other_orders = regular_other_orders | today_delivery_other_orders
+
+        today_yandex_delivery_other_orders = Order.objects.filter(prepared_by=staff, open_time__isnull=False,
+                                                                  start_shawarma_cooking=True,
+                                                                  open_time__contains=timezone.now().date(),
+                                                                  is_canceled=False,
+                                                                  servery__service_point=result['service_point'],
+                                                                  close_time__isnull=True).order_by('open_time')
+
+        other_orders = regular_other_orders | today_delivery_other_orders | today_yandex_delivery_other_orders
         has_order = False
         display_number = ''
 
@@ -2267,11 +2275,11 @@ def c_i_a(request):
                                                             close_time__isnull=True).filter(
                 Q(start_shawarma_cooking=True) | Q(start_shawarma_preparation=True)).order_by('open_time')
             today_yandex_delivery_new_order = Order.objects.filter(prepared_by=staff, open_time__isnull=False,
-                                                            is_delivery=True,
-                                                            open_time__contains=timezone.now().date(),
-                                                            is_canceled=False, content_completed=False,
-                                                            is_grilling=False,
-                                                            close_time__isnull=True).filter(
+                                                                   is_delivery=True,
+                                                                   open_time__contains=timezone.now().date(),
+                                                                   is_canceled=False, content_completed=False,
+                                                                   is_grilling=False,
+                                                                   close_time__isnull=True).filter(
                 Q(start_shawarma_cooking=True) | Q(start_shawarma_preparation=True)).order_by('open_time')
             new_order = regular_new_order | today_delivery_new_order | today_yandex_delivery_new_order
             # new_order = Order.objects.filter(prepared_by=staff, open_time__isnull=False,
