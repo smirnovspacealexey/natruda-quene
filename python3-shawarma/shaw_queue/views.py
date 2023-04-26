@@ -3789,7 +3789,13 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
             if menu_item.can_be_prepared_by.title == 'Cook':
                 has_cook_content = True
                 break
-        if has_cook_content and cook_choose != 'delivery':
+
+        if has_cook_content and (delivery_daily_number or cook_choose != 'delivery'):
+            need_process_cook_content = True
+        else:
+            need_process_cook_content = False
+
+        if need_process_cook_content:
             try:
                 cooks = Staff.objects.filter(available=True, staff_category__title__iexact='Cook',
                                              service_point=service_point)
@@ -3808,7 +3814,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
                     'message': 'Нет доступных поваров!'
                 })
                 return data
-        if has_cook_content and cook_choose != 'delivery':
+        if need_process_cook_content:
             if cook_choose == 'auto':
                 min_index = 0
                 min_count = 100

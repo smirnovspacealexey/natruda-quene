@@ -36,25 +36,25 @@ def sber_result(request):
     except:
         logger_debug.info(f'sber_result ERROR: {traceback.format_exc()}')
 
-
-def add_cook_for_delivery_order(order):
-    has_cook_content = False
-    for item in order.ordercontent_set.all():
-        menu_item = item.menu_item
-        if menu_item.can_be_prepared_by.title == 'Cook':
-            has_cook_content = True
-            break
-    if has_cook_content:
-        try:
-            cooks = Staff.objects.filter(available=True, staff_category__title__iexact='Cook',
-                                         service_point=order.servery.service_point)
-            cooks = sample(list(cooks), len(cooks))
-        except:
-            logger_debug.info(f'add_coock ERROR: {traceback.format_exc()}')
-            return
-
-        if len(cooks) == 0:
-            logger_debug.info(f'add_coock ERROR: {traceback.format_exc()}')
-            return
+#
+# def add_cook_for_delivery_order(order):
+#     has_cook_content = False
+#     for item in order.ordercontent_set.all():
+#         menu_item = item.menu_item
+#         if menu_item.can_be_prepared_by.title == 'Cook':
+#             has_cook_content = True
+#             break
+#     if has_cook_content:
+#         try:
+#             cooks = Staff.objects.filter(available=True, staff_category__title__iexact='Cook',
+#                                          service_point=order.servery.service_point)
+#             cooks = sample(list(cooks), len(cooks))
+#         except:
+#             logger_debug.info(f'add_coock ERROR: {traceback.format_exc()}')
+#             return
+#
+#         if len(cooks) == 0:
+#             logger_debug.info(f'add_coock ERROR: {traceback.format_exc()}')
+#             return
 
 
