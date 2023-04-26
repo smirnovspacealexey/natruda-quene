@@ -1,7 +1,7 @@
 <div class="order-block-container">
     <div class="order-block shadowed">
         <div class="cook-order-block-header" onclick="SelectOrder({{ cooks_order.order.id }})">
-            <div class="cook-order-number
+            <span class="cook-order-number
 {% if cooks_order.order.is_preorder %}
                               {% if cooks_order.order.content_completed %}
                                 preorder_ready
@@ -20,7 +20,7 @@
                 {% endif %}
             {% endif %}"
                  onclick="SelectOrder({{ cooks_order.order.id }})">
-                № {% if cooks_order.order.delivery_daily_number %}Д{{ cooks_order.order.delivery_daily_number }}{% else %}{{ cooks_order.display_number }}{% endif %}
+                № {% if cooks_order.order.delivery_daily_number %}Д<span style="font-size: 60%;">{{ cooks_order.order.delivery_daily_number }}</span>{% else %}{{ cooks_order.display_number }}{% endif %}
             </div>
             <div class="cook-order-cook-part
                 {% if cooks_order.order.is_preorder %}
