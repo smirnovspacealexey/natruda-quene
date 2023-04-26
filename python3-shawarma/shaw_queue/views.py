@@ -2173,7 +2173,7 @@ def cook_interface(request):
                                        OrderContentOption.objects.filter(content_item=item)]),
                                   } for number, item in enumerate(taken_order_in_grill_content, start=1)],
             'cooks_orders': [{'order': cooks_order,
-                              'display_number': cooks_order.daily_number % 100,
+                              'display_number': 'Д' + str(cooks_order.delivery_daily_number) if cooks_order.delivery_daily_number else cooks_order.daily_number % 100,
                               'cook_content_count': len(OrderContent.objects.filter(order=cooks_order,
                                                                                     menu_item__can_be_prepared_by__title__iexact='cook'))}
                              for cooks_order in other_orders if len(OrderContent.objects.filter(order=cooks_order,
@@ -2373,7 +2373,7 @@ def c_i_a(request):
         context_other = {
             'finished_content_count': finished_content_count if finished_content_count > 0 else 0,
             'cooks_orders': [{'order': cooks_order,
-                              'display_number': cooks_order.daily_number % 100,
+                              'display_number': 'Д' + str(cooks_order.delivery_daily_number) if cooks_order.delivery_daily_number else cooks_order.daily_number % 100,
                               'cook_content_count': len(OrderContent.objects.filter(order=cooks_order,
                                                                                     menu_item__can_be_prepared_by__title__iexact='cook'))}
                              for cooks_order in other_orders if len(OrderContent.objects.filter(order=cooks_order,
