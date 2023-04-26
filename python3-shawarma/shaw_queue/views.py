@@ -2379,7 +2379,7 @@ def c_i_a(request):
                              for cooks_order in other_orders if len(OrderContent.objects.filter(order=cooks_order,
                                                                                                 menu_item__can_be_prepared_by__title__iexact='cook')) > 0],
             'free_orders': [{'order': free_order,
-                             'display_number': free_order.daily_number % 100,
+                             'display_number': 'Д' + str(free_order.delivery_daily_number) if free_order.delivery_daily_number else free_order.daily_number % 100,
                              'cook_content_count': len(OrderContent.objects.filter(order=free_order,
                                                                                    menu_item__can_be_prepared_by__title__iexact='cook'))}
                             for free_order in free_orders if len(OrderContent.objects.filter(order=free_order,
