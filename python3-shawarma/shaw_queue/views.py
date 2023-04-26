@@ -2307,7 +2307,8 @@ def c_i_a(request):
         taken_order_in_grill_content = []
         if len(new_order) > 0:
             new_order = new_order[0]
-            display_number = new_order.daily_number % 100
+
+            display_number = 'Д' + str(new_order.delivery_daily_number) if new_order.delivery_daily_number else new_order.daily_number % 100
             try:
                 # taken_order_content = OrderContent.objects.filter(order=new_order,
                 # menu_item__can_be_prepared_by__title__iexact='Cook',
