@@ -86,7 +86,7 @@ class OrderContentInline(admin.TabularInline):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'daily_number', 'delivery_daily_number', 'open_time', 'close_time', 'content_completed', 'is_paid', 'is_delivery', 'from_site', 'guid_1c']
-    list_editable = ('daily_number', 'delivery_daily_number', 'close_time', 'is_paid', 'is_delivery')
+    list_editable = ('daily_number', 'delivery_daily_number', 'close_time', 'is_paid', 'is_delivery', 'content_completed')
     search_fields = ['daily_number', ]
     list_filter = ['from_site', 'is_delivery', 'is_paid']
     inlines = [OrderContentInline]
