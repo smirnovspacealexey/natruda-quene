@@ -3803,7 +3803,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
             except:
                 data.update({
                     'success': False,
-                    'message': 'Something wrong happened while getting set of cooks!'
+                    'message': 'Something wrong happened while getting set of cooks! (1)'
                 })
                 client.captureException()
                 return data
@@ -3843,7 +3843,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
                 file.write("Выбранный повар: {}\n".format(cooks[min_index]))
                 order.prepared_by = cooks[min_index]
             else:
-                if cook_choose != 'none':
+                if cook_choose != 'none' and cook_choose != 'delivery':
                     try:
                         order.prepared_by = Staff.objects.get(id=int(cook_choose))
                     except MultipleObjectsReturned:
@@ -3856,7 +3856,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
                     except:
                         data.update({
                             'success': False,
-                            'message': 'Something wrong happened while getting set of orders!'
+                            'message': 'Something wrong happened while getting set of orders! (2)'
                         })
                         client.captureException()
                         return data
