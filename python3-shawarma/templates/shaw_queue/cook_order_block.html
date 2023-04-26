@@ -20,7 +20,7 @@
                 {% endif %}
             {% endif %}"
                  onclick="SelectOrder({{ cooks_order.order.id }})">
-                № {% if cooks_order.order.delivery_daily_number %}<span style="font-size: 65%; margin: 0">Д{{ cooks_order.order.delivery_daily_number }}</span>{% else %}{{ cooks_order.display_number }}{% endif %}
+                № {% if cooks_order.order.delivery_daily_number %}<span style="font-size: 55%; margin: 0">Д{{ cooks_order.order.delivery_daily_number }}</span>{% else %}{{ cooks_order.display_number }}{% endif %}
             </div>
             <div class="cook-order-cook-part
                 {% if cooks_order.order.is_preorder %}
@@ -37,7 +37,7 @@
                 {% endif %}
             {% endif %}"
                  onclick="SelectOrder({{ cooks_order.order.id }})">
-                ({{ cooks_order.cook_content_count }})
+                {% if cooks_order.order.delivery_daily_number %}<span style="font-size: 55%; margin: 0">({{ cooks_order.cook_content_count }})</span>{% else %}({{ cooks_order.cook_content_count }}){% endif %}
             </div>
         </div>
         {#        <div class="cook-order-block__button">&#10004</div> del me#}
