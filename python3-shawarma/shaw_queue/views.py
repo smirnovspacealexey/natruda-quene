@@ -3667,7 +3667,6 @@ def make_order(request):
     try:
         order_id = request.POST.get('order_id', None)
         delivery_order_pk = request.POST.get('delivery_order_pk', None)
-        delivery_daily_number = request.POST.get('delivery_daily_number', None)
         is_preorder = True if int(request.POST.get('is_preorder', 0)) == 1 else False
         is_pickup = True if int(request.POST.get('is_pickup', 0)) == 1 else False
         servery_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
@@ -3678,6 +3677,11 @@ def make_order(request):
         payment = request.POST['payment']
         cook_choose = request.POST['cook_choose']
         discount = request.POST.get('discount', 0)
+
+        if cook_choose == 'delivery':
+            delivery_daily_number = request.POST.get('delivery_daily_number', None)
+        else:
+            delivery_daily_number = None
 
         is_paid = False
         paid_with_cash = False
