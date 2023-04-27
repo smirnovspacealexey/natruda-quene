@@ -2383,8 +2383,7 @@ def c_i_a(request):
                              'display_number': free_order.display_number,
                              'cook_content_count': len(OrderContent.objects.filter(order=free_order,
                                                                                    menu_item__can_be_prepared_by__title__iexact='cook'))}
-                            for free_order in free_orders if len(OrderContent.objects.filter(order=free_order,
-                                                                                             menu_item__can_be_prepared_by__title__iexact='cook')) > 0]
+                            for free_order in Order.objects.all()]
         }
         template_other = loader.get_template('shaw_queue/cooks_order_queue.html')
         data = {

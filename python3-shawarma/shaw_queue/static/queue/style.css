@@ -422,14 +422,14 @@ div.ready-orders {
 }
 
 div.open-orders {
-    width: calc(100% - 235px);
+    width: calc(100% - 280px);
     height: 100%;
     float: left;
     padding: 1rem;
 }
 
 div.order-block-container {
-    width: 220px;
+    width: 280px;
     min-width: 180px;
     padding: 5px;
     float: left;
@@ -1001,7 +1001,7 @@ div.cook-pause-button {
 }
 
 div.cook-order-queue-display {
-    width: 200px;
+    width: 280px;
     height: 100%;
     float: left;
     border-left: solid 2px #D8D8D8;
@@ -1037,7 +1037,7 @@ div.cook-order-queue-display {
 }
 
 div.selected-order-display {
-    width: calc(100% - 235px);
+    width: calc(100% - 280px);
     height: 100%;
     float: left;
 }
