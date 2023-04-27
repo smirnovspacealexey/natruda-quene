@@ -164,8 +164,8 @@ class DeliveryHistory(models.Model):
 
             while daily_number is None:
                 daily_number = get_six_numbers()
-                if Order.objects.filter(open_time__contains=timezone.now().date(), close_time__isnull=True,
-                                        is_canceled=False, is_ready=False, is_delivery=True, daily_number=daily_number).exists():
+                if Order.objects.filter(open_time__contains=timezone.now().date(), daily_number=int(daily_number)).exists()\
+                        or DeliveryHistory.objects.filter(daily_number=daily_number, confirm=False).exists():
                     daily_number = None
 
             self.daily_number = daily_number
