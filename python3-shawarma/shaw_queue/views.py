@@ -1224,11 +1224,11 @@ def buyer_queue(request, vertical=False, black=False, px=None, new=False):
     else:
         return JsonResponse(result)
 
-    display_open_orders = [{'servery': order.servery.display_title, 'daily_number': order.daily_number % 100} for
+    display_open_orders = [{'servery': order.servery.display_title, 'daily_number': order.display_number} for
                            order in
                            open_orders]
 
-    display_ready_orders = [{'servery': order.servery.display_title, 'daily_number': order.daily_number % 100} for
+    display_ready_orders = [{'servery': order.servery.display_title, 'daily_number': order.display_number} for
                             order in
                             ready_orders]
     print('black')
@@ -1340,11 +1340,11 @@ def buyer_queue_ajax(request, vertical=False):
     else:
         return JsonResponse(result)
 
-    display_open_orders = [{'servery': order.servery.display_title, 'daily_number': order.daily_number % 100} for
+    display_open_orders = [{'servery': order.servery.display_title, 'daily_number': order.display_number} for
                            order in
                            open_orders]
 
-    display_ready_orders = [{'servery': order.servery.display_title, 'daily_number': order.daily_number % 100} for
+    display_ready_orders = [{'servery': order.servery.display_title, 'daily_number': order.display_number} for
                             order in
                             ready_orders]
 
@@ -1431,11 +1431,11 @@ def buyer_queue_ajax_new(request, vertical=False):   # del me after, Im copy
     else:
         return JsonResponse(result)
 
-    display_open_orders = [{'servery': order.servery.display_title, 'daily_number': order.daily_number % 100} for
+    display_open_orders = [{'servery': order.servery.display_title, 'daily_number': order.display_number} for
                            order in
                            open_orders]
 
-    display_ready_orders = [{'servery': order.servery.display_title, 'daily_number': order.daily_number % 100} for
+    display_ready_orders = [{'servery': order.servery.display_title, 'daily_number': order.display_number} for
                             order in
                             ready_orders]
 
@@ -2140,7 +2140,7 @@ def cook_interface(request):
         taken_order_in_grill_content = []
         if len(new_order) > 0:
             new_order = new_order[0]
-            display_number = 'Д' + str(new_order.delivery_daily_number) if new_order.delivery_daily_number else new_order.daily_number % 100
+            display_number = new_order.display_number
             # taken_order_content = OrderContent.objects.filter(order=new_order,
             #                                                   menu_item__can_be_prepared_by__title__iexact='Cook',
             #                                                   # menu_item__productvariant__size_option__isnull=False,
@@ -2173,7 +2173,7 @@ def cook_interface(request):
                                        OrderContentOption.objects.filter(content_item=item)]),
                                   } for number, item in enumerate(taken_order_in_grill_content, start=1)],
             'cooks_orders': [{'order': cooks_order,
-                              'display_number': 'Д' + str(cooks_order.delivery_daily_number) if cooks_order.delivery_daily_number else cooks_order.daily_number % 100,
+                              'display_number': cooks_order.display_number,
                               'cook_content_count': len(OrderContent.objects.filter(order=cooks_order,
                                                                                     menu_item__can_be_prepared_by__title__iexact='cook'))}
                              for cooks_order in other_orders if len(OrderContent.objects.filter(order=cooks_order,
@@ -2308,7 +2308,7 @@ def c_i_a(request):
         if len(new_order) > 0:
             new_order = new_order[0]
 
-            display_number = 'Д' + str(new_order.delivery_daily_number) if new_order.delivery_daily_number else new_order.daily_number % 100
+            display_number = new_order.display_number
             try:
                 # taken_order_content = OrderContent.objects.filter(order=new_order,
                 # menu_item__can_be_prepared_by__title__iexact='Cook',
@@ -2374,13 +2374,13 @@ def c_i_a(request):
         context_other = {
             'finished_content_count': finished_content_count if finished_content_count > 0 else 0,
             'cooks_orders': [{'order': cooks_order,
-                              'display_number': 'Д' + str(cooks_order.delivery_daily_number) if cooks_order.delivery_daily_number else cooks_order.daily_number % 100,
+                              'display_number': cooks_order.display_number ,
                               'cook_content_count': len(OrderContent.objects.filter(order=cooks_order,
                                                                                     menu_item__can_be_prepared_by__title__iexact='cook'))}
                              for cooks_order in other_orders if len(OrderContent.objects.filter(order=cooks_order,
                                                                                                 menu_item__can_be_prepared_by__title__iexact='cook')) > 0],
             'free_orders': [{'order': free_order,
-                             'display_number': 'Д' + str(free_order.delivery_daily_number) if free_order.delivery_daily_number else free_order.daily_number % 100,
+                             'display_number': free_order.display_number,
                              'cook_content_count': len(OrderContent.objects.filter(order=free_order,
                                                                                    menu_item__can_be_prepared_by__title__iexact='cook'))}
                             for free_order in free_orders if len(OrderContent.objects.filter(order=free_order,
@@ -2649,7 +2649,7 @@ def order_content(request, order_id):
         try:
             context = {
                 'order_info': order_info,
-                'display_number': order_info.delivery_daily_number if order_info.delivery_daily_number else order_info.daily_number % 100,
+                'display_number': order_info.display_number,
                 'maker': order_info.prepared_by,
                 'staff_category': StaffCategory.objects.get(staff__user=request.user),
                 'order_content': [{
@@ -3092,7 +3092,7 @@ def print_order(request, order_id):
         context = {
             'order_info': order_info,
             'order_content': order_content,
-            'display_number': order_info.daily_number % 100
+            'display_number': order_info.display_number
         }
 
         service_point = result['service_point']
@@ -3131,7 +3131,7 @@ def print_delivery_order(request: HttpRequest) -> JsonResponse:
             'order_info': order_info,
             'order_content': order_content,
             'delivery_order': delivery_order,
-            'display_number': order_info.daily_number % 100
+            'display_number': order_info.display_number
         }
 
         success = print_template(device_ip, template.render(context, request), result['service_point'])
@@ -3254,7 +3254,7 @@ def select_order(request):
             # TODO: Uncomment, when product variants will be ready.
             context = {
                 'selected_order': selected_order,
-                'display_number': selected_order.daily_number % 100,
+                'display_number': selected_order.display_number,
                 'order_content': [{'number': number,
                                    'item': item,
                                    'note': (item.note + ', ' if len(item.note) > 0 else '') + ', '.join(
@@ -3346,14 +3346,14 @@ def select_cook(request):
     except:
         data = {
             'success': False,
-            'message': 'Что-то пошло не так при назначении заказа №{} повару {}!'.format(order.daily_number % 100, cook)
+            'message': 'Что-то пошло не так при назначении заказа №{} повару {}!'.format(order.display_number, cook)
         }
         client.captureException()
         return JsonResponse(data)
 
     data = {
         'success': True,
-        'message': 'Заказ №{} назначен в готовку повару {}.'.format(order.daily_number % 100, cook)
+        'message': 'Заказ №{} назначен в готовку повару {}.'.format(order.display_number, cook)
     }
 
     return JsonResponse(data=data)
@@ -3398,14 +3398,14 @@ def change_cook(request):
     except:
         data = {
             'success': False,
-            'message': 'Что-то пошло не так при смене повара!'.format(order.daily_number % 100, cook)
+            'message': 'Что-то пошло не так при смене повара!'.format(order.display_number, cook)
         }
         client.captureException()
         return JsonResponse(data)
 
     data = {
         'success': True,
-        'message': 'Заказ №{} готов к смене повара.'.format(order.daily_number % 100, cook)
+        'message': 'Заказ №{} готов к смене повара.'.format(order.display_number, cook)
     }
 
     return JsonResponse(data=data)
@@ -3782,7 +3782,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
         # cooks = Staff.objects.filter(user__last_login__contains=timezone.now().date(), staff_category__title__iexact='Cook')
         data = {
             "daily_number": order.daily_number,
-            "display_number": order.daily_number % 100
+            "display_number": order.display_number
         }
         has_cook_content = False
         for item in content:
@@ -3988,7 +3988,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
                 data["total"] = order.total
                 data["content"] = json.dumps(content_to_send)
                 data["message"] = ''
-                data["daily_number"] = 'Д' + str(order.delivery_daily_number) if order.delivery_daily_number else order.daily_number % 100
+                data["daily_number"] = order.display_number
                 data["guid"] = order.guid_1c
                 data["pk"] = order.pk
                 order.is_paid = True
@@ -3998,7 +3998,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
             data["total"] = order.total
             data["content"] = json.dumps(content_to_send)
             data["message"] = ''
-            data["daily_number"] = 'Д' + str(order.delivery_daily_number) if order.delivery_daily_number else order.daily_number % 100
+            data["daily_number"] = order.display_number
             data["pk"] = order.pk
         return data
     except:
@@ -5822,7 +5822,7 @@ def prepare_json_check(order):
         cook_name = "{}".format(order.prepared_by.user.first_name)
     else:
         cook_name = ""
-    order_number = str(order.daily_number % 100)
+    order_number = str(order.display_number)
 
     print("Cash: {}".format(aux_query[0]['order__paid_with_cash']))
     if aux_query[0]['order__paid_with_cash']:
@@ -6007,7 +6007,7 @@ def send_order_to_1c(order, is_return):
         'cash': order.paid_with_cash,
         'cashless': not order.paid_with_cash,
         'internet_order': False,
-        'queue_number': order.daily_number % 100,
+        'queue_number': order.display_number,
         'cook': cook,
         'return_of_goods': is_return,
         'total': order.total,

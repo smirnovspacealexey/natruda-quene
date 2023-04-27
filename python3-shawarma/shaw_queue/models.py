@@ -360,7 +360,7 @@ class Order(models.Model):
         if self.from_site:
             return (str(delivery_order.daily_number) + 'C' if delivery_order else 'C') + str(self.daily_number % 100)
         elif self.delivery_daily_number:
-            return 'Д' + str(self.delivery_daily_number % 100)
+            return 'Д' + str(self.delivery_daily_number)
         return str(self.daily_number % 100)
 
     class Meta:
