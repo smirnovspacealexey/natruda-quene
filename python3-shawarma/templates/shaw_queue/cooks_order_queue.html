@@ -1,11 +1,11 @@
-<div class="taken-orders-container">
+<div class="taken-orders-container" style="width: 260px;">
 {% for cooks_order in cooks_orders %}
     {% include 'shaw_queue/cook_order_block.html' with cooks_order=cooks_order %}
 {% empty %}
     <span>Ваша очередь заказов пуста.</span>
 {% endfor %}
 </div>
-<div class="free-orders-container">
+<div class="free-orders-container" style="width: 260px;">
 {% for free_order in free_orders %}
     {% include 'shaw_queue/cook_order_block.html' with cooks_order=free_order %}
 {% empty %}
