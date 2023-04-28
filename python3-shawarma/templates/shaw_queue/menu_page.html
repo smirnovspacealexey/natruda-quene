@@ -460,6 +460,7 @@
             } else if (data['pk_delivery'] === null) {
                 alert('Что-то не так( \nПопробуйте перезагрузить страницу')
             } else {
+                data['full_price'] = data['delivery_price'] + total
                 let send_data = data
                 send_data['order'] = JSON.stringify(currOrder)
                 $.ajax({
