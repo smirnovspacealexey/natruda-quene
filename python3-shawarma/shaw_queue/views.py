@@ -6995,7 +6995,7 @@ def api_delivery(request):
 
         full_price = data.get('full_price', None)
 
-        menu_item_delivery = Menu.objects.filter(pk=int(data.get('pk_delivery', '0'))).last()
+        # menu_item_delivery = Menu.objects.filter(pk=int(data.get('pk_delivery', '0'))).last()
 
         daily_number, six_numbers = delivery_request(source, destination, order_items=order_items, price=int(round(float(full_price))))
         if daily_number:
@@ -7004,11 +7004,11 @@ def api_delivery(request):
                 'daily_number': daily_number,
                 'six_numbers': six_numbers,
 
-                'id': menu_item_delivery.pk,
-                'title': menu_item_delivery.title,
-                'price': menu_item_delivery.price,
+                # 'id': menu_item_delivery.pk,
+                # 'title': menu_item_delivery.title,
+                # 'price': menu_item_delivery.price,
                 'quantity': 1,
-                'note': menu_item_delivery.note,
+                # 'note': menu_item_delivery.note,
             }
 
             try:

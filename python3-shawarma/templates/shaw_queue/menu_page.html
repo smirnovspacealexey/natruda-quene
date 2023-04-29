@@ -481,18 +481,6 @@
                     data: send_data,
                     dataType: 'json',
                     success: function (res) {
-                        currOrder.push({
-                            'id': res['id'],
-                            'title': res['title'],
-                            'price': res['price'],
-                            'quantity': res['quantity'],
-                            'note': res['note'],
-                            'qr_req': false,
-                            'qr': '',
-                        })
-
-                        DrawOrderTable()
-                        CalculateTotal()
                         let delivery_daily_number = $('#delivery_daily_number')
                         delivery_daily_number.show()
                         delivery_daily_number.val('Д' + res['daily_number'])
