@@ -40,7 +40,7 @@ class DeliverySettings(models.Model):
 
         js = ''
         for distance in ds.distances.all().order_by('meters'):
-            js += f'if ({distance.meters} > value) {{data["pk_delivery"] = {distance.menu_item.pk}; return {distance.roubles}}};'
+            js += f'if ({distance.meters} > value) {{AddOne({distance.menu_item.pk}, "{distance.menu_item.title}", {distance.menu_item.js_price()}, false); delivery_id={distance.menu_item.pk}; return {distance.menu_item.price} }};'
         return js
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):

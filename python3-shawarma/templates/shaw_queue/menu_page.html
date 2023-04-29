@@ -166,16 +166,19 @@
                 </div>
                 <div class="shadowed">
                     <p>
-                    <p>
                         <input type="radio" id="cook_delivery" name="cook_choose" value="delivery" disabled>
-                        <label for="cook_auto">Доставка</label>
-                        <input style="border-bottom: 0" type="text" id="delivery_daily_number" name="delivery_daily_number" value="444" disabled>
+                        <label for="cook_auto" title="Доставка с оплатой через СМС">Доставка</label>
+                        <input type="text" id="delivery_daily_number" name="delivery_daily_number" value="" hidden="hidden">
                     </p>
-                    <label for="paid_with_sms">Доставка с оплатой через СМС</label>
                     <br>
+                    <p>
+                        <label>Добавить задержку</label>
+                        <br>
+                        <button class="small-btn success" onclick="add30()">+30 мин</button> <input style="margin-left: 20px" type="number" class="modal-quantity-input" id="holdMinutes" name="holdMinutes" min="0" max="120">
+                    </p>
                     <br>
-                    <button id="delivery_sms" class="small-btn success" onclick="deliveryForm()">
-                        Заполнить форму
+                    <button title="Доставка с оплатой через СМС" id="delivery_sms" class="small-btn success" onclick="deliveryForm()">
+                        Заполнить форму доставки
                     </button>
                     <button hidden="hidden" id="delivery_sms_hide" class="small-btn" onclick="deliveryFormHide()">
                         скрыть форму
@@ -433,6 +436,11 @@
         </div>
     </div>
     <script>
+        function add30() {
+            let holdMinutes = $('#holdMinutes')
+            holdMinutes.val(Number(holdMinutes.val()) + 30)
+        }
+
         function deliveryForm() {
             let cook_delivery = $('#cook_delivery')
             cook_delivery.removeAttr('disabled')
@@ -461,8 +469,8 @@
                 alert('Что-то не так( \nПопробуйте перезагрузить страницу')
             } else if (data['delivery_price'] === null) {
                 alert('Что-то не так( \nПопробуйте перезагрузить страницу')
-            } else if (data['pk_delivery'] === null) {
-                alert('Что-то не так( \nПопробуйте перезагрузить страницу')
+                {# } else if (data['pk_delivery'] === null) {#}
+                {#    alert('Что-то не так( \nПопробуйте перезагрузить страницу')#}
             } else {
                 data['full_price'] = data['delivery_price'] + total
                 let send_data = data
@@ -485,8 +493,9 @@
 
                         DrawOrderTable()
                         CalculateTotal()
-
-                        $('#delivery_daily_number').val('Д' + res['daily_number'])
+                        let delivery_daily_number = $('#delivery_daily_number')
+                        delivery_daily_number.show()
+                        delivery_daily_number.val('Д' + res['daily_number'])
                         alert('СМС ушла')
                     },
                     error: function (xhr, errmsg, err) {
@@ -508,7 +517,7 @@
             'comment': null,
             'phone': null,
             'name': null,
-            'pk_delivery': null,
+            {#'pk_delivery': null,#}
         }
 
         let delivery_price = $('#delivery_price');
@@ -588,6 +597,8 @@
         let limit_positions = 500
         let doZoom = true
         let distance
+        let delivery_id
+        let res_distance_price = 0
 
         function init() {
             myMap = new ymaps.Map("ymap", {
@@ -648,14 +659,21 @@
             }, duration + 700);
 
             setTimeout(() => {
-                let res_distance_price = get_price(distance)
-                let res_full_price = res_distance_price + total
-                delivery_price.val('цена доставки: ' + res_distance_price + '₽  км: ' +  (distance/1000).toFixed(1))
-                full_price.val('общая цена за заказ: ' + res_full_price + '₽')
-                data['full_price'] = res_full_price
-                data['delivery_price'] = res_distance_price
+                setPriceUnderMap(true)
             }, 1000);
 
+        }
+
+        function setPriceUnderMap(new_delivery=false) {
+            if (new_delivery) {
+                MinusOneItem(delivery_id)
+                res_distance_price = get_price(distance)
+            }
+
+            delivery_price.val('цена доставки: ' + res_distance_price + '₽  км: ' +  (distance/1000).toFixed(1))
+            full_price.val('общая цена за заказ: ' + total + '₽')
+            data['full_price'] = total
+            data['delivery_price'] = res_distance_price
         }
 
         function get_distance(coordinates1, coordinates2) {
@@ -678,7 +696,7 @@
             });
             myMap.geoObjects.add(multiRoute);
         }
-        $('#delivery_daily_number').val('333')
+
         function get_price(value) {
             {{ delivery_js|safe }}
         }
@@ -696,7 +714,7 @@
                 'comment': null,
                 'phone': null,
                 'name': null,
-                'pk_delivery': null,
+                {#'pk_delivery': null,#}
             }
 
             for (key in data) {
@@ -705,9 +723,13 @@
 
             $('#cook_none').click()
             $('#not_paid').click()
-            $('#cook_delivery').attr("disabled", true);
-            $('#delivery_daily_number').val(null)
+            $('#cook_delivery').attr("disabled", true)
+            let delivery_daily_number = $('#delivery_daily_number')
+            delivery_daily_number.val(null)
+            delivery_daily_number.attr("disabled", true)
             zoom = 11
+            res_distance_price = 0
+            delivery_id = null
         }
 
     </script>
