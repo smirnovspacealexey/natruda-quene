@@ -167,7 +167,7 @@
                 <div class="shadowed">
                     <p>
                     <p>
-                        <input type="radio" id="cook_delivery" name="cook_choose" value="delivery">
+                        <input type="radio" id="cook_delivery" name="cook_choose" value="delivery" disabled>
                         <label for="cook_auto">Доставка</label>
                         <input style="border-bottom: 0" type="text" id="delivery_daily_number" name="delivery_daily_number" value="444" disabled>
                     </p>
@@ -434,16 +434,20 @@
     </div>
     <script>
         function deliveryForm() {
-            $('#cook_delivery').click()
+            let cook_delivery = $('#cook_delivery')
+            cook_delivery.removeAttr('disabled')
+            cook_delivery.click()
             $('#deliveryForm').show()
             $('#delivery_sms_hide').show()
             $('#delivery_sms').hide()
         }
 
         function deliveryFormHide() {
+            $('#cook_none').click()
             $('#deliveryForm').hide()
             $('#delivery_sms_hide').hide()
             $('#delivery_sms').show()
+            $('#cook_delivery').attr("disabled", true);
         }
 
         function SMS() {
@@ -490,7 +494,6 @@
                     }
                 });
             }
-
         }
 
         let data = {
@@ -573,6 +576,7 @@
         $(document).ready(function () {
             $("#phone").mask("+7(999)999-99-99");
             ymaps.ready(init);
+            cleanDeliveryForm()
         })
 
         let myMap
@@ -674,7 +678,7 @@
             });
             myMap.geoObjects.add(multiRoute);
         }
-
+        $('#delivery_daily_number').val('333')
         function get_price(value) {
             {{ delivery_js|safe }}
         }
@@ -695,16 +699,16 @@
                 'pk_delivery': null,
             }
 
-        }
+            for (key in data) {
+                $('#' + key).val(data[key])
+            }
 
-        for (key in data) {
-            $('#' + key).val(data[key])
+            $('#cook_none').click()
+            $('#not_paid').click()
+            $('#cook_delivery').attr("disabled", true);
+            $('#delivery_daily_number').val(null)
+            zoom = 11
         }
-
-        $('#cook_none').click()
-        $('#not_paid').click()
-        zoom = 11
-        $('#delivery_daily_number')[0].reset()
 
     </script>
 

@@ -1,4 +1,4 @@
-from .models import DeliveryHistory, YandexSettings
+from .models import DeliveryHistory, YandexSettings, DeliveryDistance
 from shaw_queue.models import ServicePoint, Menu
 import requests
 import json
@@ -31,6 +31,16 @@ def delivery_request(source, destination, history=None, order=None, order_items=
 
         for item in order_items:
             menu_item = Menu.objects.filter(pk=item['id']).last()
+
+            if DeliveryDistance.objects.filter(menu_item=menu_item).exists():
+                continue
+
+            if menu_item.customer_title:
+                title = menu_item.customer_title
+            elif menu_item.title:
+                title = menu_item.title
+            else:
+                continue
             items.append(
                 {
                     "cost_currency": yandex_settings.currency,
@@ -44,7 +54,7 @@ def delivery_request(source, destination, history=None, order=None, order_items=
                         "length": 0.1,
                         "width": 0.1
                     },
-                    "title": menu_item.customer_title,
+                    "title": title,
                     "weight": menu_item.category.weight / 1000
                 }
             )
