@@ -448,6 +448,10 @@
             $('#deliveryForm').show()
             $('#delivery_sms_hide').show()
             $('#delivery_sms').hide()
+            preorder_checkbox = $('[name=preorder_checkbox]');
+            pickup_checkbox = $('[name=pickup_checkbox]');
+            preorder_checkbox.prop("checked", false);
+            pickup_checkbox.prop("checked", false);
         }
 
         function deliveryFormHide() {
