@@ -85,10 +85,10 @@ class OrderContentInline(admin.TabularInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['__str__', 'daily_number', 'delivery_daily_number', 'open_time', 'close_time', 'content_completed', 'is_paid', 'is_delivery', 'from_site', 'guid_1c']
+    list_display = ['__str__', 'daily_number', 'delivery_daily_number', 'open_time', 'close_time', 'content_completed', 'is_paid', 'is_delivery', 'is_preorder', 'from_site', 'guid_1c']
     list_editable = ('daily_number', 'delivery_daily_number', 'close_time', 'is_paid', 'is_delivery', 'content_completed')
     search_fields = ['daily_number', 'delivery_daily_number', 'open_time', 'guid_1c', 'servery__title']
-    list_filter = ['from_site', 'is_delivery', 'is_paid', 'open_time', 'close_time']
+    list_filter = ['from_site', 'is_delivery', 'is_paid', 'open_time', 'close_time', 'is_preorder']
     inlines = [OrderContentInline]
 
 
