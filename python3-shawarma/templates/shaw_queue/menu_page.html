@@ -667,7 +667,7 @@
         function setPriceUnderMap(new_delivery=false) {
             if (new_delivery) {
                 if (delivery_id) {
-                    MinusOneItem(delivery_id)
+                    MinusOneItem(FindItem(delivery_id, ''))
                 }
                 res_distance_price = get_price(distance)
             }
