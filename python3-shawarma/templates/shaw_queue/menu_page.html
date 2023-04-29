@@ -666,7 +666,9 @@
 
         function setPriceUnderMap(new_delivery=false) {
             if (new_delivery) {
-                MinusOneItem(delivery_id)
+                if (delivery_id) {
+                    MinusOneItem(delivery_id)
+                }
                 res_distance_price = get_price(distance)
             }
 
@@ -674,6 +676,7 @@
             full_price.val('общая цена за заказ: ' + total + '₽')
             data['full_price'] = total
             data['delivery_price'] = res_distance_price
+            alert()
         }
 
         function get_distance(coordinates1, coordinates2) {
