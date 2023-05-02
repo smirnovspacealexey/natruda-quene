@@ -3,6 +3,7 @@ from django.db import models
 from shaw_queue.models import Menu, Order
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from datetime import datetime
 import uuid
 import random
 
@@ -155,7 +156,8 @@ class DeliveryHistory(models.Model):
         return self.uuid + '-' + str(self.pk)
 
     def add_logg(self, new_log, name=''):
-        new_log = f'\n--{name}---\n' + str(new_log)
+        now = datetime.now()
+        new_log = f'-----{name}------{now.strftime("%Y-%m-%d %H:%M:%S.%f")}\n' + str(new_log) + '\n\n'
         if self.logg:
             self.logg = self.logg + new_log
         else:

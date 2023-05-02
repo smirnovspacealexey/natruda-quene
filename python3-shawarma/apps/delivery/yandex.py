@@ -173,6 +173,7 @@ def delivery_request(source, destination, history=None, order=None, order_items=
             history.save()
             return history.daily_number, history.six_numbers
         else:
+            history.save()
             delivery_logger.info(f'delivery_request ERROR: {res}')
             return None, None
     except:
