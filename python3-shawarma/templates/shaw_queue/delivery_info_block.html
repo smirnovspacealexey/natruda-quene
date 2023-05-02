@@ -1,13 +1,14 @@
-{#<div class="delivery-info-block">#}
-{#    {{ delivery_info.delivery }} {{ delivery_info.departure_time }}#}
-{#    <ul class="list-group">#}
-{#        {% for delivery_order in delivery_info.delivery_orders %}#}
-{#            <li class="list-group-item">#}
-{#                {{ delivery_order }}#}
-{#            </li>#}
-{#        {% endfor %}#}
-{#    </ul>#}
-{#</div>#}
+<div class="delivery-info-block">
+    {{ delivery_info.delivery }} {{ delivery_info.departure_time }}
+    <ul class="list-group">
+        {% for delivery_order in delivery_info.delivery_orders %}
+            <li class="list-group-item">
+                {{ delivery_order }}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{#history orders fullday#}
 <div class="dropdown">
     <button id="clps-btn-{{ index }}" class="collapsible-btn"
             onclick="ToggleCollapsible('clps-btn-{{ index }}', 'clps-content-{{ index }}')">

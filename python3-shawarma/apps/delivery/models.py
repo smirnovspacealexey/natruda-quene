@@ -136,21 +136,26 @@ class DeliveryHistory(models.Model):
     confirm = models.BooleanField(default=False, help_text='заявка подтверждена')
     claim_id = models.CharField('claim_id', max_length=50, default="")
     # delivery_price = models.IntegerField(verbose_name="delivery_price", default=0)
-    # description = models.CharField('description', max_length=500, default="")
+    description = models.CharField('description', max_length=500, default="Челябинск, Россия", blank=True)
+    fullname = models.CharField('fullname', max_length=500, default="")
     # coordinates = models.CharField('coordinates', max_length=100, default="")
     # porch = models.CharField('porch', max_length=100, default="")
     # door_code = models.CharField('door_code', max_length=100, default="")
     # sfloor = models.CharField('sfloor', max_length=100, default="")
     # sflat = models.CharField('sflat', max_length=100, default="")
     # comment = models.TextField(blank=True, null=True)
-    # phone = models.CharField('phone', max_length=100, default="")
+    phone = models.CharField('phone', max_length=100, default="", blank=True)
     # name = models.CharField('name', max_length=100, default="")
     # delivery_menu = models.ForeignKey(Menu, on_delete=models.SET_NULL, verbose_name="delivery_menu", null=True, blank=True)
-    # items = models.TextField(blank=True, null=True)
+    items = models.TextField(blank=True, null=True)
+    logg = models.TextField(blank=True, null=True)
 
     @property
     def request_id(self):
         return self.uuid + '-' + str(self.pk)
+
+    def add_logg(self, new_log, name=''):
+        self.logg = self.logg + f'\n--{name}---\n' + new_log
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         if self.six_numbers == '':

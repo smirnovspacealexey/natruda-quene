@@ -148,6 +148,12 @@ LOGGING = {
             'filename': 'log/debug_logger.log',
             'formatter': 'verbose'
         },
+        'delivery_logger': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'log/delivery_logger.log',
+            'formatter': 'verbose'
+        },
     },
     'loggers': {
         'django.request': {
@@ -172,6 +178,10 @@ LOGGING = {
         },
         'debug_logger': {
             'handlers': ['debug_logger'],
+            'level': 'INFO',
+        },
+        'delivery_logger': {
+            'handlers': ['delivery_logger'],
             'level': 'INFO',
         },
         '1c': {

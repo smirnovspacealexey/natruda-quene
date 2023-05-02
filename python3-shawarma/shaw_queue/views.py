@@ -47,6 +47,7 @@ import subprocess
 
 logger = logging.getLogger(__name__)
 logger_debug = logging.getLogger('debug_logger')   # del me
+delivery_logger = logging.getLogger('delivery_logger')
 
 logger_1c = logging.getLogger('1c')
 
@@ -6960,6 +6961,8 @@ def api_delivery(request):
         phone = data.get('phone', '')
         phone = phone.replace('(', "").replace(')', "").replace('-', "")
 
+        delivery_logger.info(f'api_delivery: {data}')
+
         destination = {
             "fullname": 'Челябинск, ' + data.get('fullname', ''),
             "city": "Челябинск",
@@ -7026,7 +7029,7 @@ def api_delivery(request):
                 else:
                     raise ConnectionError
             except:
-                logger_debug.info(f'ERROR: {traceback.format_exc()}')
+                delivery_logger.info(f'ERROR: {traceback.format_exc()}')
                 # sber_url = 'http://www.sberbank.ru/ru/s_m_business/bankingservice/sberpay'
 
         else:
@@ -7034,6 +7037,6 @@ def api_delivery(request):
 
         return JsonResponse(data)
     except:
-        logger_debug.info(f'ERROR: {traceback.format_exc()}')
+        delivery_logger.info(f'ERROR: {traceback.format_exc()}')
 
 
