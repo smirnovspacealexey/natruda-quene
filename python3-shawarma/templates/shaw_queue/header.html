@@ -61,7 +61,7 @@
                 </div>
             </a>
         {% endif %}
-        {% if staff_category.title == 'Administration' %}
+{#        {% if staff_category.title == 'Administration' %}#}
             <a href="{% url 'statistics' %}">
                 <div class="header-buttons" id="statistics_interface">
                         Шаурма
@@ -72,7 +72,7 @@
                         История заказов
                 </div>
             </a>
-        {% endif %}
+{#        {% endif %}#}
         {% if staff_category.title == 'Administration' %}
             <a href="{% url 'opinion_statistics' %}">
                 <div class="header-buttons" id="opinion_statistics_interface">
