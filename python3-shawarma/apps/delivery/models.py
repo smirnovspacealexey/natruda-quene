@@ -157,7 +157,7 @@ class DeliveryHistory(models.Model):
 
     def add_logg(self, new_log, name=''):
         now = datetime.now()
-        new_log = f'       {now.strftime("%Y-%m-%d %H:%M:%S.%f")}:  {name}    ----------------------------\n\n' + str(new_log) + '\n\n\n\n'
+        new_log = f'{now.strftime("%Y-%m-%d %H:%M:%S.%f")}:                 {name}\n\n' + str(new_log) + '\n----------------------------\n\n\n'
         if self.logg:
             self.logg = self.logg + new_log
         else:
