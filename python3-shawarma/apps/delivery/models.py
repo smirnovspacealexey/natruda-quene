@@ -155,7 +155,7 @@ class DeliveryHistory(models.Model):
         return self.uuid + '-' + str(self.pk)
 
     def add_logg(self, new_log, name=''):
-        self.logg = self.logg + f'\n--{name}---\n' + new_log
+        self.logg = self.logg + f'\n--{name}---\n' + str(new_log)
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         if self.six_numbers == '':

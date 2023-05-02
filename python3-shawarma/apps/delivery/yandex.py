@@ -166,7 +166,7 @@ def delivery_request(source, destination, history=None, order=None, order_items=
         response = json.loads(res.content.decode("utf-8"))
         print(res.status_code)
         print(response)
-        history.add_logg(str(response), 'yandex response')
+        history.add_logg(str(res), 'yandex response')
         if res.status_code == 200:
             delivery_logger.info(f'delivery_request: SUCCESS {res}')
             history.claim_id = response['id']
