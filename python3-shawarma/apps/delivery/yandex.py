@@ -168,7 +168,7 @@ def delivery_request(source, destination, history=None, order=None, order_items=
         print(response)
         history.add_logg(str(res), 'yandex response')
         if res.status_code == 200:
-            delivery_logger.info(f'delivery_request: SUCCESS {res}')
+            delivery_logger.info(f'delivery_request: SUCCESS {response}')
             history.claim_id = response['id']
             history.save()
             return history.daily_number, history.six_numbers
