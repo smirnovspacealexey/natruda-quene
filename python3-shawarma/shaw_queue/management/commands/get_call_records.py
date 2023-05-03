@@ -14,8 +14,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         logger_debug.info(f'in get call records\n\n')
 
+        # original_prefix = '/var/spool/asterisk/monitor'
+        # substitute_prefix = '//192.168.20.25/rec/monitor'
         original_prefix = '/var/spool/asterisk/monitor'
-        substitute_prefix = '//192.168.20.25/rec/monitor'
+        substitute_prefix = 'https://pbx.natruda.ru/monitor/'
         result = None
         try:
             self.stdout.write('Requesting records from {}'.format('https://' + ELASTIX_SERVER + '/' + ELASTIX_SCRIPT+'?'+'_login='+ ELASTIX_LOGIN+ '&_secret='+ ELASTIX_SECRET+
