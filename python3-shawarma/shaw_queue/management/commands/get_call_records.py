@@ -2,7 +2,7 @@ from shawarma.settings import ELASTIX_ACTION, ELASTIX_LOGIN, ELASTIX_SCRIPT, ELA
 from django.core.management.base import BaseCommand, CommandError
 from raven.contrib.django.raven_compat.models import client
 from shaw_queue.models import CallData
-from requests.exceptions import HTTPError,TooManyRedirects, ConnectionError, Timeout
+from requests.exceptions import HTTPError, TooManyRedirects, ConnectionError, Timeout
 import requests
 import logging
 logger_debug = logging.getLogger('debug_logger')
@@ -50,6 +50,7 @@ class Command(BaseCommand):
             records_data = None
             try:
                 records_data = result.json()['data']
+                logger_debug.info(f'records_data {records_data}')
             except KeyError:
                 self.stderr.write(self.style.ERROR('Нет data в ответе Elastix!'))
                 client.captureException()
