@@ -68,7 +68,16 @@ class Command(BaseCommand):
                     continue
 
                 try:
-                    record_url = substitute_prefix+(record['recordingfile'])[len(original_prefix):]
+                    calldate = record['calldate'].split()
+                    calldate = calldate[0].replace('-', '/')
+                except KeyError:
+                    self.stderr.write(self.style.ERROR('Нет calldate в ответе Elastix!'))
+                    client.captureException()
+                    continue
+
+                try:
+                    # record_url = substitute_prefix+(record['recordingfile'])[len(original_prefix):]
+                    record_url = substitute_prefix + calldate + '/' + (record['recordingfile'])
                     print(record_url)
                     if call.record == "Record path not set" or call.record != record_url:
                         call.record = record_url

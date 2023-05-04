@@ -638,7 +638,8 @@ def ats_listner(request):
     caller_id = request.GET.get('caller_id', None)
     call_uid = request.GET.get('uid', None)
     operator_id = request.GET.get('operator_id', None)
-    event_code = request.GET.get('event_code', None)  # 1 - from_queue, 2 - call_manager_chose, 3 - accept, 4 - discarb
+    event_code = request.GET.get('event_code', 2)  # 1 - from_queue, 2 - call_manager_chose, 3 - accept, 4 - discarb
+    logger_debug.info(f'ats_listner {request.GET}')
     print("{} {} {} {} {}".format(tel, caller_id, call_uid, operator_id, event_code))
     if event_code is not None:
         try:
