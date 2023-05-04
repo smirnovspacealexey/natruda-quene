@@ -55,17 +55,17 @@ class Command(BaseCommand):
                 client.captureException()
 
             for record in records_data:
-                try:
-                    call = CallData.objects.get(ats_id=record['uniqueid'])
-                    print('call')
-                except KeyError:
-                    self.stderr.write(self.style.ERROR('Нет uniqueid в ответе Elastix!'))
-                    client.captureException()
-                except CallData.DoesNotExist:
-                    # self.stderr.write(self.style.ERROR('Нет CallData c ats id == {}!'.format(record['uniqueid'])))
-                    # client.captureException()
-                    print('нет call')
-                    continue
+                # try:
+                #     call = CallData.objects.get(ats_id=record['uniqueid'])
+                #     print('call')
+                # except KeyError:
+                #     self.stderr.write(self.style.ERROR('Нет uniqueid в ответе Elastix!'))
+                #     client.captureException()
+                # except CallData.DoesNotExist:
+                #     # self.stderr.write(self.style.ERROR('Нет CallData c ats id == {}!'.format(record['uniqueid'])))
+                #     # client.captureException()
+                #     print('нет call')
+                #     continue
 
                 try:
                     calldate = record['calldate'].split()
@@ -79,9 +79,9 @@ class Command(BaseCommand):
                     # record_url = substitute_prefix+(record['recordingfile'])[len(original_prefix):]
                     record_url = substitute_prefix + calldate + '/' + (record['recordingfile'])
                     print(record_url)
-                    if call.record == "Record path not set" or call.record != record_url:
-                        call.record = record_url
-                        call.save()
+                    # if call.record == "Record path not set" or call.record != record_url:
+                    #     call.record = record_url
+                    #     call.save()
                 except KeyError:
                     self.stderr.write(self.style.ERROR('Нет recordingfile в ответе Elastix!'))
                     client.captureException()
