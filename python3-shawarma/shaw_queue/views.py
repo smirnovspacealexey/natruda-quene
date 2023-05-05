@@ -646,14 +646,14 @@ def ats_listner(request):
             event_code = int(event_code)
         except ValueError:
             logger.error('Неправильный код события {}!'.format(event_code))
-            return HttpResponse('Wrong event code provided.')
+            return HttpResponse('Wrong event code provided. (1)')
         except:
             logger.error('Неправильный код события {}!'.format(event_code))
             client.captureException()
-            return HttpResponse('Wrong event code provided.')
+            return HttpResponse('Wrong event code provided. (2)')
 
     if 1 > event_code > 4:
-        return HttpResponse('Wrong event code provided.')
+        return HttpResponse('Wrong event code provided. (3)')
 
     if caller_id is not None and call_uid is not None and operator_id is not None and event_code is not None:
         call_data = None
