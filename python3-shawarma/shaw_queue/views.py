@@ -660,7 +660,7 @@ def ats_listner(request):
         if event_code == 1:
             logger_debug.info(f'customer {caller_id}')
             try:
-                customer = Customer.objects.filter(phone_number="+{}".format(caller_id)).last()
+                customer = Customer.objects.get(phone_number="+{}".format(caller_id))
                 logger_debug.info(f'customer 1 {customer}')
                 print("Choosing customer {}".format("+{}".format(caller_id)))
             except Customer.DoesNotExist:
