@@ -658,16 +658,13 @@ def ats_listner(request):
     if caller_id is not None and call_uid is not None and operator_id is not None and event_code is not None:
         call_data = None
         if event_code == 1:
-            logger_debug.info(f'customer {caller_id}')
             try:
                 customer = Customer.objects.get(phone_number="+{}".format(caller_id))
-                logger_debug.info(f'customer 1 {customer}')
                 print("Choosing customer {}".format("+{}".format(caller_id)))
             except Customer.DoesNotExist:
                 customer = Customer(phone_number="+{}".format(caller_id))
                 print("Creating customer {}".format("+{}".format(caller_id)))
                 customer.save()
-                logger_debug.info(f'customer 2 {customer}')
 
             try:
                 call_manager = Staff.objects.get(phone_number=operator_id)
