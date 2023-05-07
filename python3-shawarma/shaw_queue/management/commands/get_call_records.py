@@ -50,6 +50,7 @@ class Command(BaseCommand):
             records_data = None
             try:
                 records_data = result.json()['data']
+                print(records_data)
             except KeyError:
                 self.stderr.write(self.style.ERROR('Нет data в ответе Elastix!'))
                 client.captureException()
