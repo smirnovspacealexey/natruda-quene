@@ -135,7 +135,7 @@ class StaffAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'staff_category', 'available', 'fired', 'super_guy', 'service_point', 'phone_number']
     list_editable = ('staff_category', 'available', 'fired', 'super_guy', 'service_point', 'phone_number')
     search_fields = ['__str__', 'phone_number']
-    filter_horizontal = ('available', 'fired', 'super_guy')
+    list_filter = ['available', 'fired', 'super_guy', ]
 
 admin.site.register(StaffCategory)
 admin.site.register(MenuCategory)
