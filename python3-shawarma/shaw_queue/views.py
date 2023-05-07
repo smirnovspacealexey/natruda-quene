@@ -700,7 +700,7 @@ def ats_listner(request):
                     return HttpResponse('Failed to find call data.')
             except CallData.MultipleObjectsReturned:
                 client.captureException()
-                logger.error('Multiple call records returned for uid {}!'.format(call_uid)
+                logger.error('Multiple call records returned for uid {}!'.format(call_uid))
                 logger_debug.info(f'ats_listner 9')
                 return HttpResponse('Multiple call records returned.')
             except:
