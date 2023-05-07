@@ -68,6 +68,7 @@ class CallDataAdmin(admin.ModelAdmin):
     search_fields = ['customer__phone_number', 'customer__name', 'customer__email', 'ats_id', ]
     list_filter = ['accepted', 'missed', ]
     actions = [accepted_everything, ]
+    raw_id_fields = ['customer']
 
 
 class OrderContentInline(admin.TabularInline):
@@ -136,6 +137,7 @@ class StaffAdmin(admin.ModelAdmin):
     list_editable = ('staff_category', 'available', 'fired', 'super_guy', 'service_point', 'phone_number')
     search_fields = ['phone_number']
     list_filter = ['available', 'fired', 'super_guy', ]
+
 
 admin.site.register(StaffCategory)
 admin.site.register(MenuCategory)
