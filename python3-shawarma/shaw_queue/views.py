@@ -645,11 +645,13 @@ def ats_listner(request):
         try:
             event_code = int(event_code)
         except ValueError:
+            logger_debug.info(f'ats_listner 1')
             logger.error('Неправильный код события {}!'.format(event_code))
             return HttpResponse('Wrong event code provided. (1)')
         except:
             logger.error('Неправильный код события {}!'.format(event_code))
             client.captureException()
+            logger_debug.info(f'ats_listner 2')
             return HttpResponse('Wrong event code provided. (2)')
 
     if 1 > event_code > 4:
@@ -665,12 +667,14 @@ def ats_listner(request):
                 customer = Customer(phone_number="+{}".format(caller_id))
                 print("Creating customer {}".format("+{}".format(caller_id)))
                 customer.save()
+                logger_debug.info(f'ats_listner 3')
 
             try:
                 call_manager = Staff.objects.get(phone_number=operator_id)
                 print("Choosing manager {}".format(operator_id))
             except Staff.DoesNotExist:
                 print("Failed to find manager {}".format(operator_id))
+                logger_debug.info(f'ats_listner 4')
                 return HttpResponse('Failed to find call manager.')
 
             try:
@@ -679,24 +683,30 @@ def ats_listner(request):
             except CallData.DoesNotExist:
                 call_data = CallData(ats_id=call_uid, timepoint=timezone.now(), customer=customer,
                                      call_manager=call_manager)
+                logger_debug.info(f'ats_listner 5')
             print("Created {} {} {} {}".format(call_data.ats_id, call_data.timepoint, call_data.customer,
                                                call_data.call_manager))
 
         if event_code == 3 or event_code == 4:
+            logger_debug.info(f'ats_listner 6')
             try:
                 call_data = CallData.objects.get(ats_id=call_uid)
             except CallData.DoesNotExist:
+                logger_debug.info(f'ats_listner 7')
                 if not (event_code == 4 and tel == "s"):
                     # This error logging is currently silenced to stop spam.
                     # logger.error('Failed to find call data for uid {}!'.format(call_uid))
+                    logger_debug.info(f'ats_listner 8')
                     return HttpResponse('Failed to find call data.')
             except CallData.MultipleObjectsReturned:
                 client.captureException()
-                logger.error('Multiple call records returned for uid {}!'.format(call_uid))
+                logger.error('Multiple call records returned for uid {}!'.format(call_uid)
+                logger_debug.info(f'ats_listner 9')
                 return HttpResponse('Multiple call records returned.')
             except:
                 client.captureException()
                 logger.error('Something wrong happened while searching call data for uid {}!'.format(call_uid))
+                logger_debug.info(f'ats_listner 10')
                 return HttpResponse('Something wrong happened while searching call data.')
             if call_data is not None:
                 call_data.accepted = True
@@ -704,24 +714,29 @@ def ats_listner(request):
                                                     call_data.call_manager))
 
         if call_data is not None:
+            logger_debug.info(f'ats_listner 11')
             try:
                 print("Trying to clean call data...")
                 call_data.full_clean()
             except ValidationError as e:
                 client.captureException()
                 exception_messages = ""
+                logger_debug.info(f'ats_listner 12')
                 for message in e.messages:
                     exception_messages += message
                     logger.error('Call data has not pass validation: {}'.format(message))
                     print('Call data has not pass validation: {}'.format(message))
                 return HttpResponse('Call data has not pass validation: {}'.format(exception_messages))
+            logger_debug.info(f'ats_listner 3')
             call_data.save()
             print("Saving {} {} {} {}".format(call_data.ats_id, call_data.timepoint, call_data.customer,
                                               call_data.call_manager))
             return HttpResponse('Success')
         else:
+            logger_debug.info(f'ats_listner 14')
             return HttpResponse('Fail (1)')
     else:
+        logger_debug.info(f'ats_listner 15')
         return HttpResponse('Fail (2)')
 
 
