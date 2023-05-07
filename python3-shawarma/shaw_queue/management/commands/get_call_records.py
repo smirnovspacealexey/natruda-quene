@@ -65,7 +65,7 @@ class Command(BaseCommand):
                 except CallData.DoesNotExist:
                     # self.stderr.write(self.style.ERROR('Нет CallData c ats id == {}!'.format(record['uniqueid'])))
                     # client.captureException()
-                    print('нет call')
+                    # print('нет call')
                     continue
 
                 try:
