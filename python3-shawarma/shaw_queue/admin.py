@@ -134,7 +134,7 @@ class ServicePointAdmin(admin.ModelAdmin):
 class StaffAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'staff_category', 'available', 'fired', 'super_guy', 'service_point', 'phone_number']
     list_editable = ('staff_category', 'available', 'fired', 'super_guy', 'service_point', 'phone_number')
-    search_fields = ['__str__', 'phone_number']
+    search_fields = ['phone_number']
     list_filter = ['available', 'fired', 'super_guy', ]
 
 admin.site.register(StaffCategory)
