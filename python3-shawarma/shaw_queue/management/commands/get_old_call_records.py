@@ -66,7 +66,7 @@ class Command(BaseCommand):
 
                 try:
                     call = CallData.objects.get(ats_id=record['uniqueid'])
-                    print('call')
+                    print(call)
                 except KeyError:
                     continue
 
@@ -80,6 +80,9 @@ class Command(BaseCommand):
                         caller_id = recordingfile_list[2]
                         operator_id = int(recordingfile_list[1])
                         call_uid = recordingfile_list[5][:-4]
+                        print()
+                        print(record_time, caller_id, operator_id, call_uid)
+                        print()
 
                         try:
                             customer = Customer.objects.get(phone_number="+{}".format(caller_id))
