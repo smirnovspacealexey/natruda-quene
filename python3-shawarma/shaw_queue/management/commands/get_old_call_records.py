@@ -80,8 +80,18 @@ class Command(BaseCommand):
                         caller_id = recordingfile_list[2]
                         operator_id = int(recordingfile_list[1])
                         call_uid = recordingfile_list[5][:-4]
-                        call_manager = Staff.objects.get(phone_number=operator_id)
-                        customer = Customer.objects.get(phone_number="+{}".format(caller_id))
+
+                        try:
+                            customer = Customer.objects.get(phone_number="+{}".format(caller_id))
+                            print("Choosing customer {}".format("+{}".format(caller_id)))
+                        except Customer.DoesNotExist:
+                            customer = Customer(phone_number="+{}".format(caller_id))
+                            customer.save()
+
+                        try:
+                            call_manager = Staff.objects.get(phone_number=operator_id)
+                        except Staff.DoesNotExist:
+                            continue
 
                         call = CallData(ats_id=call_uid, timepoint=record_time, customer=customer, call_manager=call_manager)
                     else:
