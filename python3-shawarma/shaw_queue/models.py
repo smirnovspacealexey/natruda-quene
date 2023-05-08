@@ -646,7 +646,7 @@ class CallData(models.Model):
         return "{} {}".format(self.customer, self.duration)
 
     class Meta:
-        ordering = ('timepoint',)
+        ordering = ('-timepoint',)
 
 
 class CookingTime(models.Model):
