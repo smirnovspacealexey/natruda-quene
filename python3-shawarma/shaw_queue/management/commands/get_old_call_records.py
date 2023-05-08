@@ -1,11 +1,15 @@
 from shawarma.settings import ELASTIX_ACTION, ELASTIX_LOGIN, ELASTIX_SCRIPT, ELASTIX_SECRET, ELASTIX_SERVER
 from django.core.management.base import BaseCommand, CommandError
 from raven.contrib.django.raven_compat.models import client
-from shaw_queue.models import CallData
+from shaw_queue.models import CallData, Staff, Customer
 from requests.exceptions import HTTPError, TooManyRedirects, ConnectionError, Timeout
 import requests
 import logging
+import time
+from datetime import datetime
+import sys, traceback
 logger_debug = logging.getLogger('debug_logger')
+
 
 class Command(BaseCommand):
     help = 'Requests record data from Elastix'
@@ -50,23 +54,40 @@ class Command(BaseCommand):
             records_data = None
             try:
                 records_data = result.json()['data']
-                print(records_data)
+                # print(records_data)
             except KeyError:
                 self.stderr.write(self.style.ERROR('Нет data в ответе Elastix!'))
                 client.captureException()
 
             for record in records_data:
+
+                if not record['recordingfile']:
+                    continue
+
                 try:
                     call = CallData.objects.get(ats_id=record['uniqueid'])
                     print('call')
                 except KeyError:
-                    self.stderr.write(self.style.ERROR('Нет uniqueid в ответе Elastix!'))
-                    client.captureException()
-                except CallData.DoesNotExist:
-                    # self.stderr.write(self.style.ERROR('Нет CallData c ats id == {}!'.format(record['uniqueid'])))
-                    # client.captureException()
-                    # print('нет call')
                     continue
+
+                except CallData.DoesNotExist:
+                    recordingfile_list = record['recordingfile'].split('-')
+
+                    if recordingfile_list[0] == 'external':
+                        record_time = datetime.strptime(f'{recordingfile_list[3]} {recordingfile_list[4]}',
+                                                        '%Y%m%d %H%M%S')
+
+                        caller_id = recordingfile_list[2]
+                        operator_id = int(recordingfile_list[1])
+                        call_uid = recordingfile_list[5][:-4]
+                        call_manager = Staff.objects.get(phone_number=operator_id)
+                        customer = Customer.objects.get(phone_number="+{}".format(caller_id))
+
+                        call = CallData(ats_id=call_uid, timepoint=record_time, customer=customer, call_manager=call_manager)
+                    else:
+                        continue
+
+                print(call)
 
                 try:
                     calldate = record['calldate'].split()
@@ -77,6 +98,12 @@ class Command(BaseCommand):
                     continue
 
                 try:
+                    try:
+                        call.duration = time.strftime("%H:%M:%S", time.gmtime(int(record['billsec'])))
+                    except:
+                        pass
+
+
                     # record_url = substitute_prefix+(record['recordingfile'])[len(original_prefix):]
                     record_url = substitute_prefix + calldate + '/' + (record['recordingfile'])
                     print(record_url)

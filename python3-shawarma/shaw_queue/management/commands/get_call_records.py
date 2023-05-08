@@ -82,7 +82,7 @@ class Command(BaseCommand):
 
                 try:
                     try:
-                        call.duration = time.strftime("%H:%M:%S", time.gmtime(int(record['duration'])))
+                        call.duration = time.strftime("%H:%M:%S", time.gmtime(int(record['billsec'])))
                     except:
                         print(f'delivery_request ERROR: {traceback.format_exc()}')
                         pass
