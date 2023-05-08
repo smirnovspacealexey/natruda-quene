@@ -645,6 +645,9 @@ class CallData(models.Model):
     def __unicode__(self):
         return "{} {}".format(self.customer, self.duration)
 
+    class Meta:
+        ordering = ('timepoint',)
+
 
 class CookingTime(models.Model):
     minutes = models.IntegerField(verbose_name="минуты на готовку")
