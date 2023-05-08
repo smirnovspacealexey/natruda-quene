@@ -94,6 +94,8 @@ class Command(BaseCommand):
                             call_manager = Staff.objects.get(phone_number=operator_id)
                         except Staff.DoesNotExist:
                             continue
+                        except Staff.MultipleObjectsReturned:
+                            call_manager = Staff.objects.filter(phone_number=operator_id, staff_category__title='Operator').first()
 
                         call = CallData(ats_id=call_uid, timepoint=record_time, customer=customer, call_manager=call_manager)
                     else:
