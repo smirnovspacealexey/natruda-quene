@@ -64,11 +64,14 @@ class ServeryAdmin(admin.ModelAdmin):
 
 @admin.register(CallData)
 class CallDataAdmin(admin.ModelAdmin):
-    list_display = ['customer', 'call_manager', 'ats_id', 'timepoint', 'accepted', 'missed', 'duration', 'record']
+    list_display = ['customer', 'call_manager', 'ats_id', 'timepoint', 'accepted_', 'missed_', 'duration', 'link']
     search_fields = ['customer__phone_number', 'customer__name', 'customer__email', 'ats_id', ]
     list_filter = ['accepted', 'missed', ]
     actions = [accepted_everything, ]
     raw_id_fields = ['customer']
+    CallData.accepted_.short_description = 'принят'
+    CallData.missed_.short_description = 'пропущен'
+    CallData.link.short_description = 'запись'
 
 
 class OrderContentInline(admin.TabularInline):

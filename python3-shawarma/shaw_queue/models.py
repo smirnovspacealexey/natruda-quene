@@ -645,6 +645,22 @@ class CallData(models.Model):
     def __unicode__(self):
         return "{} {}".format(self.customer, self.duration)
 
+    def link(self):
+        if self.record and self.record != 'Record path not set':
+            return format_html(f'<a href="{self.record}">🔉</a>')
+        else:
+            return '🔇'
+
+    def accepted_(self):
+        yes = '<img src="/static/admin/img/icon-yes.svg" alt="True">'
+        no = '<img src="/static/admin/img/icon-no.svg" alt="True">'
+        return format_html(f'{ yes if self.accepted else no}')
+
+    def missed_(self):
+        yes = '<img src="/static/admin/img/icon-yes.svg" alt="True">'
+        no = '<img src="/static/admin/img/icon-no.svg" alt="True">'
+        return format_html(f'{ yes if self.missed else no}')
+
     class Meta:
         ordering = ('-timepoint',)
 
