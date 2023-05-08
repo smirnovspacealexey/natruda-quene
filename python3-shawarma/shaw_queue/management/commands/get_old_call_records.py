@@ -5,11 +5,7 @@ from shaw_queue.models import CallData
 from requests.exceptions import HTTPError, TooManyRedirects, ConnectionError, Timeout
 import requests
 import logging
-import time
-import sys, traceback
-
 logger_debug = logging.getLogger('debug_logger')
-
 
 class Command(BaseCommand):
     help = 'Requests record data from Elastix'
@@ -25,7 +21,7 @@ class Command(BaseCommand):
         result = None
         try:
             self.stdout.write('Requesting records from {}'.format('https://' + ELASTIX_SERVER + '/' + ELASTIX_SCRIPT+'?'+'_login='+ ELASTIX_LOGIN+ '&_secret='+ ELASTIX_SECRET+
-                                                                  '&_action='+ ELASTIX_ACTION))
+                                          '&_action='+ ELASTIX_ACTION))
             result = requests.get('https://' + ELASTIX_SERVER + '/' + ELASTIX_SCRIPT,
                                   params={'_login': ELASTIX_LOGIN, '_secret': ELASTIX_SECRET,
                                           '_action': ELASTIX_ACTION}, verify=False)
@@ -81,12 +77,6 @@ class Command(BaseCommand):
                     continue
 
                 try:
-                    try:
-                        call.duration = time.strftime("%H:%M:%S", time.gmtime(int(record['duration'])))
-                    except:
-                        print(f'delivery_request ERROR: {traceback.format_exc()}')
-                        pass
-
                     # record_url = substitute_prefix+(record['recordingfile'])[len(original_prefix):]
                     record_url = substitute_prefix + calldate + '/' + (record['recordingfile'])
                     print(record_url)
