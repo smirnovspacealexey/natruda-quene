@@ -65,12 +65,12 @@ class Command(BaseCommand):
                     continue
 
                 try:
-                    call = CallData.objects.get(ats_id=record['uniqueid'])
+                    call = CallData.objects.filter(ats_id=record['uniqueid']).last()
                     print(call)
                 except KeyError:
                     continue
 
-                except CallData.DoesNotExist:
+                except not call:
                     recordingfile_list = record['recordingfile'].split('-')
 
                     if recordingfile_list[0] == 'external':
