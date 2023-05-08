@@ -89,6 +89,8 @@ class Command(BaseCommand):
                         except Customer.DoesNotExist:
                             customer = Customer(phone_number="+{}".format(caller_id))
                             customer.save()
+                        except Customer.MultipleObjectsReturned:
+                            customer = Customer.objects.filter(phone_number="+{}".format(caller_id)).first()
 
                         try:
                             call_manager = Staff.objects.get(phone_number=operator_id)
