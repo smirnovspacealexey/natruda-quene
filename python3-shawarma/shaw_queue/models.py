@@ -647,7 +647,7 @@ class CallData(models.Model):
 
     def link(self):
         if self.record and self.record != 'Record path not set':
-            return format_html(f'<a href="{self.record}">🔉</a>')
+            return format_html(f'<a target=»_blank href="{self.record}">🔉</a>')
         else:
             return '🔇'
 
