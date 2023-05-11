@@ -661,8 +661,8 @@ class CallData(models.Model):
         no = '<img src="/static/admin/img/icon-no.svg" alt="True">'
         return format_html(f'{ yes if self.missed else no}')
 
-    class Meta:
-        ordering = ('-timepoint',)
+    # class Meta:
+    #     ordering = ('-timepoint',)
 
 
 class CookingTime(models.Model):
