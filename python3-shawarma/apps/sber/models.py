@@ -16,7 +16,7 @@ class SberSettings(models.Model):
     min_amount = models.IntegerField(default=500, verbose_name="минимальная сумма заказа")
     max_amount = models.IntegerField(default=10000, verbose_name="максимальная сумма заказа")
     tax_system = models.CharField(max_length=1, choices=TAX_SYSTEMS)
-    callback_token = models.CharField(max_length=50, choices=TAX_SYSTEMS, null=True, blank=True, default='')
+    callback_token = models.CharField(max_length=50, null=True, blank=True, default='')
 
     in_test = models.BooleanField('тестовый режим', default=False)
 
