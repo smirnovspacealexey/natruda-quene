@@ -43,5 +43,5 @@ class SberSettingsForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
 
     class Meta:
-        fields = ['login', 'password', 'tax_system', 'in_test']
+        fields = ['login', 'password', 'tax_system', 'callback_token', 'in_test']
         model = SberSettings
