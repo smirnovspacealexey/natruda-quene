@@ -102,7 +102,7 @@ class Command(BaseCommand):
                                                                 staff_category__title='Operator').first()
 
                         call = CallData(ats_id=call_uid, timepoint=record_time, customer=customer,
-                                        call_manager=call_manager)
+                                        call_manager=call_manager, accepted=True)
                     else:
                         continue
 
