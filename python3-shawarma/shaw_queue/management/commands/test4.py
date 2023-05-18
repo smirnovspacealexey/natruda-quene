@@ -1,8 +1,7 @@
 from shawarma.settings import ELASTIX_ACTION, ELASTIX_LOGIN, ELASTIX_SCRIPT, ELASTIX_SECRET, ELASTIX_SERVER
 from django.core.management.base import BaseCommand, CommandError
 from raven.contrib.django.raven_compat.models import client
-from shaw_queue.models import CallData, Staff, Customer
-from datetime import datetime
+from shaw_queue.models import CallData
 from requests.exceptions import HTTPError, TooManyRedirects, ConnectionError, Timeout
 import requests
 import logging
@@ -60,10 +59,7 @@ class Command(BaseCommand):
                 self.stderr.write(self.style.ERROR('Нет data в ответе Elastix!'))
                 client.captureException()
 
-            for record in records_data[-300:]:
-                if not record['recordingfile']:
-                    continue
-
+            for record in records_data:
                 try:
                     call = CallData.objects.get(ats_id=record['uniqueid'])
                     print('call')
@@ -71,40 +67,10 @@ class Command(BaseCommand):
                     self.stderr.write(self.style.ERROR('Нет uniqueid в ответе Elastix!'))
                     client.captureException()
                 except CallData.DoesNotExist:
-                    recordingfile_list = record['recordingfile'].split('-')
-
-                    if recordingfile_list[0] == 'external':
-                        record_time = datetime.strptime(f'{recordingfile_list[3]} {recordingfile_list[4]}',
-                                                        '%Y%m%d %H%M%S')
-
-                        caller_id = recordingfile_list[2]
-                        operator_id = int(recordingfile_list[1])
-                        call_uid = recordingfile_list[5][:-4]
-                        print('\nnew')
-                        print(record_time, caller_id, operator_id, call_uid)
-                        print()
-
-                        try:
-                            customer = Customer.objects.get(phone_number="+{}".format(caller_id))
-                            print("Choosing customer {}".format("+{}".format(caller_id)))
-                        except Customer.DoesNotExist:
-                            customer = Customer(phone_number="+{}".format(caller_id))
-                            customer.save()
-                        except Customer.MultipleObjectsReturned:
-                            customer = Customer.objects.filter(phone_number="+{}".format(caller_id)).first()
-
-                        try:
-                            call_manager = Staff.objects.get(phone_number=operator_id)
-                        except Staff.DoesNotExist:
-                            continue
-                        except Staff.MultipleObjectsReturned:
-                            call_manager = Staff.objects.filter(phone_number=operator_id,
-                                                                staff_category__title='Operator').first()
-
-                        call = CallData(ats_id=call_uid, timepoint=record_time, customer=customer,
-                                        call_manager=call_manager)
-                    else:
-                        continue
+                    # self.stderr.write(self.style.ERROR('Нет CallData c ats id == {}!'.format(record['uniqueid'])))
+                    # client.captureException()
+                    # print('нет call')
+                    continue
 
                 try:
                     calldate = record['calldate'].split()
