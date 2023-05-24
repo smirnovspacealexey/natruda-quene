@@ -23,8 +23,8 @@ def sber_result(request):
                                          is_ready=False, is_delivery=True, delivery_daily_number=int(daily_number)).last()
             order.is_paid = True
             order.save()
-            # data = send_order_to_1c(order, False)
-            data = None
+            data = send_order_to_1c(order, False, paid=True)
+            # data = None
 
             delivery_history = order.deliveryhistory_set.last()
 

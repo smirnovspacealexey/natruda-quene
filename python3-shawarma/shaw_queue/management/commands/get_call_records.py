@@ -30,7 +30,6 @@ class Command(BaseCommand):
             result = requests.get('https://' + ELASTIX_SERVER + '/' + ELASTIX_SCRIPT,
                                   params={'_login': ELASTIX_LOGIN, '_secret': ELASTIX_SECRET,
                                           '_action': ELASTIX_ACTION}, verify=False)
-            print("{}".format(result.url))
             result.raise_for_status()
             self.stdout.write(self.style.SUCCESS('Records requested successfully!'))
         except Timeout:
@@ -66,7 +65,6 @@ class Command(BaseCommand):
 
                 try:
                     call = CallData.objects.get(ats_id=record['uniqueid'])
-                    print('call')
                 except KeyError:
                     self.stderr.write(self.style.ERROR('Нет uniqueid в ответе Elastix!'))
                     client.captureException()
@@ -80,9 +78,6 @@ class Command(BaseCommand):
                         caller_id = recordingfile_list[2]
                         operator_id = int(recordingfile_list[1])
                         call_uid = recordingfile_list[5][:-4]
-                        print('\nnew')
-                        print(record_time, caller_id, operator_id, call_uid)
-                        print()
 
                         try:
                             customer = Customer.objects.get(phone_number="+{}".format(caller_id))

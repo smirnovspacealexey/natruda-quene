@@ -6018,7 +6018,7 @@ def get_1c_menu(request):
     return HttpResponse()
 
 
-def send_order_to_1c(order, is_return):
+def send_order_to_1c(order, is_return, paid=None):
     if order.prepared_by is not None:
         cook = order.prepared_by.user.first_name
     else:
@@ -6036,6 +6036,10 @@ def send_order_to_1c(order, is_return):
         'Discount': order.discount,
         'Goods': []
     }
+
+    if paid:
+        order_dict.update({'paid': True})
+
     curr_order_content = OrderContent.objects.filter(order=order, menu_item__price__gt=0).values('menu_item__title',
                                                                                                  'menu_item__guid_1c', 'qr').annotate(
         count=Sum('quantity'))  # TODO оптимизировать через переборку средствами питона
