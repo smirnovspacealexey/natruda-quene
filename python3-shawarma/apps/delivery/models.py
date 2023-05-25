@@ -129,6 +129,35 @@ class YandexSettings(models.Model):
 
 
 class DeliveryHistory(models.Model):
+
+    STATUSES = [('new', 'новый'),
+                ('estimating', 'оценка'),
+                ('estimating_failed', 'Ошибка_оценки'),
+                ('ready_for_approval', 'готов_к_одобрению'),
+                ('accepted', 'принято'),
+                ('performer_lookup', 'исполнитель_поиск'),
+                ('performer_draft', 'исполнитель_проект'),
+                ('performer_found', 'найденный исполнитель'),
+                ('performer_not_found', 'исполнитель не найден'),
+                ('pickup_arrived', 'самовывоз прибыл'),
+                ('ready_for_pickup_confirmation', 'готово к подтверждению получения'),
+                ('pickuped', 'забрано'),
+                ('delivery_arrived', 'доставка прибыла'),
+                ('ready_for_delivery_confirmation', 'готово к подтверждению доставки'),
+                ('pay_waiting', 'ожидание оплаты'),
+                ('delivered', 'доставлено'),
+                ('delivered_finish', 'доставлено (завершено)'),
+                ('returning', 'возвращение'),
+                ('return_arrived', 'возврат прибыл'),
+                ('ready_for_return_confirmation', 'готово к подтверждению возврата'),
+                ('returned', 'возвращено'),
+                ('returned_finish', 'возвращено (завершено)'),
+                ('failed', 'ошибка'),
+                ('cancelled', 'отмена'),
+                ('cancelled_with_payment', 'отменено с оплатой'),
+                ('cancelled_by_taxi', 'отменено на такси'),
+                ('cancelled_with_items_on_hands', 'отменено с продуктами на руках'), ]
+
     uuid = models.CharField(max_length=200, default='')
     six_numbers = models.CharField('код для курьера', max_length=200, default="")
     daily_number = models.CharField('daily_number', max_length=50, default="")
@@ -148,6 +177,7 @@ class DeliveryHistory(models.Model):
     phone = models.CharField('phone', max_length=100, default="", blank=True)
     # name = models.CharField('name', max_length=100, default="")
     # delivery_menu = models.ForeignKey(Menu, on_delete=models.SET_NULL, verbose_name="delivery_menu", null=True, blank=True)
+    status = models.CharField('status', choices=STATUSES, max_length=100, default="new", blank=True)
     items = models.TextField(blank=True, null=True)
     logg = models.TextField(blank=True, null=True)
 
@@ -163,6 +193,13 @@ class DeliveryHistory(models.Model):
         else:
             self.logg = new_log
 
+    @property
+    def status_html(self):
+        if self.status:
+            status = self.get_status_display()
+            return f'<a onclick="alert(\'{status}\')" title="{status}">{status[:10] + "..." if len(status) > 10 else status}</a>'
+        return ''
+
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         if self.six_numbers == '':
             self.six_numbers = get_six_numbers()
@@ -175,7 +212,7 @@ class DeliveryHistory(models.Model):
 
             while daily_number is None:
                 daily_number = get_six_numbers()
-                if Order.objects.filter(open_time__contains=timezone.now().date(), daily_number=int(daily_number)).exists()\
+                if Order.objects.filter(open_time__contains=timezone.now().date(), daily_number=int(daily_number)).exists() \
                         or DeliveryHistory.objects.filter(daily_number=daily_number, confirm=False).exists():
                     daily_number = None
 
@@ -183,7 +220,12 @@ class DeliveryHistory(models.Model):
 
         super().save()
 
+    def __str__(self):
+        return f'{self.phone} {self.order} {self.status}'
 
+
+class DeliveryActive(models.Model):
+    delivery = models.ForeignKey(DeliveryHistory, on_delete=models.CASCADE, blank=True, null=True)
 
 
 

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import YandexSettings, DeliveryHistory, DeliverySettings, DeliveryDistance
+from .models import YandexSettings, DeliveryHistory, DeliverySettings, DeliveryDistance, DeliveryActive
 from time import gmtime, strftime
 
 
@@ -12,9 +12,9 @@ class YandexSettingsAdmin(admin.ModelAdmin):
 
 @admin.register(DeliveryHistory)
 class DeliveryHistoryAdmin(admin.ModelAdmin):
-    list_display = ['uuid', 'six_numbers', 'daily_number', 'full_price', 'order', 'confirm', 'claim_id']
+    list_display = ['uuid', 'six_numbers', 'daily_number', 'full_price', 'order', 'confirm', 'claim_id', 'status']
+    list_editable = ('status',)
     raw_id_fields = ["order",]
-
 
 
 @admin.register(DeliverySettings)
@@ -28,6 +28,12 @@ class DeliveryDistanceAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'meters', 'roubles', 'menu_item']
     list_editable = ('meters', 'roubles', 'menu_item')
     search_fields = ['meters', 'roubles']
+
+
+@admin.register(DeliveryActive)
+class DeliveryActiveAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'delivery']
+
 
 
 

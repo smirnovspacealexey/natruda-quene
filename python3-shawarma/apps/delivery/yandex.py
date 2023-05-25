@@ -1,4 +1,4 @@
-from .models import DeliveryHistory, YandexSettings, DeliveryDistance
+from .models import DeliveryHistory, YandexSettings, DeliveryDistance, DeliveryActive
 from shaw_queue.models import ServicePoint, Menu
 import requests
 import json
@@ -20,6 +20,7 @@ def delivery_request(source, destination, history=None, order=None, order_items=
 
         if not history:
             history = DeliveryHistory.objects.create(full_price=price)
+            DeliveryActive.objects.create(delivery=history)
 
         cargo_options = []
         if yandex_settings.thermobag:
@@ -197,6 +198,27 @@ def delivery_confirm(history):
             history.save()
 
         logger_debug.info(f'delivery_request res: {res}')
+    except:
+        logger_debug.info(f'confirm ERROR: {traceback.format_exc()}')
+
+
+def check_delivery_status(history):
+    try:
+        yandex_settings = YandexSettings.current()
+        headers = {'Accept-Language': 'ru', 'Authorization': 'Bearer ' + yandex_settings.token}
+
+        data = {
+            "version": 1
+        }
+        res = requests.post(f'{url}/info?claim_id={history.claim_id}', json=data, headers=headers)
+
+        if res.status_code == 200:
+            response = json.loads(res.content.decode("utf-8"))
+            history.status = response['status']
+            history.confirm = True
+            history.save()
+
+        logger_debug.info(f'check_delivery_status res: {res}')
     except:
         logger_debug.info(f'confirm ERROR: {traceback.format_exc()}')
 
