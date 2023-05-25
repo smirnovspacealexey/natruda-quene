@@ -5,5 +5,5 @@ from apps.delivery.models import DeliveryHistory
 class Command(BaseCommand):
     def handle(self, *args, **options):
         for dh in DeliveryHistory.objects.all():
-            dh.status = None
+            dh.status = 'delivered'
             dh.save()
