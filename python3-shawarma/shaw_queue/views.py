@@ -6085,6 +6085,7 @@ def send_order_to_1c(order, is_return, paid=None):
             'http://' + order.servery.service_point.server_1c.ip_address + ':' + order.servery.service_point.server_1c.port + ORDER_URL,
             auth=(SERVER_1C_USER.encode('utf8'), SERVER_1C_PASS),
             json=order_dict)
+        print(result)
     except ConnectionError:
         data = {
             'success': False,
@@ -6101,9 +6102,11 @@ def send_order_to_1c(order, is_return, paid=None):
         return data
 
     if result.status_code == 200:
+        print(result)
         order.sent_to_1c = True
         try:
             order.guid_1c = result.json()['GUID']
+            print(result.json())
         except KeyError:
             data = {
                 'success': False,

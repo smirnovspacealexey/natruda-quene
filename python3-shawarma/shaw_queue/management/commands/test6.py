@@ -10,6 +10,8 @@ class Command(BaseCommand):
         curr_order_content = OrderContent.objects.filter(order=order, menu_item__price__gt=0)
         order.pk = None
         order.save()
+        order.guid_1c = ''
+        order.save()
         print(order)
 
         for oc in curr_order_content:
