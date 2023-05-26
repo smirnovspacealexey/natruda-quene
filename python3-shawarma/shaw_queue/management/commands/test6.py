@@ -1,15 +1,25 @@
 from django.core.management.base import BaseCommand, CommandError
 from apps.delivery.models import DeliveryHistory
-from shaw_queue.models import Order
+from shaw_queue.models import Order, OrderContent
 from shaw_queue.views import send_order_to_1c
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
         order = Order.objects.filter(pk=2013947).last()
+        curr_order_content = OrderContent.objects.filter(order=order, menu_item__price__gt=0)
         order.pk = None
         order.save()
         print(order)
+
+        for oc in curr_order_content:
+            print(oc.pk, oc.order, '|')
+            oc.pk = None
+            oc.save()
+            oc.order = order
+            oc.save()
+            print(oc.pk, oc.order)
+
         print(send_order_to_1c(order, False, True))
         print('\n')
 
