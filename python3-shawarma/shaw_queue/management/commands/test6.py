@@ -13,12 +13,12 @@ class Command(BaseCommand):
         print(order)
 
         for oc in curr_order_content:
-            print(oc.pk, oc.order, '|')
+            print(oc.pk, oc.order.pk, '|')
             oc.pk = None
             oc.save()
             oc.order = order
             oc.save()
-            print(oc.pk, oc.order)
+            print(oc.pk, oc.order.pk)
 
         print(send_order_to_1c(order, False, True))
         print('\n')
