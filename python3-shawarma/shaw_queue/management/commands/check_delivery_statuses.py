@@ -19,5 +19,5 @@ class Command(BaseCommand):
                 delivery.delete()
                 continue
 
-            check_delivery_status(delivery)
+            check_delivery_status(delivery.delivery)
 
