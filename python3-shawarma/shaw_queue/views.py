@@ -6077,6 +6077,7 @@ def send_order_to_1c(order, is_return, paid=None):
                 }
             )
     try:
+        print(order_dict)
         # result = requests.post('http://' + SERVER_1C_IP + ':' + SERVER_1C_PORT + ORDER_URL,
         #                        auth=(SERVER_1C_USER.encode('utf8'), SERVER_1C_PASS),
         #                        json=order_dict)
