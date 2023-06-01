@@ -15,7 +15,7 @@ class Command(BaseCommand):
         logger_debug.info(f'Check delivery statuses\n\n')
 
         for delivery in DeliveryActive.objects.all():
-            if delivery.delivery.order and not delivery.delivery.order.close_time:
+            if delivery.delivery.order and delivery.delivery.order.close_time:
                 delivery.delete()
                 continue
 
