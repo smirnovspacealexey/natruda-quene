@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'apps.delivery',
     'jquery',
     'ymaps',
+    'apps.logs'
 ]
 
 MIDDLEWARE = [

@@ -5,6 +5,7 @@ from django.http.response import HttpResponseRedirect
 from .models import Menu, Order, Staff, StaffCategory, MenuCategory, OrderContent, Servery, OrderOpinion, PauseTracker, \
     ServicePoint, Printer, Customer, CallData, DiscountCard, Delivery, DeliveryOrder, ContentOption, SizeOption, \
     MacroProduct, MacroProductContent, ProductOption, ProductVariant, OrderContentOption, CookingTime
+from apps.logs.models import Log
 from django.template import loader
 from django.core.exceptions import EmptyResultSet, MultipleObjectsReturned, PermissionDenied, ObjectDoesNotExist, \
     ValidationError
@@ -6019,6 +6020,7 @@ def get_1c_menu(request):
 
 
 def send_order_to_1c(order, is_return, paid=None):
+    Log.add_new(f'send_order_to_1c\n order: {order}; is_return: {is_return}; paid: {paid},', '1c')
     if order.prepared_by is not None:
         cook = order.prepared_by.user.first_name
     else:
@@ -6081,11 +6083,15 @@ def send_order_to_1c(order, is_return, paid=None):
         # result = requests.post('http://' + SERVER_1C_IP + ':' + SERVER_1C_PORT + ORDER_URL,
         #                        auth=(SERVER_1C_USER.encode('utf8'), SERVER_1C_PASS),
         #                        json=order_dict)
+
+        Log.add_new(f'sending to 1c\n order dict: {order_dict}', '1c')
         result = requests.post(
             'http://' + order.servery.service_point.server_1c.ip_address + ':' + order.servery.service_point.server_1c.port + ORDER_URL,
             auth=(SERVER_1C_USER.encode('utf8'), SERVER_1C_PASS),
             json=order_dict)
         print(result)
+
+        Log.add_new(f'sending to 1c (result)\n status_code: {str(result.status_code)} \n result: {result.json()}', '1c')
     except ConnectionError:
         data = {
             'success': False,
@@ -6171,14 +6177,20 @@ def send_order_to_1c(order, is_return, paid=None):
 
 
 def send_order_return_to_1c(order):
+    Log.add_new(f'send_order_return_to_1c\n order: {order}', '1c')
+
     order_dict = {
         'Order': order.guid_1c
     }
     try:
+        Log.add_new(f'sending to 1c\n order_dict: {order_dict}', '1c')
+
         result = requests.post(
             'http://' + order.servery.service_point.server_1c.ip_address + ':' + order.servery.service_point.server_1c.port + RETURN_URL,
             auth=(SERVER_1C_USER.encode('utf8'), SERVER_1C_PASS),
             json=order_dict)
+        Log.add_new(f'sending to 1c (result)\n status_code: {str(result.status_code)} \n result: {result.json()}', '1c')
+
     except ConnectionError:
         data = {
             'success': False,
