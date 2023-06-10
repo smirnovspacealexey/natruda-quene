@@ -358,6 +358,7 @@ class Order(models.Model):
                     self.is_paid = True
                     super().save()
                     from shaw_queue.views import send_order_to_1c
+                    print('+++\n')
                     send_order_to_1c(self, False, paid=True)
 
     @property

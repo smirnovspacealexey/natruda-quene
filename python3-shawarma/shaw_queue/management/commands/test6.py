@@ -22,8 +22,9 @@ class Command(BaseCommand):
             oc.save()
             print(oc.pk, oc.order.pk)
 
+        print('---\n')
         print(send_order_to_1c(order, False, True))
-        print('\n')
+        print('---\n')
 
 
 
