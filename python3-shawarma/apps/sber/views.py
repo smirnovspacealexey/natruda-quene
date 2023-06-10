@@ -4,6 +4,7 @@ from django.utils import timezone
 from shaw_queue.models import Order, Staff, Menu, Servery
 from shaw_queue.views import send_order_to_1c
 from apps.delivery.backend import delivery_confirm
+from apps.delivery.models import DeliveryHistory
 import logging
 from random import sample
 from django.views.decorators.csrf import csrf_exempt
@@ -21,16 +22,18 @@ def sber_result(request):
             order = Order.objects.filter(open_time__contains=timezone.now().date(),
                                          close_time__isnull=True, is_canceled=False, is_paid=False,
                                          is_ready=False, is_delivery=True, delivery_daily_number=int(daily_number)).last()
-            order.is_paid = True
-            order.save()
-            data = send_order_to_1c(order, False, paid=True)
-            # data = None
 
-            delivery_history = order.deliveryhistory_set.last()
+            if order:
+                order.is_paid = True
+                order.save()
+                data = send_order_to_1c(order, False, paid=True)
+                # data = None
+                delivery_history = order.deliveryhistory_set.last()
 
+                logger_debug.info(f'sber_result order \n{order}\n {data}')
+            else:
+                delivery_history = DeliveryHistory.objects.filter(daily_number=daily_number, confirm=False).last()
             delivery_confirm(delivery_history)
-
-            logger_debug.info(f'sber_result order \n{order}\n {data}')
 
         return JsonResponse(data={'success': True})
     except:

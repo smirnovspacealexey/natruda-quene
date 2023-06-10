@@ -346,13 +346,16 @@ class Order(models.Model):
         if self.from_site:
             self.guid_1c = 'from_site'
         super().save()
-        if self.delivery_daily_number:
+        if self.delivery_daily_number and not self.deliveryhistory_set.last():
             from apps.delivery.models import DeliveryHistory
 
             delivery_history = DeliveryHistory.objects.filter(daily_number=str(self.delivery_daily_number)).last()
             if delivery_history:
                 delivery_history.order = self
                 delivery_history.save()
+                if delivery_history.confirm:
+                    self.is_paid = True
+                    super().save()
 
     @property
     def display_number(self):
