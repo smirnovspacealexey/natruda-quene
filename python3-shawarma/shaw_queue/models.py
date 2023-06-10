@@ -351,7 +351,7 @@ class Order(models.Model):
             from apps.delivery.models import DeliveryHistory
 
             delivery_history = DeliveryHistory.objects.filter(daily_number=str(self.delivery_daily_number)).last()
-            if delivery_history:
+            if delivery_history and not delivery_history.order:
                 delivery_history.order = self
                 delivery_history.save()
                 if delivery_history.confirm:
