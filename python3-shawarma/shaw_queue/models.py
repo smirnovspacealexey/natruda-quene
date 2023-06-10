@@ -10,6 +10,7 @@ import datetime
 import logging
 from django.utils.html import format_html
 
+
 logger_debug = logging.getLogger('debug_logger')  # del me
 
 
@@ -356,6 +357,9 @@ class Order(models.Model):
                 if delivery_history.confirm:
                     self.is_paid = True
                     super().save()
+                    from shaw_queue.views import send_order_to_1c
+                    send_order_to_1c(self, False, paid=True)
+
 
     @property
     def display_number(self):
