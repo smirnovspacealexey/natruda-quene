@@ -164,6 +164,7 @@ class DeliveryHistory(models.Model):
     full_price = models.IntegerField(verbose_name="full_price", default=0)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)
     confirm = models.BooleanField(default=False, help_text='заявка подтверждена')
+    paid = models.BooleanField(default=False, help_text='заявка оплачена')
     claim_id = models.CharField('claim_id', max_length=50, default="")
     # delivery_price = models.IntegerField(verbose_name="delivery_price", default=0)
     description = models.CharField('description', max_length=500, default="Челябинск, Россия", blank=True)

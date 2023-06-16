@@ -354,7 +354,7 @@ class Order(models.Model):
             if delivery_history and not delivery_history.order:
                 delivery_history.order = self
                 delivery_history.save()
-                if delivery_history.confirm:
+                if delivery_history.paid:
                     self.is_paid = True
                     super().save()
                     from shaw_queue.views import send_order_to_1c

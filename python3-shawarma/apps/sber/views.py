@@ -33,6 +33,9 @@ def sber_result(request):
                 logger_debug.info(f'sber_result order \n{order}\n {data}')
             else:
                 delivery_history = DeliveryHistory.objects.filter(daily_number=daily_number, confirm=False).last()
+
+            delivery_history.paid = True
+            delivery_history.save()
             if not delivery_history.wait_minutes:
                 delivery_confirm(delivery_history)
 
