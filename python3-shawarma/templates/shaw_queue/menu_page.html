@@ -481,6 +481,7 @@
                 {#    alert('Что-то не так( \nПопробуйте перезагрузить страницу')#}
             } else {
                 data['full_price'] = total
+                data['wait_minutes'] = $('#holdMinutes').val()
                 let send_data = data
                 send_data['order'] = JSON.stringify(currOrder)
                 $.ajax({
@@ -582,6 +583,24 @@
             $("#phone").mask("+7(999)999-99-99");
             ymaps.ready(init);
             cleanDeliveryForm()
+
+            let now = new Date();
+            let current_hours = now.getHours()
+            if (current_hours < 11) {
+                let left_before_opening = (11 - current_hours) * 60 - now.getMinutes()
+                let lastDigit = left_before_opening % 10
+                let twoLastDigit = left_before_opening % 100
+                let lastWord = ' минут'
+                if (twoLastDigit > 20 || twoLastDigit < 10) {
+                    if (lastDigit === 1) {
+                        lastWord += 'а'
+                    } else if (lastDigit < 5 && lastDigit > 1) {
+                        lastWord += 'ы'
+                    }
+                }
+                alert('до открытия ' + left_before_opening + lastWord)
+                $('#holdMinutes').val(left_before_opening)
+            }
         })
 
         let myMap
@@ -729,6 +748,7 @@
             res_distance_price = 0
             delivery_id = null
         }
+
 
     </script>
 

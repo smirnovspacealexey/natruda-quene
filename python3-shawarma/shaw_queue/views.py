@@ -6983,9 +6983,9 @@ def api_delivery(request):
         data = request.POST
         order_items = data.get('order', '')
         order_items = list(json.loads(order_items))
-        print(order_items[0])
 
         phone = data.get('phone', '')
+        wait_minutes = data.get('wait_minutes', None)
         phone = phone.replace('(', "").replace(')', "").replace('-', "")
 
         delivery_logger.info(f'api_delivery: {data}')
@@ -7027,7 +7027,7 @@ def api_delivery(request):
 
         # menu_item_delivery = Menu.objects.filter(pk=int(data.get('pk_delivery', '0'))).last()
 
-        daily_number, six_numbers = delivery_request(source, destination, order_items=order_items, price=int(round(float(full_price))))
+        daily_number, six_numbers = delivery_request(source, destination, order_items=order_items, price=int(round(float(full_price))), wait_minutes=wait_minutes)
         if daily_number:
             data = {
                 'success': True,

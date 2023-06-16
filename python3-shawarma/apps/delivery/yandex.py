@@ -13,13 +13,26 @@ delivery_logger = logging.getLogger('delivery_logger')
 url = 'https://b2b.taxi.yandex.net/b2b/cargo/integration/v2/claims/'
 
 
-def delivery_request(source, destination, history=None, order=None, order_items=None, price=None):
+def delivery_request(source, destination, history=None, order=None, order_items=None, price=None, items=None, wait_minutes=None):
     try:
         yandex_settings = YandexSettings.current()
         headers = {'Accept-Language': 'ru', 'Authorization': 'Bearer ' + yandex_settings.token}
 
         if not history:
             history = DeliveryHistory.objects.create(full_price=price)
+            history.fullname = destination["fullname"]
+            history.phone = destination['phone']
+            history.longitude = destination['longitude']
+            history.latitude = destination['latitude']
+            history.city = destination['city']
+            history.comment = destination['comment']
+            history.country = destination['country']
+            history.description = destination['description']
+            history.door_code = destination.get('door_code', '')
+            history.porch = destination.get('porch', '')
+            history.sflat = destination.get('sflat', '')
+            history.sfloor = destination.get('sfloor', '')
+            history.wait_minutes = wait_minutes
             DeliveryActive.objects.create(delivery=history)
 
         cargo_options = []
@@ -29,41 +42,40 @@ def delivery_request(source, destination, history=None, order=None, order_items=
         if yandex_settings.auto_courier:
             cargo_options.append('auto_courier')
 
-        items = []
+        if not items:
+            items = []
 
-        for item in order_items:
-            menu_item = Menu.objects.filter(pk=item['id']).last()
+            for item in order_items:
+                menu_item = Menu.objects.filter(pk=item['id']).last()
 
-            if DeliveryDistance.objects.filter(menu_item=menu_item).exists():
-                continue
+                if DeliveryDistance.objects.filter(menu_item=menu_item).exists():
+                    continue
 
-            if menu_item.customer_title:
-                title = menu_item.customer_title
-            elif menu_item.title:
-                title = menu_item.title
-            else:
-                continue
-            items.append(
-                {
-                    "cost_currency": yandex_settings.currency,
-                    "cost_value": str(menu_item.price),
-                    "droppof_point": 2,
-                    "extra_id": str(item['id']),
-                    "pickup_point": 1,
-                    "quantity": item['quantity'],
-                    "size": {
-                        "height": 0.05,
-                        "length": 0.1,
-                        "width": 0.1
-                    },
-                    "title": title,
-                    "weight": menu_item.category.weight / 1000
-                }
-            )
+                if menu_item.customer_title:
+                    title = menu_item.customer_title
+                elif menu_item.title:
+                    title = menu_item.title
+                else:
+                    continue
+                items.append(
+                    {
+                        "cost_currency": yandex_settings.currency,
+                        "cost_value": str(menu_item.price),
+                        "droppof_point": 2,
+                        "extra_id": str(item['id']),
+                        "pickup_point": 1,
+                        "quantity": item['quantity'],
+                        "size": {
+                            "height": 0.05,
+                            "length": 0.1,
+                            "width": 0.1
+                        },
+                        "title": title,
+                        "weight": menu_item.category.weight / 1000
+                    }
+                )
 
         history.items = str(items)
-        history.fullname = destination["fullname"]
-        history.phone = destination['phone']
         history.add_logg(str(destination), 'destination')
 
         data = {
