@@ -33,7 +33,8 @@ def sber_result(request):
                 logger_debug.info(f'sber_result order \n{order}\n {data}')
             else:
                 delivery_history = DeliveryHistory.objects.filter(daily_number=daily_number, confirm=False).last()
-            delivery_confirm(delivery_history)
+            if not delivery_history.wait_minutes:
+                delivery_confirm(delivery_history)
 
         return JsonResponse(data={'success': True})
     except:

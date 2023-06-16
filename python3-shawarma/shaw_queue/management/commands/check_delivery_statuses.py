@@ -30,8 +30,8 @@ class Command(BaseCommand):
                     destination = {}
                     destination["fullname"] = history.fullname
                     destination['phone'] = history.phone
-                    destination['longitude'] = history.longitude
-                    destination['latitude'] = history.latitude
+                    destination['longitude'] = float(history.longitude)
+                    destination['latitude'] = float(history.latitude)
                     destination['city'] = history.city
                     destination['comment'] = history.comment
                     destination['country'] = history.country
@@ -48,11 +48,13 @@ class Command(BaseCommand):
                     history.wait_minutes = None
                     history.save()
                     daily_number, six_numbers = delivery_request(ServicePoint.objects.filter(id=2).last(), destination, history=history, items=items, price=history.full_price)
-                    if daily_number:
-                        logger_debug.info('OKAY')
+                    if daily_number and history.order and history.order.is_paid:
+                        delivery_confirm(history)
+                        logger_debug.info(f'{history}\nOKAY')
                     continue
 
                 history.wait_minutes = wait_minutes
                 history.save()
-            check_delivery_status(delivery.delivery)
+            else:
+                check_delivery_status(delivery.delivery)
 
