@@ -23,6 +23,8 @@ class Command(BaseCommand):
 
             if delivery.delivery.wait_minutes:
                 wait_minutes = delivery.delivery.wait_minutes - 5
+                logger_debug.info(wait_minutes)
+
                 if wait_minutes < 1:
                     history = delivery.delivery
                     destination = {}
@@ -42,6 +44,7 @@ class Command(BaseCommand):
                     items = history.items
                     items = items.replace("\'", "\"")
                     items = list(json.loads(items))
+                    logger_debug.info(history)
 
                     delivery_request(ServicePoint.objects.filter(id=2).last(), destination, history=history, items=items, price=history.full_price)
                     continue
