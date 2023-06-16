@@ -22,11 +22,11 @@ class Command(BaseCommand):
                 continue
 
             if delivery.delivery.wait_minutes:
+                history = delivery.delivery
                 wait_minutes = delivery.delivery.wait_minutes - 5
                 logger_debug.info(wait_minutes)
 
                 if wait_minutes < 1:
-                    history = delivery.delivery
                     destination = {}
                     destination["fullname"] = history.fullname
                     destination['phone'] = history.phone
@@ -45,11 +45,14 @@ class Command(BaseCommand):
                     items = items.replace("\'", "\"")
                     items = list(json.loads(items))
                     logger_debug.info(history)
-
-                    delivery_request(ServicePoint.objects.filter(id=2).last(), destination, history=history, items=items, price=history.full_price)
+                    history.wait_minutes = None
+                    history.save()
+                    daily_number, six_numbers = delivery_request(ServicePoint.objects.filter(id=2).last(), destination, history=history, items=items, price=history.full_price)
+                    if daily_number:
+                        logger_debug.info('OKAY')
                     continue
 
-                delivery.delivery.wait_minutes = wait_minutes
-                delivery.delivery.save()
+                history.wait_minutes = wait_minutes
+                history.save()
             check_delivery_status(delivery.delivery)
 

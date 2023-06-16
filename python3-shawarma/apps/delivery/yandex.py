@@ -174,21 +174,24 @@ def delivery_request(source, destination, history=None, order=None, order_items=
             "skip_emergency_notify": yandex_settings.skip_emergency_notify
         }
 
-        history.add_logg(str(data), 'request to yandex')
-        res = requests.post(f'{url}create?request_id={history.request_id}', json=data, headers=headers)
-        response = json.loads(res.content.decode("utf-8"))
-        print(res.status_code)
-        print(response)
-        history.add_logg(str(res) + '\n' + str(response), 'yandex response')
-        if res.status_code == 200:
-            delivery_logger.info(f'delivery_request: SUCCESS {response}')
-            history.claim_id = response['id']
-            history.save()
-            return history.daily_number, history.six_numbers
+        if not wait_minutes:
+            history.add_logg(str(data), 'request to yandex')
+            res = requests.post(f'{url}create?request_id={history.request_id}', json=data, headers=headers)
+            response = json.loads(res.content.decode("utf-8"))
+            print(res.status_code)
+            print(response)
+            history.add_logg(str(res) + '\n' + str(response), 'yandex response')
+            if res.status_code == 200:
+                delivery_logger.info(f'delivery_request: SUCCESS {response}')
+                history.claim_id = response['id']
+                history.save()
+                return history.daily_number, history.six_numbers
+            else:
+                history.save()
+                delivery_logger.info(f'delivery_request ERROR: {res}')
+                return None, None
         else:
-            history.save()
-            delivery_logger.info(f'delivery_request ERROR: {res}')
-            return None, None
+            return history.daily_number, history.six_numbers
     except:
         logger_debug.info(f'delivery_request ERROR: {traceback.format_exc()}')
 
