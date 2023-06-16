@@ -231,7 +231,6 @@ def check_delivery_status(history):
         if res.status_code == 200:
             response = json.loads(res.content.decode("utf-8"))
             history.status = response['status']
-            history.confirm = True
             history.save()
 
         logger_debug.info(f'check_delivery_status res: {res}')
