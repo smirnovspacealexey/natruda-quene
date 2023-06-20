@@ -481,8 +481,11 @@
                 {#    alert('Что-то не так( \nПопробуйте перезагрузить страницу')#}
             } else {
                 data['full_price'] = total
-                data['wait_minutes'] = $('#holdMinutes').val()
-                let send_data = data
+                let wait_minutes = $('#holdMinutes').val()
+                if (wait_minutes !== '' && wait_minutes !== 0) {
+                    data['wait_minutes'] = wait_minutes
+                }
+                                let send_data = data
                 send_data['order'] = JSON.stringify(currOrder)
                 $.ajax({
                     type: 'POST',

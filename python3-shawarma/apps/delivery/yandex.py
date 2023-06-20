@@ -195,6 +195,7 @@ def delivery_request(source, destination, history=None, order=None, order_items=
             return history.daily_number, history.six_numbers
     except:
         logger_debug.info(f'delivery_request ERROR: {traceback.format_exc()}')
+        return None, None
 
     # logger_debug.info(f'delivery_request {order, order.pk} \n\n{headers} \n {data} \n {res.status_code} \n {response}')
 
