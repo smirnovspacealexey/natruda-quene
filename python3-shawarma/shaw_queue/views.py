@@ -6986,6 +6986,8 @@ def api_delivery(request):
 
         phone = data.get('phone', '')
         wait_minutes = data.get('wait_minutes', None)
+        if wait_minutes == 0:
+            wait_minutes = None
         phone = phone.replace('(', "").replace(')', "").replace('-', "")
 
         delivery_logger.info(f'api_delivery: {data}')
