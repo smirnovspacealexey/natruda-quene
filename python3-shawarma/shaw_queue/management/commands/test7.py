@@ -5,6 +5,11 @@ from shaw_queue.views import send_order_to_1c
 from apps.logs.models import Log
 import requests
 import sys, traceback
+from shawarma.settings import TIME_ZONE, LISTNER_URL, LISTNER_PORT, PRINTER_URL, SERVER_1C_PORT, SERVER_1C_IP, \
+    GETLIST_URL, SERVER_1C_USER, SERVER_1C_PASS, ORDER_URL, FORCE_TO_LISTNER, DEBUG_SERVERY, RETURN_URL, \
+    CAROUSEL_IMG_DIR, CAROUSEL_IMG_URL, SMTP_LOGIN, SMTP_PASSWORD, SMTP_FROM_ADDR, SMTP_TO_ADDR, TIME_ZONE, \
+    DADATA_TOKEN, \
+    LOCAL_TEST, MEDIA_ROOT, MEDIA_URL, HOST
 
 
 class Command(BaseCommand):
@@ -29,7 +34,7 @@ class Command(BaseCommand):
 
             result = requests.post(
                 'http://192.168.20.75:80/NaTruda/hs/Exchange/',
-                auth=("b'Obmen'", '111'),
+                auth=(SERVER_1C_USER.encode('utf8'), SERVER_1C_PASS),
                 json=order_dict)
             print(result)
         except:
