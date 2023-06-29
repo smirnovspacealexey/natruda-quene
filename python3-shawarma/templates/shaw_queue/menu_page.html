@@ -460,7 +460,7 @@
                 phone: $('#phone2').val(),
                 price: total
             };
-
+            alert(send_data)
             $.ajax({
                 type: 'POST',
                 url: '{% url 'api-sms-pay' %}',
