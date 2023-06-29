@@ -7071,6 +7071,7 @@ def api_delivery(request):
 
 @csrf_exempt
 def api_sms_pay(request):
+    delivery_logger.info(f'api_sms_pay')
     try:
         from apps.sms.backend import send_sms
         from apps.sber.backend import Sber
@@ -7087,6 +7088,8 @@ def api_sms_pay(request):
         full_price = data.get('price', '')
         daily_number = '00000'
 
+        delivery_logger.info(f'{phone} {full_price}')
+
         try:
             sber = Sber()
             res = sber.registrate_order(full_price, daily_number)
@@ -7097,6 +7100,7 @@ def api_sms_pay(request):
                 raise ConnectionError
 
             success, result = send_sms(phone, f'{daily_number}. {full_price}р. Ссылка на оплату {sber_url}')
+            delivery_logger.info(f'{success} {result}')
             if success:
                 return JsonResponse(data)
             else:
