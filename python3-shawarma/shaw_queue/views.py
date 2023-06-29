@@ -7079,10 +7079,10 @@ def api_sms_pay(request):
 
         # order_items = unquote_plus(request.COOKIES.get('currOrder', ''), encoding="utf-8")
 
-        source = ServicePoint.objects.filter(id=2).last()
+        # source = ServicePoint.objects.filter(id=2).last()
         data = request.POST
-        order_items = data.get('order', '')
-        order_items = list(json.loads(order_items))
+        # order_items = data.get('order', '')
+        # order_items = list(json.loads(order_items))
 
         phone = data.get('phone', '')
         full_price = data.get('price', '')
@@ -7107,5 +7107,8 @@ def api_sms_pay(request):
                 raise ConnectionError
         except:
             delivery_logger.info(f'ERROR: {traceback.format_exc()}')
+            raise ConnectionError
     except:
+        print(traceback.format_exc())
         delivery_logger.info(f'ERROR: {traceback.format_exc()}')
+        raise ConnectionError
