@@ -456,9 +456,11 @@
         }
 
         function SMS2() {
-            let send_data= {}
-            send_data['phone'] = $('#phone2').val()
-            send_data['price'] = total
+            let send_data = {
+                phone: $('#phone2').val(),
+                price: total
+            };
+
             $.ajax({
                 type: 'POST',
                 url: '{% url 'api-sms-pay' %}',
