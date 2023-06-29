@@ -129,6 +129,12 @@
                         <input type="radio" id="paid_without_cash" value="paid_without_cash" name="payment_choose">
                         <label for="paid_without_cash">Безналичный</label>
                     </p>
+                    <p>
+                        <input type="radio" id="paid_with_sms" value="paid_with_sms" name="payment_choose" onchange="smsPay()">
+                        <label for="paid_with_sms">Оплата по СМС</label>
+                        <br>
+                        <input type="tel" title="Телефон" placeholder="*Телефон" id="phone2" hidden="hidden">
+                    </p>
                 </div>
                 <div class="shadowed">
                     <p>
@@ -440,6 +446,30 @@
         </div>
     </div>
     <script>
+        function smsPay() {
+            alert(total)
+            $('#phone2').show()
+        }
+
+        function SMS2() {
+            let send_data= {}
+            send_data['phone'] = $('#phone2').val()
+            send_data['price'] = total
+            $.ajax({
+                type: 'POST',
+                url: '{% url 'api-sms-pay' %}',
+                data: send_data,
+                dataType: 'json',
+                success: function (res) {
+                    alert('СМС ушла')
+                },
+                error: function (xhr, errmsg, err) {
+                    alert('СМС не отправилось')
+                }
+            });
+        }
+
+
         function add30() {
             let holdMinutes = $('#holdMinutes')
             holdMinutes.val(Number(holdMinutes.val()) + 30)
@@ -485,7 +515,7 @@
                 if (wait_minutes !== '' && wait_minutes !== 0) {
                     data['wait_minutes'] = wait_minutes
                 }
-                                let send_data = data
+                let send_data = data
                 send_data['order'] = JSON.stringify(currOrder)
                 $.ajax({
                     type: 'POST',
@@ -584,6 +614,7 @@
 
         $(document).ready(function () {
             $("#phone").mask("+7(999)999-99-99");
+            $("#phone2").mask("+7(999)999-99-99");
             ymaps.ready(init);
             cleanDeliveryForm()
 

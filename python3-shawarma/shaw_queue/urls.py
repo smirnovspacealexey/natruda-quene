@@ -13,6 +13,8 @@ urlpatterns = [
     path('delivery/create/', views.delivery, name='delivery-sms'),
     path('api/delivery/create/', views.api_delivery, name='api-delivery-sms'),
 
+    path('api/sms/pay/', views.api_sms_pay, name='api-sms-pay'),
+
     url(r'^$', views.welcomer, name='welcomer'),
     url(r'^reload_menu', views.get_1c_menu, name='reload_menu'),
     url(r'^order_status', views.recive_1c_order_status, name='order_status'),

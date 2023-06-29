@@ -7054,7 +7054,7 @@ def api_delivery(request):
 
                 success, result = send_sms(phone, f'{daily_number}. {full_price}р. Ссылка на оплату {sber_url}')
                 if success:
-                    JsonResponse(data)
+                    return JsonResponse(data)
                 else:
                     raise ConnectionError
             except:
@@ -7069,3 +7069,39 @@ def api_delivery(request):
         delivery_logger.info(f'ERROR: {traceback.format_exc()}')
 
 
+@csrf_exempt
+def api_sms_pay(request):
+    try:
+        from apps.sms.backend import send_sms
+        from apps.sber.backend import Sber
+        from urllib.parse import unquote_plus
+
+        # order_items = unquote_plus(request.COOKIES.get('currOrder', ''), encoding="utf-8")
+
+        source = ServicePoint.objects.filter(id=2).last()
+        data = request.POST
+        order_items = data.get('order', '')
+        order_items = list(json.loads(order_items))
+
+        phone = data.get('phone', '')
+        full_price = data.get('price', '')
+        daily_number = '00000'
+
+        try:
+            sber = Sber()
+            res = sber.registrate_order(full_price, daily_number)
+            logger_debug.info(f'res: {res}')
+            if res[0]:
+                sber_url = res[1]['formUrl']
+            else:
+                raise ConnectionError
+
+            success, result = send_sms(phone, f'{daily_number}. {full_price}р. Ссылка на оплату {sber_url}')
+            if success:
+                return JsonResponse(data)
+            else:
+                raise ConnectionError
+        except:
+            delivery_logger.info(f'ERROR: {traceback.format_exc()}')
+    except:
+        delivery_logger.info(f'ERROR: {traceback.format_exc()}')
