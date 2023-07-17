@@ -6,7 +6,7 @@ from shaw_queue.views import send_order_to_1c
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        order = Order.objects.filter(pk=2040602).last()
+        order = Order.objects.filter(pk=2106407).last()
         curr_order_content = OrderContent.objects.filter(order=order, menu_item__price__gt=0)
         order.pk = None
         order.save()
