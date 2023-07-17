@@ -42,7 +42,7 @@ class Command(BaseCommand):
             print(result.content)
             print(result.encoding)
             print(result.headers)
-            print(result.history)
+            # print(result.history)
             print(result.json())
         except:
             print(f'ERROR: {traceback.format_exc()}')
