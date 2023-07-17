@@ -34,7 +34,7 @@ class Command(BaseCommand):
 
             print(order_dict)
             result = requests.post(
-                'http://192.168.20.76:80/NaTruda/hs/Exchange/',
+                'http://192.168.20.76:80/natruda/hs/Exchange/',
                 auth=(SERVER_1C_USER.encode('utf8'), SERVER_1C_PASS),
                 json=order_dict)
             print(result)
