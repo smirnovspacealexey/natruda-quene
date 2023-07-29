@@ -3995,6 +3995,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
             if FORCE_TO_LISTNER:
                 data = send_order_to_listner(order)
             elif with1c and not order.from_site:
+                Log.add_new(f'{order} views 3998', '1C')
                 data = send_order_to_1c(order, False)
                 if not data["success"]:
                     if order_id:
@@ -4993,6 +4994,7 @@ def pay_order(request):
                 # order.is_paid = True
                 order.save()
         else:
+            Log.add_new(f'{order} views 4997', '1C')
             data = send_order_to_1c(order, False)
             print('Order is paid with status {} {} {} and saved .'.format(order.status_1c, order.paid_in_1c,
                                                                           order.sent_to_1c))

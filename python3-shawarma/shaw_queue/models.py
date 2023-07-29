@@ -9,6 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 import datetime
 import logging
 from django.utils.html import format_html
+from apps.logs.models import Log
 
 
 logger_debug = logging.getLogger('debug_logger')  # del me
@@ -358,6 +359,7 @@ class Order(models.Model):
                     self.is_paid = True
                     super().save()
                     from shaw_queue.views import send_order_to_1c
+                    Log.add_new(f'{self} models 362', '1C')
                     send_order_to_1c(self, False, paid=True)
 
     @property
