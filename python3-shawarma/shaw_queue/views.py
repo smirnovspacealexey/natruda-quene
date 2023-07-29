@@ -3757,6 +3757,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
             order_last_daily_number = Order.objects.filter(open_time__contains=timezone.now().date(),
                                                            servery__service_point=service_point).aggregate(
                 Max('daily_number'))
+            Log.add_new(f'order_last_daily_number: {order_last_daily_number}', '1C')
         except EmptyResultSet:
             data = {
                 'success': False,
@@ -3780,6 +3781,9 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
                 order_next_number = order_last_daily_number['daily_number__max'] + 1
             else:
                 order_next_number = 1
+
+            Log.add_new(f'order_next_number: {order_next_number}', '1C')
+
         try:
             if order_id:
                 order = Order.objects.get(id=order_id)
