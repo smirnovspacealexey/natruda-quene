@@ -3752,12 +3752,11 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
     logger_debug = logging.getLogger('debug_logger')  # del me
     logger_debug.info(f'-----\n{content}\n\n{servery}\n\n{service_point}\n\n')  # del me
     try:
-        pass
         try:
             order_last_daily_number = Order.objects.filter(open_time__contains=timezone.now().date(),
                                                            servery__service_point=service_point).aggregate(
                 Max('daily_number'))
-            Log.add_new(f'order_last_daily_number: {order_last_daily_number}', '1C')
+            Log.add_new(f'order_last_daily_number: {order_last_daily_number} {timezone.now().date()} {service_point}', '1C')
         except EmptyResultSet:
             data = {
                 'success': False,
