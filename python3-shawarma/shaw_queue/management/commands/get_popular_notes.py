@@ -23,7 +23,9 @@ class Command(BaseCommand):
             except:
                 continue
 
-        res = dict(sorted(popular.items(), key=lambda x: x[0]))
+        res = dict(sorted(popular.items(),
+                          key=lambda x: x[1],
+                          reverse=True))
         print(res)
         print('---------END----------')
 
