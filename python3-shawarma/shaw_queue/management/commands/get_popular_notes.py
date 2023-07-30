@@ -11,15 +11,20 @@ class Command(BaseCommand):
         popular = {}
         i = 10000
         for order_content in OrderContent.objects.all().order_by('-pk')[:10000]:
-            note = order_content.note
-            i = i - 1
-            print(f'{i}) {order_content.menu_item.title}:   {note}')
-            if note:
-                if note in popular:
-                    popular[note] = popular[note] + 1
-                else:
-                    popular.update({note: 1})
-        print(popular)
+            try:
+                note = order_content.note
+                i = i - 1
+                print(f'{i}) {order_content.menu_item.title}:   {note}')
+                if note:
+                    if note in popular:
+                        popular[note] = popular[note] + 1
+                    else:
+                        popular.update({note: 1})
+            except:
+                continue
+
+        res = dict(sorted(popular.items(), key=lambda x: x[0]))
+        print(res)
         print('---------END----------')
 
 
