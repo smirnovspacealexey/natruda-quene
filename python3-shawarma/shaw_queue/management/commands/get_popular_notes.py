@@ -13,10 +13,10 @@ class Command(BaseCommand):
         for order_content in OrderContent.objects.all().order_by('-pk')[:10000]:
             note = order_content.note
             i = i - 1
-            print(f'{i}) {order_content.menu_item.title}   {note}')
+            print(f'{i}) {order_content.menu_item.title}:   {note}')
             if note:
                 if note in popular:
-                    popular[note] = note + 1
+                    popular[note] = popular[note] + 1
                 else:
                     popular.update({note: 1})
         print(popular)
