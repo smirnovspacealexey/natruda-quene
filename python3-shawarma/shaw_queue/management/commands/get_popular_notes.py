@@ -32,7 +32,7 @@ class Command(BaseCommand):
                           reverse=True))
         print(res)
         i = 1
-        for note in res[:20]:
+        for note in res:
             popular_note = PopularNote.objects.filter(position=i).last()
             if not popular_note:
                 PopularNote.objects.create(position=i, note=note)
@@ -40,6 +40,8 @@ class Command(BaseCommand):
                 popular_note.note = note
                 popular_note.save()
             i = i + 1
+            if i > 20:
+                break
         print('---------END----------')
 
 
