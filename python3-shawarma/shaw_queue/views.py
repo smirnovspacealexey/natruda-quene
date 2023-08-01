@@ -32,6 +32,7 @@ from shawarma.settings import TIME_ZONE, LISTNER_URL, LISTNER_PORT, PRINTER_URL,
 from apps.delivery.models import YandexSettings, DeliverySettings
 from raven.contrib.django.raven_compat.models import client
 from random import sample
+from apps.main.models import PopularNote
 from itertools import chain
 import time
 from django.views.decorators.csrf import csrf_exempt
@@ -911,6 +912,7 @@ def menu(request):
     if result['success']:
         try:
             context = {
+                'popularNotes': PopularNote.objects.all()
                 'user': request.user,
                 'available_cookers': Staff.objects.filter(available=True, staff_category__title__iexact='Cook',
                                                           service_point=result['service_point']),
