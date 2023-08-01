@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ExcelBase
+from .models import ExcelBase, PopularNote
 from .backend import excel_to_base
 
 
@@ -26,4 +26,8 @@ class ExcelBaseAdmin(admin.ModelAdmin):
     search_fields = ['name', ]
     actions = [parse_to_base, ]
 
+
+@admin.register(PopularNote)
+class PopularNoteAdmin(admin.ModelAdmin):
+    list_display = ['__str__', 'note', 'position', ]
 

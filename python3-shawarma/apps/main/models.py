@@ -12,3 +12,10 @@ class ExcelBase(models.Model):
     def __str__(self):
         return f'{self.pk} - {self.name}'
 
+
+class PopularNote(models.Model):
+    note = models.CharField(max_length=1000)
+    position = models.IntegerField(verbose_name="position")
+
+    def __str__(self):
+        return f'{self.pk} - {self.note}'
