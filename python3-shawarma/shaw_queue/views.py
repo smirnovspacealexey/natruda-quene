@@ -912,7 +912,7 @@ def menu(request):
     if result['success']:
         try:
             context = {
-                'popularNotes': PopularNote.objects.all()
+                'popularNotes': PopularNote.objects.all(),
                 'user': request.user,
                 'available_cookers': Staff.objects.filter(available=True, staff_category__title__iexact='Cook',
                                                           service_point=result['service_point']),
