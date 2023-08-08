@@ -41,4 +41,7 @@ class NoteBTNAdmin(admin.ModelAdmin):
     readonly_fields = ["preview"]
 
     def preview(self, obj):
-        return mark_safe(f'<img src="{obj.picture.url}" style="max-width: 50px;">')
+        try:
+            return mark_safe(f'<img src="{obj.picture.url}" style="max-width: 50px;">')
+        except:
+            return ''
