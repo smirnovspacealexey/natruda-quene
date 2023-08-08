@@ -37,6 +37,7 @@ class PopularNoteAdmin(admin.ModelAdmin):
 class NoteBTNAdmin(admin.ModelAdmin):
     list_display = ['preview', 'picture', 'note', 'position']
     list_editable = ('note', 'position', 'picture')
+    fields = ('position', )
     readonly_fields = ["preview"]
 
     def preview(self, obj):
