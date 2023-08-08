@@ -19,3 +19,13 @@ class PopularNote(models.Model):
 
     def __str__(self):
         return f'{self.pk} - {self.note}'
+
+
+class NoteBTN(models.Model):
+    note = models.CharField(max_length=1000)
+    picture = models.ImageField(upload_to="img/notes/category_pictures", blank=True, null=True, verbose_name="Иконка")
+    position = models.IntegerField(verbose_name="position")
+
+    def __str__(self):
+        return f'{self.pk} - {self.note}'
+

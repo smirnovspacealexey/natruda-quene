@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import ExcelBase, PopularNote
+from .models import ExcelBase, PopularNote, NoteBTN
 from .backend import excel_to_base
+from django.utils.safestring import mark_safe
 
 
 def parse_to_base(modeladmin, request, queryset):
@@ -31,3 +32,12 @@ class ExcelBaseAdmin(admin.ModelAdmin):
 class PopularNoteAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'note', 'position', ]
 
+
+@admin.register(NoteBTN)
+class NoteBTNAdmin(admin.ModelAdmin):
+    list_display = ['preview', 'picture', 'note', 'position']
+    list_editable = ('note', 'position', 'picture')
+    readonly_fields = ["preview"]
+
+    def preview(self, obj):
+        return mark_safe(f'<img src="{obj.picture.url}" style="max-width: 50px;">')
