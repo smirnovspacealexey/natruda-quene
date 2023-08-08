@@ -29,3 +29,6 @@ class NoteBTN(models.Model):
     def __str__(self):
         return f'{self.pk} - {self.note}'
 
+    class Meta:
+        ordering = ('position', 'note')
+
