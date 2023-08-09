@@ -22,7 +22,7 @@
                 <button class="btn info" id="minus-button">-</button>
             <div class="quick-comment-container">
                   {% for btn in noteBtns %}
-                        <button class="btn img-btn" onclick="addNote('{{ btn.note }}')"><img alt="" src="{{ btn.picture.url }}"></button>
+                        <button class="btn img-btn" title="{{ btn.note }}" id="note{{ btn.position }}"><img alt="" src="{{ btn.picture.url }}"></button>
                   {% endfor %}
 
 

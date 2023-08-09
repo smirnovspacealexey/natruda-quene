@@ -508,6 +508,9 @@ function ShowModalEdit(index) {
     var jalapeno = $('#jalapeno-button');
     var bellPepper = $('#bellPepper-button');
 
+    var note1 = $('#note1');
+
+
     title.text(currOrder[index]['title']);
     quantity.val(currOrder[index]['quantity']);
     quantity.blur(
@@ -693,8 +696,14 @@ function ShowModalEdit(index) {
         }
     );
 
-    function addNote() {
-        var str = ' Зелень';
+    note1.click(
+        function () {
+            addNote(note1.attr('title'))
+        }
+    );
+
+    function addNote(title) {
+        var str = ' ' + title;
         if (note.val().includes(str)) {
             note.val(note.val().replace(str, ''));
         }
