@@ -715,82 +715,69 @@ function ShowModalEdit(index) {
     );
     note2.click(
         function () {
-            addNote(note1.attr('title'))
+            addNote(note2.attr('title'))
         }
     );
     note3.click(
         function () {
-            addNote(note1.attr('title'))
+            addNote(note3.attr('title'))
         }
     );
     note4.click(
         function () {
-            addNote(note1.attr('title'))
+            addNote(note4.attr('title'))
         }
     );
     note5.click(
         function () {
-            addNote(note1.attr('title'))
+            addNote(note5.attr('title'))
         }
     );
     note6.click(
         function () {
-            addNote(note1.attr('title'))
+            addNote(note6.attr('title'))
         }
     );
     note7.click(
         function () {
-            addNote(note1.attr('title'))
+            addNote(note7.attr('title'))
         }
     );
     note8.click(
         function () {
-            addNote(note1.attr('title'))
+            addNote(note8.attr('title'))
         }
     );
     note9.click(
         function () {
-            addNote(note1.attr('title'))
+            addNote(note9.attr('title'))
         }
     );
     note10.click(
         function () {
-            addNote(note1.attr('title'))
+            addNote(note10.attr('title'))
         }
     );
     note11.click(
         function () {
-            addNote(note1.attr('title'))
+            addNote(note11.attr('title'))
         }
     );
     note12.click(
         function () {
-            addNote(note1.attr('title'))
-        }
-    );    note1.click(
-        function () {
-            addNote(note1.attr('title'))
+            addNote(note12.attr('title'))
         }
     );
     note13.click(
         function () {
-            addNote(note1.attr('title'))
-        }
-    );    note1.click(
-        function () {
-            addNote(note1.attr('title'))
+            addNote(note13.attr('title'))
         }
     );
     note14.click(
         function () {
-            addNote(note1.attr('title'))
-        }
-    );    note1.click(
-        function () {
-            addNote(note1.attr('title'))
+            addNote(note14.attr('title'))
         }
     );
-
 
     function addNote(title) {
         var str = ' ' + title;
