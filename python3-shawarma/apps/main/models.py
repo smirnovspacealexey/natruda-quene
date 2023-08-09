@@ -31,7 +31,7 @@ class NoteBTN(models.Model):
         return f'{self.pk} - {self.note}'
 
     class Meta:
-        ordering = ('position', 'note')
+        ordering = ('active', 'position', 'note')
 
     @staticmethod
     def btns():
