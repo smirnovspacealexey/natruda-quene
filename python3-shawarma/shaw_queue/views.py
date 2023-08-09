@@ -3759,7 +3759,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
             order_last_daily_number = Order.objects.filter(open_time__contains=timezone.now().date(),
                                                            servery__service_point=service_point).aggregate(
                 Max('daily_number'))
-            Log.add_new(f'order_last_daily_number: {order_last_daily_number} {timezone.now().date()} {service_point}', '1C')
+            # Log.add_new(f'order_last_daily_number: {order_last_daily_number} {timezone.now().date()} {service_point}', '1C')
         except EmptyResultSet:
             data = {
                 'success': False,
@@ -3784,7 +3784,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
             else:
                 order_next_number = 1
 
-            Log.add_new(f'order_next_number: {order_next_number}', '1C')
+            # Log.add_new(f'order_next_number: {order_next_number}', '1C')
 
         try:
             if order_id:
@@ -4001,7 +4001,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
             if FORCE_TO_LISTNER:
                 data = send_order_to_listner(order)
             elif with1c and not order.from_site:
-                Log.add_new(f'{order} views 3998', '1C')
+                # Log.add_new(f'{order} views 3998', '1C')
                 data = send_order_to_1c(order, False)
                 if not data["success"]:
                     if order_id:
@@ -5000,7 +5000,7 @@ def pay_order(request):
                 # order.is_paid = True
                 order.save()
         else:
-            Log.add_new(f'{order} views 4997', '1C')
+            # Log.add_new(f'{order} views 4997', '1C')
             data = send_order_to_1c(order, False)
             print('Order is paid with status {} {} {} and saved .'.format(order.status_1c, order.paid_in_1c,
                                                                           order.sent_to_1c))
@@ -6090,12 +6090,12 @@ def send_order_to_1c(order, is_return, paid=None):
         # result = requests.post('http://' + SERVER_1C_IP + ':' + SERVER_1C_PORT + ORDER_URL,
         #                        auth=(SERVER_1C_USER.encode('utf8'), SERVER_1C_PASS),
         #                        json=order_dict)
-        Log.add_new(f"{'http://' + order.servery.service_point.server_1c.ip_address + ':' + order.servery.service_point.server_1c.port + ORDER_URL}\n\n{SERVER_1C_USER.encode('utf8')}\n\n{SERVER_1C_PASS}\n\n{str(order_dict)}", '1C')
+        # Log.add_new(f"{'http://' + order.servery.service_point.server_1c.ip_address + ':' + order.servery.service_point.server_1c.port + ORDER_URL}\n\n{SERVER_1C_USER.encode('utf8')}\n\n{SERVER_1C_PASS}\n\n{str(order_dict)}", '1C')
         result = requests.post(
             'http://' + order.servery.service_point.server_1c.ip_address + ':' + order.servery.service_point.server_1c.port + ORDER_URL,
             auth=(SERVER_1C_USER.encode('utf8'), SERVER_1C_PASS),
             json=order_dict)
-        Log.add_new(f'{result.status_code} {result.text} {result.json()}', '1C')
+        # Log.add_new(f'{result.status_code} {result.text} {result.json()}', '1C')
 
         print(result)
     except ConnectionError:
