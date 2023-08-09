@@ -509,7 +509,19 @@ function ShowModalEdit(index) {
     var bellPepper = $('#bellPepper-button');
 
     var note1 = $('#note1');
-
+    var note2 = $('#note2');
+    var note3 = $('#note3');
+    var note4 = $('#note4');
+    var note5 = $('#note5');
+    var note6 = $('#note6');
+    var note7 = $('#note7');
+    var note8 = $('#note8');
+    var note9 = $('#note9');
+    var note10 = $('#note10');
+    var note11 = $('#note11');
+    var note12 = $('#note12');
+    var note13 = $('#note13');
+    var note14 = $('#note14');
 
     title.text(currOrder[index]['title']);
     quantity.val(currOrder[index]['quantity']);
@@ -701,6 +713,84 @@ function ShowModalEdit(index) {
             addNote(note1.attr('title'))
         }
     );
+    note2.click(
+        function () {
+            addNote(note1.attr('title'))
+        }
+    );
+    note3.click(
+        function () {
+            addNote(note1.attr('title'))
+        }
+    );
+    note4.click(
+        function () {
+            addNote(note1.attr('title'))
+        }
+    );
+    note5.click(
+        function () {
+            addNote(note1.attr('title'))
+        }
+    );
+    note6.click(
+        function () {
+            addNote(note1.attr('title'))
+        }
+    );
+    note7.click(
+        function () {
+            addNote(note1.attr('title'))
+        }
+    );
+    note8.click(
+        function () {
+            addNote(note1.attr('title'))
+        }
+    );
+    note9.click(
+        function () {
+            addNote(note1.attr('title'))
+        }
+    );
+    note10.click(
+        function () {
+            addNote(note1.attr('title'))
+        }
+    );
+    note11.click(
+        function () {
+            addNote(note1.attr('title'))
+        }
+    );
+    note12.click(
+        function () {
+            addNote(note1.attr('title'))
+        }
+    );    note1.click(
+        function () {
+            addNote(note1.attr('title'))
+        }
+    );
+    note13.click(
+        function () {
+            addNote(note1.attr('title'))
+        }
+    );    note1.click(
+        function () {
+            addNote(note1.attr('title'))
+        }
+    );
+    note14.click(
+        function () {
+            addNote(note1.attr('title'))
+        }
+    );    note1.click(
+        function () {
+            addNote(note1.attr('title'))
+        }
+    );
+
 
     function addNote(title) {
         var str = ' ' + title;
@@ -803,6 +893,21 @@ function CloseModalEdit() {
     var jalapeno = $('#jalapeno-button');
     var bellPepper = $('#bellPepper-button');
 
+    var note1 = $('#note1');
+    var note2 = $('#note2');
+    var note3 = $('#note3');
+    var note4 = $('#note4');
+    var note5 = $('#note5');
+    var note6 = $('#note6');
+    var note7 = $('#note7');
+    var note8 = $('#note8');
+    var note9 = $('#note9');
+    var note10 = $('#note10');
+    var note11 = $('#note11');
+    var note12 = $('#note12');
+    var note13 = $('#note13');
+    var note14 = $('#note14');
+
     var modal = document.getElementById('modal-edit');
 
     quantity.off("blur");
@@ -826,6 +931,21 @@ function CloseModalEdit() {
     mushrooms.off("click");
     jalapeno.off("click");
     bellPepper.off("click");
+
+    note1.off("click");
+    note2.off("click");
+    note3.off("click");
+    note4.off("click");
+    note5.off("click");
+    note6.off("click");
+    note7.off("click");
+    note8.off("click");
+    note9.off("click");
+    note10.off("click");
+    note11.off("click");
+    note12.off("click");
+    note13.off("click");
+    note14.off("click");
 
     modal.style.display = "none";
 }
