@@ -7102,7 +7102,7 @@ def api_sms_pay(request):
         try:
             sber = Sber()
             res = sber.registrate_order(full_price, daily_number)
-            logger_debug.info(f'res: {res}')
+            delivery_logger.info(f'sber res: {res}')
             if res[0]:
                 sber_url = res[1]['formUrl']
             else:
