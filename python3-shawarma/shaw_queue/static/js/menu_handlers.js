@@ -525,6 +525,9 @@ function ShowModalEdit(index) {
     var note15 = $('#note15');
     var note16 = $('#note16');
     var note17 = $('#note17');
+    var note18 = $('#note18');
+    var note19 = $('#note19');
+    var note20 = $('#note20');
 
     title.text(currOrder[index]['title']);
     quantity.val(currOrder[index]['quantity']);
@@ -796,6 +799,21 @@ function ShowModalEdit(index) {
             addNote(note17.attr('title'))
         }
     );
+    note18.click(
+        function () {
+            addNote(note18.attr('title'))
+        }
+    );
+    note19.click(
+        function () {
+            addNote(note19.attr('title'))
+        }
+    );
+    note20.click(
+        function () {
+            addNote(note20.attr('title'))
+        }
+    );
 
     function addNote(title) {
         var str = ' ' + title;
@@ -915,6 +933,9 @@ function CloseModalEdit() {
     var note15 = $('#note15');
     var note16 = $('#note16');
     var note17 = $('#note17');
+    var note18 = $('#note18');
+    var note19 = $('#note19');
+    var note20 = $('#note20');
 
     var modal = document.getElementById('modal-edit');
 
@@ -957,6 +978,9 @@ function CloseModalEdit() {
     note15.off("click");
     note16.off("click");
     note17.off("click");
+    note18.off("click");
+    note19.off("click");
+    note20.off("click");
 
     modal.style.display = "none";
 }
