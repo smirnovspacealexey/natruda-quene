@@ -25,10 +25,15 @@ class NoteBTN(models.Model):
     note = models.CharField(max_length=1000)
     picture = models.ImageField(upload_to="img/notes/category_pictures", blank=True, null=True, verbose_name="Иконка")
     position = models.IntegerField(verbose_name="position")
+    active = models.BooleanField('active', default=True)
 
     def __str__(self):
         return f'{self.pk} - {self.note}'
 
     class Meta:
         ordering = ('position', 'note')
+
+    @staticmethod
+    def btns():
+        return NoteBTN.objects.filter(active=True)
 

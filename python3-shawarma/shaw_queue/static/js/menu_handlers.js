@@ -692,6 +692,19 @@ function ShowModalEdit(index) {
             SelectSuggestion(index, note.val());
         }
     );
+
+    function addNote() {
+        var str = ' Зелень';
+        if (note.val().includes(str)) {
+            note.val(note.val().replace(str, ''));
+        }
+        else {
+            note.val(note.val() + str);
+        }
+        SelectSuggestion(index, note.val());
+    }
+
+
     chile.click(
         function () {
             var str = ' Чили';

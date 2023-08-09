@@ -35,9 +35,9 @@ class PopularNoteAdmin(admin.ModelAdmin):
 
 @admin.register(NoteBTN)
 class NoteBTNAdmin(admin.ModelAdmin):
-    list_display = ['preview', 'picture', 'note', 'position']
-    list_editable = ('note', 'position', 'picture')
-    fields = ('preview', 'picture', 'note', 'position')
+    list_display = ['preview', 'picture', 'note', 'position', 'active']
+    list_editable = ('note', 'position', 'picture', 'active')
+    fields = ('preview', 'picture', 'note', 'position', 'active')
     readonly_fields = ["preview"]
 
     def preview(self, obj):
@@ -45,3 +45,4 @@ class NoteBTNAdmin(admin.ModelAdmin):
             return mark_safe(f'<img src="{obj.picture.url}" style="max-width: 50px;">')
         except:
             return ''
+
