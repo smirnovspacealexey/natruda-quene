@@ -37,3 +37,10 @@ class NoteBTN(models.Model):
     def btns():
         return NoteBTN.objects.filter(active=True)
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        note_btn = NoteBTN.objects.filter(position=self.position).last()
+        if note_btn:
+            note_btn.position = self.position + 1
+            note_btn.save()
+        super().save()
+
