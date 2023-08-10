@@ -7095,7 +7095,9 @@ def api_sms_pay(request):
 
         phone = data.get('phone', '')
         full_price = data.get('price', '')
-        daily_number = '00000'
+        import random  # TODO
+
+        daily_number = str(random.randint(100000, 999999))
 
         delivery_logger.info(f'{phone} {full_price}')
 

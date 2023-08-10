@@ -328,6 +328,7 @@ class Order(models.Model):
     is_pickup = models.BooleanField(default=False, verbose_name="С собой")
     # True - if paid with cash, False - if paid with card.
     paid_with_cash = models.BooleanField(default=True, verbose_name="Paid With Cash")
+    paid_with_sms = models.BooleanField(default=False, verbose_name="Paid With SMS")
     from_site = models.BooleanField(default=False, verbose_name="From site")
     pickup = models.BooleanField(default=False, verbose_name="Самовывоз")
     servery = models.ForeignKey(Servery, verbose_name="Servery", on_delete=models.CASCADE)

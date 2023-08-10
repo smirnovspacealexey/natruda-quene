@@ -1,5 +1,6 @@
 from django.db import models
 from django import forms
+from django.utils import timezone
 
 
 class SberSettings(models.Model):
@@ -45,3 +46,17 @@ class SberSettingsForm(forms.ModelForm):
     class Meta:
         fields = ['login', 'password', 'tax_system', 'callback_token', 'in_test']
         model = SberSettings
+
+
+class SberTransaction(models.Model):
+    orderNumber = models.CharField(max_length=200)
+    date = models.DateTimeField('дата, время', default=timezone.now)
+    data = models.TextField(blank=True, null=True)
+    response = models.TextField(blank=True, null=True)
+    accepted = models.BooleanField('принято Сбером', default=False)
+    paid = models.BooleanField('клиент оплатил', default=False)
+
+    class Meta:
+        verbose_name = 'Транзакции Сбера'
+        verbose_name_plural = 'Транзакции Сбера'
+

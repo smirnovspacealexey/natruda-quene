@@ -1,9 +1,10 @@
 import requests
 import json
+import time
 from django.urls import reverse, resolve
 
 from shawarma.settings import HOST_SITE
-from .models import SberSettings
+from .models import SberSettings, SberTransaction
 
 
 class Sber:
@@ -24,6 +25,7 @@ class Sber:
             raise Exception('need SberSettings active object')
 
     def registrate_order(self, amount, order_id, ):
+        order_id = str(time.time())[:-8] + '-' + order_id
         amount = int(amount) * 100
         if amount > self.max_amount:
             return False, f'Сумма заказа больше {self.max_amount/100}'
@@ -63,8 +65,10 @@ class Sber:
         res = requests.post(url, data=data)
         if res.status_code == 200:
             response = json.loads(res.content.decode("utf-8"))
+            SberTransaction.objects.create(orderNumber=order_id, data=str(data), accepted=True)
             return True, response
         else:
+            SberTransaction.objects.create(orderNumber=order_id, data=str(res.status_code), accepted=False)
             return False, res.status_code
 
     def check_order_status(self, order_number=None, order_id=None):
