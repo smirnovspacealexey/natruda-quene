@@ -1937,9 +1937,9 @@ def current_queue_ajax(request):
             open_orders = filter_orders(current_day_orders, shawarma_filter, shashlyk_filter, paid_filter,
                                         not_paid_filter, serveries_dict)
 
-            # if LOCAL_TEST:
-            #     open_orders = Order.objects.all()
-            #     print(open_orders)
+            if LOCAL_TEST:
+                open_orders = Order.objects.all()
+                print(open_orders)
         except:
             data = {
                 'success': False,
@@ -1958,8 +1958,8 @@ def current_queue_ajax(request):
             ready_orders = filter_orders(ready_orders, shawarma_filter, shashlyk_filter, paid_filter,
                                          not_paid_filter, serveries_dict)
 
-            # if LOCAL_TEST:
-            #     ready_orders = Order.objects.all()
+            if LOCAL_TEST:
+                ready_orders = Order.objects.all()
         except:
             data = {
                 'success': False,

@@ -1020,7 +1020,10 @@ function CalculateTotal() {
         total += currOrder[i]['price'] * currOrder[i]['quantity'];
     }
     $('p.totalDisplay').each(function () {
-        setPriceUnderMap()
+        try {
+            setPriceUnderMap()
+        } catch (e) {
+        }
         let res = Number(total.toFixed(2))
         $(this).text(res);
     });

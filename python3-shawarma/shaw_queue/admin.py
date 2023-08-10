@@ -156,3 +156,9 @@ admin.site.register(ContentOption)
 admin.site.register(Server1C)
 admin.site.register(CookingTimerOrderContent)
 # admin.site.register(OrderContent)
+
+
+@admin.register(OrderContent)
+class OrderContentAdmin(admin.ModelAdmin):
+    list_display = ['order', 'start_timestamp', 'grill_timestamp', 'finish_timestamp', 'canceled_by']
+    list_editable = ('start_timestamp', 'grill_timestamp', 'finish_timestamp', 'canceled_by')
