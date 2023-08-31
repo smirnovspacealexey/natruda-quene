@@ -3,7 +3,7 @@ from shaw_queue.models import Menu, MenuCategory, MacroProduct, SizeOption, Cont
 
 
 def excel_to_base(excel):
-    workbook = pd.read_excel(excel, sheet_name=0)
+    workbook = pd.read_excel(excel, sheet_name=1)
     workbook.head()
 
     for i in range(1, workbook.shape[0]):
@@ -16,9 +16,18 @@ def excel_to_base(excel):
                                            avg_preparation_time=workbook.iloc[i, 4],
                                            note=workbook.iloc[i, 26])
 
-        # menu_cat_obj, created = MenuCategory.objects.get_or_create(pk=int(workbook.iloc[i, 6]),
-        #                                                            defaults={'title': workbook.iloc[i, 5],
-        #                                                                      'weight': int(workbook.iloc[i, 27])})
+
+        try:
+            weight = int(workbook.iloc[i, 27])
+        except:
+            weight = 0
+
+        try:
+            menu_cat_obj, created = MenuCategory.objects.get_or_create(pk=int(workbook.iloc[i, 6]),
+                                                                       defaults={'title': workbook.iloc[i, 5],
+                                                                                 'weight': weight})
+        except:
+            menu_cat_obj = None
 
         try:
             macro_product_obj, created = MacroProduct.objects.get_or_create(pk=int(workbook.iloc[i, 9]),
@@ -49,7 +58,7 @@ def excel_to_base(excel):
         except:
             product_variant_obj = None
 
-        # menu_obj.category = menu_cat_obj
+        menu_obj.category = menu_cat_obj
         menu_obj.title = workbook.iloc[i, 0]
         menu_obj.guid_1c = workbook.iloc[i, 3]
         menu_obj.save()

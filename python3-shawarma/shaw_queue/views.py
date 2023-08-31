@@ -3819,6 +3819,15 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
                 has_cook_content = True
                 break
 
+            qr = item.get('qr', "")
+            if menu_item.QR_required and qr == '':
+                data.update({
+                    'success': False,
+                    'message': f'Нет QR кода у {menu_item.title}'
+                })
+                return data
+
+
         if has_cook_content and (delivery_daily_number or cook_choose != 'delivery'):
             need_process_cook_content = True
         else:
