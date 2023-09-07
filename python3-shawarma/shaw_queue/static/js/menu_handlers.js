@@ -495,7 +495,7 @@ function DrawOrderTable() {
             // '' +
             // '</td></tr>'
             '<tr class="currentOrderRow" index="' + i + '"><td class="currentOrderTitleCell" onclick="ShowModalEdit(' + i + ')">' +
-            '<div class="table-item-title">' + currOrder[i]['title'] + ' + qr_str + </div><div class="noteText">' + currOrder[i]['note'] + '</div>' +
+            '<div class="table-item-title">' + currOrder[i]['title'] + qr_str + ' + </div><div class="noteText">' + currOrder[i]['note'] + '</div>' +
             '</td><td class="currentOrderActionCell">' + 'x' + currOrder[i]['quantity'] + '<button class="small-btn danger" onclick="MinusOneItem(' + i + ')">-1</button></td></tr>'
         );
     }
