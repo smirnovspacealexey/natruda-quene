@@ -59,6 +59,12 @@ $(function () {
 
 function SendOrder() {
     if (currOrder.length > 0) {
+        for (let i = 0; i < currOrder.length; i++) {
+            if (currOrder[i]['qr_req'] && currOrder[i]['qr'] === '') {
+                alert("QR обязатален: " + currOrder[i]['title']);
+                ShowModalEdit(i)
+            }
+        }
         current_retries = 0;
         var OK = $('#status-OK-button');
         var cancel = $('#status-cancel-button');
@@ -74,14 +80,6 @@ function SendOrder() {
         var delivery_daily_number = $('#delivery_daily_number');
         var confirmation = confirm("Подтвердить заказ?");
         var form = $('.subm');
-
-        for (let i = 0; i < currOrder.length; i++) {
-            if (currOrder[i]['qr_req'] && currOrder[i]['qr'] === '') {
-                alert("QR обязатален: " + currOrder[i]['title']);
-                ShowModalEdit(i)
-            }
-        }
-
 
         if (confirmation == true) {
             ShowModalStatus();
