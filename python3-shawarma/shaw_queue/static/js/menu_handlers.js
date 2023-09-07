@@ -63,6 +63,7 @@ function SendOrder() {
             if (currOrder[i]['qr_req'] && currOrder[i]['qr'] === '') {
                 alert("QR обязатален: " + currOrder[i]['title']);
                 ShowModalEdit(i)
+                return
             }
         }
         current_retries = 0;
