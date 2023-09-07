@@ -75,6 +75,14 @@ function SendOrder() {
         var confirmation = confirm("Подтвердить заказ?");
         var form = $('.subm');
 
+        for (let i = 0; i < currOrder.length; i++) {
+            if (currOrder[i]['qr_req'] && currOrder[i]['qr'] === '') {
+                alert("QR обязатален: " + currOrder[i]['title']);
+                ShowModalEdit(i)
+            }
+        }
+
+
         if (confirmation == true) {
             ShowModalStatus();
             OK.prop('disabled', true);

@@ -143,7 +143,7 @@ class StaffAdmin(admin.ModelAdmin):
 
 
 admin.site.register(StaffCategory)
-admin.site.register(MenuCategory)
+# admin.site.register(MenuCategory)
 admin.site.register(Printer)
 admin.site.register(Customer)
 admin.site.register(Delivery)
@@ -156,6 +156,26 @@ admin.site.register(ContentOption)
 admin.site.register(Server1C)
 admin.site.register(CookingTimerOrderContent)
 # admin.site.register(OrderContent)
+
+
+class MenuInline(admin.TabularInline):
+    model = Menu
+    extra = 0
+
+    # fieldsets = (
+    #     (None, {
+    #         # 'fields': ('menu_item', 'note', 'quantity', 'info'),
+    #         'fields': ('title', ),
+    #     }),
+    # )
+    readonly_fields = ('title',)
+
+
+@admin.register(MenuCategory)
+class MenuCategoryAdmin(admin.ModelAdmin):
+    list_display = ['title', 'customer_title', 'weight', 'hidden', 'customer_appropriate']
+    list_editable = ('customer_title', 'weight', 'hidden', 'customer_appropriate')
+    inlines = [MenuInline]
 
 
 @admin.register(OrderContent)
