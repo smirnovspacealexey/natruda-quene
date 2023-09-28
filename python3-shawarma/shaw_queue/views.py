@@ -6542,7 +6542,7 @@ def define_service_point(ip: str) -> dict:
             'success': False,
             'message': 'Множество экземпляров точек возвращено! ip {}'.format(ip_blocks)
         }
-        logger.error('Множество точек возвращено для ip {}!'.format(ip_blocks))
+        # logger.error('Множество точек возвращено для ip {}!'.format(ip_blocks))
         client.captureException()
         return data
     except:
@@ -6551,7 +6551,7 @@ def define_service_point(ip: str) -> dict:
             'success': False,
             'message': 'Что-то пошло не так при поиске точки!'
         }
-        logger.error('Что-то пошло не так при поиске точки для ip {}!'.format(ip_blocks))
+        # logger.error('Что-то пошло не так при поиске точки для ip {}!'.format(ip_blocks))
         client.captureException()
         return data
     # logger_debug.info(f'success {service_point}')  # del me
