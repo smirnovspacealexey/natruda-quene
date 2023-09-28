@@ -24,7 +24,7 @@ function nextCarousel() {
 }
 
 function refresher() {
-    //console.log('Refreshed');
+    console.log('Refreshed');
     $.ajax({
         url: $('#urls').attr('data-refresh-url'),
         data: {

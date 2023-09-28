@@ -6537,7 +6537,6 @@ def define_service_point(ip: str) -> dict:
     try:
         service_point = ServicePoint.objects.get(subnetwork=subnet_number)
     except MultipleObjectsReturned:
-        Log.add_new(f'1: {ip_blocks}', 'ip')
         return {'success': True, 'service_point': ServicePoint.objects.first()}
         data = {
             'success': False,
@@ -6547,7 +6546,6 @@ def define_service_point(ip: str) -> dict:
         client.captureException()
         return data
     except:
-        Log.add_new(f'2: {ip_blocks}', 'ip')
         return {'success': True, 'service_point': ServicePoint.objects.first()}
         data = {
             'success': False,
