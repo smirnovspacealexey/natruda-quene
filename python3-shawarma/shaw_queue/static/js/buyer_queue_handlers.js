@@ -78,10 +78,12 @@ function refresher() {
 function process_numbers(updated_ready_numbers, voiced_flags) {
     is_voicing = true;
     $.each(updated_ready_numbers, function (index, value) {
+        console.log(value, voiced_flags[index])
         if (!voiced_flags[index]) {
             setTimeout(function () {
                 aux = value;
                 console.log(aux);
+                console.log('ушло на озвучку ' + value % 100)
                 sound_number(value % 100);
                 $.ajaxSetup({
                     beforeSend: function (xhr, settings) {
