@@ -128,8 +128,8 @@ class MacroProductContentAdmin(admin.ModelAdmin):
 
 @admin.register(ServicePoint)
 class ServicePointAdmin(admin.ModelAdmin):
-    list_display = ['__str__', 'title', 'fullname', 'latitude', 'longitude']
-    list_editable = ('title', 'fullname', 'latitude', 'longitude')
+    list_display = ['__str__', 'title', 'fullname', 'latitude', 'longitude', 'subnetwork']
+    list_editable = ('title', 'fullname', 'latitude', 'longitude', 'subnetwork')
     search_fields = ['title', 'fullname']
     actions = [testdelivery, ]
 
