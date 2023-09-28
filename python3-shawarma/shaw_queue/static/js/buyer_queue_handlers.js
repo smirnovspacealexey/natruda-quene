@@ -38,7 +38,6 @@ function refresher() {
             //     return !ready_order_numbers.includes(el)
             // });
             if (!is_voicing)
-                console.log('to process_numbers: ' + updated_ready_numbers + voiced_flags);
                 process_numbers(updated_ready_numbers, voiced_flags);
             //console.log(difference);
             //sound_number(difference);
@@ -84,7 +83,6 @@ function process_numbers(updated_ready_numbers, voiced_flags) {
             setTimeout(function () {
                 aux = value;
                 console.log(aux);
-                console.log('ушло на озвучку ' + value % 100)
                 sound_number(value % 100);
                 $.ajaxSetup({
                     beforeSend: function (xhr, settings) {

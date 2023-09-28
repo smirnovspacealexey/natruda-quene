@@ -3240,6 +3240,7 @@ def unvoice_order(request):
                 }
                 client.captureException()
                 return JsonResponse(data)
+            time.sleep(5)
             order.is_voiced = True
             order.save()
             data = {
@@ -6537,7 +6538,7 @@ def define_service_point(ip: str) -> dict:
     try:
         service_point = ServicePoint.objects.get(subnetwork=subnet_number)
     except MultipleObjectsReturned:
-        return {'success': True, 'service_point': ServicePoint.objects.first()}
+        # return {'success': True, 'service_point': ServicePoint.objects.first()}
         data = {
             'success': False,
             'message': 'Множество экземпляров точек возвращено! ip {}'.format(ip_blocks)
@@ -6546,7 +6547,7 @@ def define_service_point(ip: str) -> dict:
         client.captureException()
         return data
     except:
-        return {'success': True, 'service_point': ServicePoint.objects.first()}
+        # return {'success': True, 'service_point': ServicePoint.objects.first()}
         data = {
             'success': False,
             'message': 'Что-то пошло не так при поиске точки!'
