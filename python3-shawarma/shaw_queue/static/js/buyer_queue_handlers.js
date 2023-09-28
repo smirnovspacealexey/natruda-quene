@@ -38,6 +38,7 @@ function refresher() {
             //     return !ready_order_numbers.includes(el)
             // });
             if (!is_voicing)
+                console.log('to process_numbers: ' + updated_ready_numbers + voiced_flags);
                 process_numbers(updated_ready_numbers, voiced_flags);
             //console.log(difference);
             //sound_number(difference);
