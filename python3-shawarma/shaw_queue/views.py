@@ -6537,26 +6537,25 @@ def define_service_point(ip: str) -> dict:
     try:
         service_point = ServicePoint.objects.get(subnetwork=subnet_number)
     except MultipleObjectsReturned:
-        logger_debug.info(f'ip: {ip}')
-        return {'success': True, 'service_point': ServicePoint.objects.first()}  # del me
         data = {
             'success': False,
             'message': 'Множество экземпляров точек возвращено! ip {}'.format(ip_blocks)
         }
         logger.error('Множество точек возвращено для ip {}!'.format(ip_blocks))
         client.captureException()
+        Log.add_new(f'1: {ip_blocks}', 'ip')
         return data
     except:
-        logger_debug.info(f'ip: {ip}')
-        return {'success': True, 'service_point': ServicePoint.objects.first()}  # del me
         data = {
             'success': False,
             'message': 'Что-то пошло не так при поиске точки!'
         }
         logger.error('Что-то пошло не так при поиске точки для ip {}!'.format(ip_blocks))
+        Log.add_new(f'2: {ip_blocks}', 'ip')
         client.captureException()
         return data
-
+    # logger_debug.info(f'success {service_point}')  # del me
+    # logger_debug.info(f'define_service_point CLOSE\n\n')  # del me
     return {'success': True, 'service_point': service_point}
 
 
