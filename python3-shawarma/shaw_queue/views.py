@@ -3240,7 +3240,7 @@ def unvoice_order(request):
                 }
                 client.captureException()
                 return JsonResponse(data)
-            time.sleep(5)
+            time.sleep(2)
             order.is_voiced = True
             order.save()
             data = {
