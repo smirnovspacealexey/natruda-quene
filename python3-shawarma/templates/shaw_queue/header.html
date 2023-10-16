@@ -19,20 +19,7 @@
                 </div>
             </a>
         {% endif %}
-        {% if staff_category.title == 'Barista' %}
-            <a href="{% url 'barista_interface' %}">
-                <div class="header-buttons" id="current-queue">
-                    Интерфейс баристы ☕️
-                </div>
-            </a>
-        {% endif %}
-        {% if staff_category.title == 'Burgerman' %}
-            <a href="{% url 'burgerman_interface' %}">
-                <div class="header-buttons" id="current-queue">
-                    Интерфейс бургермена 🍔️
-                </div>
-            </a>
-        {% endif %}
+
         {% if staff_category.title == 'DeliveryOperator' or staff_category.title == 'DeliveryAdmin' %}
             <a href="{% url 'delivery_interface' %}">
                 <div class="header-buttons" id="current-queue">
@@ -109,6 +96,20 @@
         <div class="header-who-logged" id="header-who-logged">
             {{ user.first_name }} {{ user.last_name }}
         </div>
+        {% if staff_category.title == 'Barista' %}
+            <a href="{% url 'barista_interface' %}">
+                <div class="header-buttons" id="current-queue">
+                    Интерфейс баристы ☕️
+                </div>
+            </a>
+        {% endif %}
+        {% if staff_category.title == 'Burgerman' %}
+            <a href="{% url 'burgerman_interface' %}">
+                <div class="header-buttons" id="current-queue">
+                    Интерфейс бургермена 🍔️
+                </div>
+            </a>
+        {% endif %}
         <div class="header-buttons" id="logout" onclick="logout()">
             Выход
         </div>
