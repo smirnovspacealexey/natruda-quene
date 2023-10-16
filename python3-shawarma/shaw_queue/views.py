@@ -2735,17 +2735,17 @@ def burger_i_ajax(request):
 
         result = define_service_point(device_ip)
         if result['success']:
-            # regular_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
-            #                                       close_time__isnull=True,
-            #                                       with_burger=True, is_canceled=False, is_grilling_burger=True,
-            #                                       is_ready=False,
-            #                                       servery__service_point=result['service_point'],
-            #                                       is_delivery=False).order_by('open_time')
+            regular_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
+                                                  close_time__isnull=True,
+                                                  with_burger=True, is_canceled=False, is_grilling_burger=True,
+                                                  is_ready=False,
+                                                  # servery__service_point=result['service_point'],
+                                                  is_delivery=False).order_by('open_time')
 
-            regular_orders = Order.objects.filter(open_time__isnull=False,
-                                                  open_time__contains=timezone.now().date(), is_canceled=False,
-                                                  burger_completed=False, is_grilling_burger=False,
-                                                  close_time__isnull=True).order_by('open_time')
+            # regular_orders = Order.objects.filter(open_time__isnull=False,
+            #                                       open_time__contains=timezone.now().date(), is_canceled=False,
+            #                                       burger_completed=False, is_grilling_burger=False,
+            #                                       close_time__isnull=True).order_by('open_time')
 
             today_delivery_orders = Order.objects.filter(is_delivery=True,
                                                          deliveryorder__delivered_timepoint__contains=timezone.now().date(),
