@@ -2753,7 +2753,7 @@ def burger_i_ajax(request):
                                                          close_time__isnull=True,
                                                          with_burger=True, is_canceled=False, is_grilling_burger=True,
                                                          is_ready=False,
-                                                         servery__service_point=result['service_point']
+                                                         # servery__service_point=result['service_point']
                                                          ).order_by(
                 'open_time')
             open_orders = regular_orders | today_delivery_orders
