@@ -2590,6 +2590,92 @@ def burgerman_interface(request):
     return unmanaged_queue(request)
 
 
+def barista_interface(request):
+    def new_processor_with_queue(request):
+        user = request.user
+        staff = Staff.objects.get(user=user)
+        # if not staff.available:
+        #     staff.available = True
+        #     staff.save()
+        context = None
+        taken_order_content = None
+        new_orders = Order.objects.filter(open_time__isnull=False,
+                                          open_time__contains=timezone.now().date(), is_canceled=False,
+                                          coffee_completed=False, is_preparing_coffee=False,
+                                          close_time__isnull=True).order_by('open_time')
+        other_orders = Order.objects.filter(open_time__isnull=False,
+                                            open_time__contains=timezone.now().date(), is_canceled=False,
+                                            close_time__isnull=True).order_by('open_time')
+        has_order = False
+        selected_order = None
+        for order in new_orders:
+            taken_order_content = OrderContent.objects.filter(order=order,
+                                                              menu_item__can_be_prepared_by__title__iexact='Barista',
+                                                              finish_timestamp__isnull=True).order_by('id')
+            if len(taken_order_content) > 0:
+                has_order = True
+                selected_order = order
+                break
+
+        taken_order_content = OrderContent.objects.filter(order=selected_order,
+                                                          menu_item__can_be_prepared_by__title__iexact='Barista').order_by(
+            'id')
+        taken_order_in_grill_content = OrderContent.objects.filter(order=selected_order,
+                                                                   grill_timestamp__isnull=False,
+                                                                   menu_item__can_be_prepared_by__title__iexact='Barista').order_by(
+            'id')
+        context = {
+            'selected_order': selected_order,
+            'order_content': [{'number': number,
+                               'item': item} for number, item in enumerate(taken_order_content, start=1)],
+            'in_grill_content': [{'number': number,
+                                  'item': item} for number, item in
+                                 enumerate(taken_order_in_grill_content, start=1)],
+            'cooks_orders': [{'order': cooks_order,
+                              'cook_content_count': len(OrderContent.objects.filter(order=cooks_order,
+                                                                                    menu_item__can_be_prepared_by__title__iexact='Barista'))}
+                             for cooks_order in other_orders if len(OrderContent.objects.filter(order=cooks_order,
+                                                                                                menu_item__can_be_prepared_by__title__iexact='Barista')) > 0],
+            'staff_category': staff.staff_category,
+            'staff': staff
+        }
+
+        template = loader.get_template('shaw_queue/barista_interface_with_queue.html')
+        aux_html = template.render(context, request)
+        return HttpResponse(template.render(context, request))
+
+    def unmanaged_queue(request):
+        device_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
+        if DEBUG_SERVERY:
+            device_ip = '127.0.0.1'
+
+        result = define_service_point(device_ip)
+        if result['success']:
+            open_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
+                                               close_time__isnull=True,
+                                               with_shashlyk=True, is_canceled=False, is_grilling_shash=True,
+                                               is_ready=False,
+                                               servery__service_point=result['service_point']).exclude(deliveryorder__moderation_needed=True).order_by(
+                'open_time')
+            context = {
+                'open_orders': [{'order': open_order,
+                                 'burgerman_part': OrderContent.objects.filter(order=open_order).filter(
+                                     menu_item__can_be_prepared_by__title__iexact='Barista').values(
+                                     'menu_item__title', 'note').annotate(count_titles=Count('menu_item__title'))
+                                 } for open_order in open_orders],
+                'open_length': len(open_orders)
+            }
+
+            template = loader.get_template('shaw_queue/burgerman_queue.html')
+        else:
+            return Http404("Неудалось определить точку обслуживания.")
+
+        return HttpResponse(template.render(context, request))
+
+    return new_processor_with_queue(request)
+    return unmanaged_queue(request)
+
+
 def s_i_a(request):
     def queue_processor(request):
         user = request.user
@@ -2769,6 +2855,102 @@ def burger_i_ajax(request):
             }
 
             template = loader.get_template('shaw_queue/burgerman_queue_ajax.html')
+            data = {
+                'html': template.render(context, request)
+            }
+        else:
+            data = {
+                'html': "<h1>Неудалось определить точку обслуживания.</h1>"
+            }
+
+        return JsonResponse(data=data)
+
+    return unmanaged_queue(request)
+    # return queue_processor(request)
+
+
+def coffee_i_ajax(request):
+    def queue_processor(request):
+        user = request.user
+        staff = Staff.objects.get(user=user)
+        # if not staff.available:
+        #     staff.available = True
+        #     staff.save()
+        context = None
+        taken_order_content = None
+        new_order = Order.objects.filter(open_time__isnull=False,
+                                         open_time__contains=timezone.now().date(), is_canceled=False,
+                                         coffee_completed=False, is_preparing_coffee=False,
+                                         close_time__isnull=True).order_by('open_time')
+        has_order = False
+        selected_order = None
+        for order in new_order:
+            taken_order_content = OrderContent.objects.filter(order=order,
+                                                              menu_item__can_be_prepared_by__title__iexact='Barista',
+                                                              finish_timestamp__isnull=True).order_by('id')
+            if len(taken_order_content) > 0:
+                has_order = True
+                selected_order = order
+                break
+
+        taken_order_content = OrderContent.objects.filter(order=selected_order,
+                                                          menu_item__can_be_prepared_by__title__iexact='Barista').order_by(
+            'id')
+        taken_order_in_grill_content = OrderContent.objects.filter(order=selected_order,
+                                                                   grill_timestamp__isnull=False,
+                                                                   menu_item__can_be_prepared_by__title__iexact='Barista').order_by(
+            'id')
+        context = {
+            'selected_order': selected_order,
+            'display_number': selected_order.display_number,
+            'order_content': [{'number': number,
+                               'item': item} for number, item in enumerate(taken_order_content, start=1)],
+            'staff_category': staff.staff_category,
+            'staff': staff
+        }
+        template = loader.get_template('shaw_queue/selected_order_content.html')
+        data = {
+            'success': True,
+            'html': template.render(context, request)
+        }
+
+        return JsonResponse(data=data)
+
+    def unmanaged_queue(request):
+        device_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
+        if DEBUG_SERVERY:
+            device_ip = '127.0.0.1'
+
+        result = define_service_point(device_ip)
+        if result['success']:
+
+            regular_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
+                                                  close_time__isnull=True,
+                                                  with_coffee=True, is_canceled=False,
+                                                  is_ready=False,
+                                                  # servery__service_point=result['service_point'],
+                                                  is_delivery=False).order_by('open_time')
+
+            today_delivery_orders = Order.objects.filter(is_delivery=True,
+                                                         deliveryorder__delivered_timepoint__contains=timezone.now().date(),
+                                                         deliveryorder__moderation_needed=False,
+                                                         close_time__isnull=True,
+                                                         with_coffee=True, is_canceled=False, is_preparing_coffee=True,
+                                                         is_ready=False,
+                                                         # servery__service_point=result['service_point']
+                                                         ).order_by(
+                'open_time')
+            open_orders = regular_orders | today_delivery_orders
+            context = {
+                'open_orders': [{'order': open_order,
+                                 'barista_part': OrderContent.objects.filter(order=open_order).filter(
+                                     menu_item__can_be_prepared_by__title__iexact='Barista').values(
+                                     'menu_item__title', 'note').annotate(count_titles=Count('menu_item__title'))
+                                 } for open_order in open_orders],
+                'open_length': len(open_orders)
+            }
+
+            template = loader.get_template('shaw_queue/barista_queue_ajax.html')
             data = {
                 'html': template.render(context, request)
             }
@@ -3775,12 +3957,42 @@ def burgerman_select_order(request):
         'success': False
     }
     if order_id:
+        order = get_object_or_404(Order, id=order_id)
         context = {
-            'selected_order': get_object_or_404(Order, id=order_id),
+            'display_number': order.display_number,
+            'selected_order': order,
             'order_content': [{'number': number,
                                'item': item} for number, item in
                               enumerate(OrderContent.objects.filter(order__id=order_id,
                                                                     menu_item__can_be_prepared_by__title__iexact='Burgerman'),
+                                        start=1)],
+            'staff_category': staff.staff_category
+        }
+        template = loader.get_template('shaw_queue/selected_order_content.html')
+        data = {
+            'success': True,
+            'html': template.render(context, request)
+        }
+
+    return JsonResponse(data=data)
+
+
+def barista_select_order(request):
+    user = request.user
+    staff = Staff.objects.get(user=user)
+    order_id = request.POST.get('order_id', None)
+    data = {
+        'success': False
+    }
+    if order_id:
+        order = get_object_or_404(Order, id=order_id)
+        context = {
+            'display_number': order.display_number,
+            'selected_order': order,
+            'order_content': [{'number': number,
+                               'item': item} for number, item in
+                              enumerate(OrderContent.objects.filter(order__id=order_id,
+                                                                    menu_item__can_be_prepared_by__title__iexact='Barista'),
                                         start=1)],
             'staff_category': staff.staff_category
         }
@@ -4945,10 +5157,19 @@ def grill_all_content(request):
     order_id = request.POST.get('order_id', None)
     if order_id:
         order = Order.objects.get(id=order_id)
+
         shashlychnik_products = OrderContent.objects.filter(order=order,
                                                             menu_item__can_be_prepared_by__title__iexact='Shashlychnik')
         cook_products = OrderContent.objects.filter(order=order,
                                                     menu_item__can_be_prepared_by__title__iexact='Cook')
+
+
+        burger_products = OrderContent.objects.filter(order=order,
+                                                      menu_item__can_be_prepared_by__title__iexact='Burgerman')
+
+        # coffee_products = OrderContent.objects.filter(order=order,
+        #                                             menu_item__can_be_prepared_by__title__iexact='Barista')
+
         if staff.staff_category.title == 'Operator' or staff.staff_category.title == 'DeliveryAdmin':
             products = shashlychnik_products
         else:
@@ -4972,6 +5193,12 @@ def grill_all_content(request):
         # Check if all shawarma is frying.
         all_is_grilling = True
         for product in cook_products:
+            if not product.is_in_grill:
+                all_is_grilling = False
+
+        # Check if all burgers is frying.
+        all_is_grilling = True
+        for product in burger_products:
             if not product.is_in_grill:
                 all_is_grilling = False
 

@@ -81,6 +81,7 @@ urlpatterns = [
     url(r'^ajax/records_statistics', views.call_record_page_ajax, name="update_records_statistics"),
     url(r'^ajax/s_order_shashlychnik', views.shashlychnik_select_order, name="select_order_shashlychnik"),
     url(r'^ajax/s_order_burgerman', views.burgerman_select_order, name="select_order_burgerman"),
+    url(r'^ajax/s_order_barista', views.barista_select_order, name="select_order_barista"),
     url(r'^ajax/cooks_content_info', views.cooks_content_info_ajax, name="cooks_content_info_ajax"),
     url(r'^current_queue', views.current_queue, name="current_queue"),
     url(r'^production_queue', views.production_queue, name="production_queue"),
@@ -90,10 +91,11 @@ urlpatterns = [
     url(r'^shashlychnik_interface', views.shashlychnik_interface, name="shashlychnik_interface"),
 
     url(r'^burgerman_interface', views.burgerman_interface, name="burgerman_interface"),
-    # url(r'^barista_interface', views.barista_interface, name="barista_interface"),
+    url(r'^barista_interface', views.barista_interface, name="barista_interface"),
 
     url(r'^s_i_ajax', views.s_i_a, name="shashlychnik_interface_ajax"),
     url(r'^burger_i_ajax', views.burger_i_ajax, name="burgerman_interface_ajax"),
+    url(r'^coffee_i_ajax', views.coffee_i_ajax, name="barista_interface_ajax"),
     url(r'^redirection', views.redirection, name="redirection"),
 
     path('buyer_queue/black/vertical/', views.buyer_queue_black_vertical, name='buyer_queue_black_vertical'),
