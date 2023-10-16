@@ -4437,13 +4437,17 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
         order.total = total
         order.with_shawarma = content_presence
         order.with_shashlyk = shashlyk_presence
-        order.with_coffee = supplement_coffee
         order.with_burger = supplement_burger
         order.content_completed = not content_presence
         order.shashlyk_completed = not shashlyk_presence
         order.supplement_completed = not supplement_presence
-        order.coffee_completed = not supplement_coffee
         order.burger_completed = not supplement_burger
+
+        baristas = Staff.objects.filter(available=True, staff_category__title__iexact='Barista', service_point=service_point)
+        if len(baristas) > 0:
+            order.with_coffee = supplement_coffee
+            order.coffee_completed = not supplement_coffee
+
         order.save()
         if order.is_paid:
             print("Sending request to " + order.servery.ip_address)
