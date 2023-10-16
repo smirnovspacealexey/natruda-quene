@@ -80,6 +80,7 @@ urlpatterns = [
     url(r'^ajax/pause_statistics', views.pause_statistic_page_ajax, name="update_pause_statistics"),
     url(r'^ajax/records_statistics', views.call_record_page_ajax, name="update_records_statistics"),
     url(r'^ajax/s_order_shashlychnik', views.shashlychnik_select_order, name="select_order_shashlychnik"),
+    url(r'^ajax/s_order_burgerman', views.burgerman_select_order, name="select_order_burgerman"),
     url(r'^ajax/cooks_content_info', views.cooks_content_info_ajax, name="cooks_content_info_ajax"),
     url(r'^current_queue', views.current_queue, name="current_queue"),
     url(r'^production_queue', views.production_queue, name="production_queue"),

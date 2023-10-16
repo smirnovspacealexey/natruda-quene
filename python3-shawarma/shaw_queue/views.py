@@ -2586,6 +2586,7 @@ def burgerman_interface(request):
 
         return HttpResponse(template.render(context, request))
 
+    return new_processor_with_queue(request)
     return unmanaged_queue(request)
 
 
@@ -2740,6 +2741,12 @@ def burger_i_ajax(request):
                                                   is_ready=False,
                                                   servery__service_point=result['service_point'],
                                                   is_delivery=False).order_by('open_time')
+
+            regular_orders = Order.objects.filter(open_time__isnull=False,
+                                                  open_time__contains=timezone.now().date(), is_canceled=False,
+                                                  burger_completed=False, is_grilling_burger=False,
+                                                  close_time__isnull=True).order_by('open_time')
+
             today_delivery_orders = Order.objects.filter(is_delivery=True,
                                                          deliveryorder__delivered_timepoint__contains=timezone.now().date(),
                                                          deliveryorder__moderation_needed=False,
@@ -2770,7 +2777,7 @@ def burger_i_ajax(request):
 
         return JsonResponse(data=data)
 
-    # return unmanaged_queue(request)
+    return unmanaged_queue(request)
     return queue_processor(request)
 
 
@@ -3746,6 +3753,32 @@ def shashlychnik_select_order(request):
                                'item': item} for number, item in
                               enumerate(OrderContent.objects.filter(order__id=order_id,
                                                                     menu_item__can_be_prepared_by__title__iexact='Shashlychnik'),
+                                        start=1)],
+            'staff_category': staff.staff_category
+        }
+        template = loader.get_template('shaw_queue/selected_order_content.html')
+        data = {
+            'success': True,
+            'html': template.render(context, request)
+        }
+
+    return JsonResponse(data=data)
+
+
+def burgerman_select_order(request):
+    user = request.user
+    staff = Staff.objects.get(user=user)
+    order_id = request.POST.get('order_id', None)
+    data = {
+        'success': False
+    }
+    if order_id:
+        context = {
+            'selected_order': get_object_or_404(Order, id=order_id),
+            'order_content': [{'number': number,
+                               'item': item} for number, item in
+                              enumerate(OrderContent.objects.filter(order__id=order_id,
+                                                                    menu_item__can_be_prepared_by__title__iexact='Burgerman'),
                                         start=1)],
             'staff_category': staff.staff_category
         }
