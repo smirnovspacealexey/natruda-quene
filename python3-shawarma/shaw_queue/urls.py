@@ -87,7 +87,12 @@ urlpatterns = [
     url(r'^cook_interface', views.cook_interface, name="cook_interface"),
     url(r'^c_i_a', views.c_i_a, name="cook_interface_ajax"),
     url(r'^shashlychnik_interface', views.shashlychnik_interface, name="shashlychnik_interface"),
+
+    url(r'^burgerman_interface', views.burgerman_interface, name="burgerman_interface"),
+    # url(r'^barista_interface', views.barista_interface, name="barista_interface"),
+
     url(r'^s_i_ajax', views.s_i_a, name="shashlychnik_interface_ajax"),
+    url(r'^burger_i_ajax', views.burger_i_ajax, name="burgerman_interface_ajax"),
     url(r'^redirection', views.redirection, name="redirection"),
 
     path('buyer_queue/black/vertical/', views.buyer_queue_black_vertical, name='buyer_queue_black_vertical'),

@@ -2504,6 +2504,91 @@ def shashlychnik_interface(request):
     return unmanaged_queue(request)
 
 
+def burgerman_interface(request):
+    def new_processor_with_queue(request):
+        user = request.user
+        staff = Staff.objects.get(user=user)
+        # if not staff.available:
+        #     staff.available = True
+        #     staff.save()
+        context = None
+        taken_order_content = None
+        new_orders = Order.objects.filter(open_time__isnull=False,
+                                          open_time__contains=timezone.now().date(), is_canceled=False,
+                                          burger_completed=False, is_grilling_burger=False,
+                                          close_time__isnull=True).order_by('open_time')
+        other_orders = Order.objects.filter(open_time__isnull=False,
+                                            open_time__contains=timezone.now().date(), is_canceled=False,
+                                            close_time__isnull=True).order_by('open_time')
+        has_order = False
+        selected_order = None
+        for order in new_orders:
+            taken_order_content = OrderContent.objects.filter(order=order,
+                                                              menu_item__can_be_prepared_by__title__iexact='Burgerman',
+                                                              finish_timestamp__isnull=True).order_by('id')
+            if len(taken_order_content) > 0:
+                has_order = True
+                selected_order = order
+                break
+
+        taken_order_content = OrderContent.objects.filter(order=selected_order,
+                                                          menu_item__can_be_prepared_by__title__iexact='Burgerman').order_by(
+            'id')
+        taken_order_in_grill_content = OrderContent.objects.filter(order=selected_order,
+                                                                   grill_timestamp__isnull=False,
+                                                                   menu_item__can_be_prepared_by__title__iexact='Burgerman').order_by(
+            'id')
+        context = {
+            'selected_order': selected_order,
+            'order_content': [{'number': number,
+                               'item': item} for number, item in enumerate(taken_order_content, start=1)],
+            'in_grill_content': [{'number': number,
+                                  'item': item} for number, item in
+                                 enumerate(taken_order_in_grill_content, start=1)],
+            'cooks_orders': [{'order': cooks_order,
+                              'cook_content_count': len(OrderContent.objects.filter(order=cooks_order,
+                                                                                    menu_item__can_be_prepared_by__title__iexact='Burgerman'))}
+                             for cooks_order in other_orders if len(OrderContent.objects.filter(order=cooks_order,
+                                                                                                menu_item__can_be_prepared_by__title__iexact='Burgerman')) > 0],
+            'staff_category': staff.staff_category,
+            'staff': staff
+        }
+
+        template = loader.get_template('shaw_queue/burgerman_interface_with_queue.html')
+        aux_html = template.render(context, request)
+        return HttpResponse(template.render(context, request))
+
+    def unmanaged_queue(request):
+        device_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
+        if DEBUG_SERVERY:
+            device_ip = '127.0.0.1'
+
+        result = define_service_point(device_ip)
+        if result['success']:
+            open_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
+                                               close_time__isnull=True,
+                                               with_shashlyk=True, is_canceled=False, is_grilling_shash=True,
+                                               is_ready=False,
+                                               servery__service_point=result['service_point']).exclude(deliveryorder__moderation_needed=True).order_by(
+                'open_time')
+            context = {
+                'open_orders': [{'order': open_order,
+                                 'burgerman_part': OrderContent.objects.filter(order=open_order).filter(
+                                     menu_item__can_be_prepared_by__title__iexact='Burgerman').values(
+                                     'menu_item__title', 'note').annotate(count_titles=Count('menu_item__title'))
+                                 } for open_order in open_orders],
+                'open_length': len(open_orders)
+            }
+
+            template = loader.get_template('shaw_queue/burgerman_queue.html')
+        else:
+            return Http404("Неудалось определить точку обслуживания.")
+
+        return HttpResponse(template.render(context, request))
+
+    return unmanaged_queue(request)
+
+
 def s_i_a(request):
     def queue_processor(request):
         user = request.user
@@ -2593,6 +2678,100 @@ def s_i_a(request):
         return JsonResponse(data=data)
 
     return unmanaged_queue(request)
+
+
+def burger_i_ajax(request):
+    def queue_processor(request):
+        user = request.user
+        staff = Staff.objects.get(user=user)
+        # if not staff.available:
+        #     staff.available = True
+        #     staff.save()
+        context = None
+        taken_order_content = None
+        new_order = Order.objects.filter(open_time__isnull=False,
+                                         open_time__contains=timezone.now().date(), is_canceled=False,
+                                         burger_completed=False, is_grilling_burger=False,
+                                         close_time__isnull=True).order_by('open_time')
+        has_order = False
+        selected_order = None
+        for order in new_order:
+            taken_order_content = OrderContent.objects.filter(order=order,
+                                                              menu_item__can_be_prepared_by__title__iexact='Burgerman',
+                                                              finish_timestamp__isnull=True).order_by('id')
+            if len(taken_order_content) > 0:
+                has_order = True
+                selected_order = order
+                break
+
+        taken_order_content = OrderContent.objects.filter(order=selected_order,
+                                                          menu_item__can_be_prepared_by__title__iexact='Burgerman').order_by(
+            'id')
+        taken_order_in_grill_content = OrderContent.objects.filter(order=selected_order,
+                                                                   grill_timestamp__isnull=False,
+                                                                   menu_item__can_be_prepared_by__title__iexact='Burgerman').order_by(
+            'id')
+        context = {
+            'selected_order': selected_order,
+            'display_number': selected_order.display_number,
+            'order_content': [{'number': number,
+                               'item': item} for number, item in enumerate(taken_order_content, start=1)],
+            'staff_category': staff.staff_category,
+            'staff': staff
+        }
+        template = loader.get_template('shaw_queue/selected_order_content.html')
+        data = {
+            'success': True,
+            'html': template.render(context, request)
+        }
+
+        return JsonResponse(data=data)
+
+    def unmanaged_queue(request):
+        device_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
+        if DEBUG_SERVERY:
+            device_ip = '127.0.0.1'
+
+        result = define_service_point(device_ip)
+        if result['success']:
+            regular_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
+                                                  close_time__isnull=True,
+                                                  with_burger=True, is_canceled=False, is_grilling_burger=True,
+                                                  is_ready=False,
+                                                  servery__service_point=result['service_point'],
+                                                  is_delivery=False).order_by('open_time')
+            today_delivery_orders = Order.objects.filter(is_delivery=True,
+                                                         deliveryorder__delivered_timepoint__contains=timezone.now().date(),
+                                                         deliveryorder__moderation_needed=False,
+                                                         close_time__isnull=True,
+                                                         with_burger=True, is_canceled=False, is_grilling_burger=True,
+                                                         is_ready=False,
+                                                         servery__service_point=result['service_point']
+                                                         ).order_by(
+                'open_time')
+            open_orders = regular_orders | today_delivery_orders
+            context = {
+                'open_orders': [{'order': open_order,
+                                 'burgerman_part': OrderContent.objects.filter(order=open_order).filter(
+                                     menu_item__can_be_prepared_by__title__iexact='Burgerman').values(
+                                     'menu_item__title', 'note').annotate(count_titles=Count('menu_item__title'))
+                                 } for open_order in open_orders],
+                'open_length': len(open_orders)
+            }
+
+            template = loader.get_template('shaw_queue/burgerman_queue_ajax.html')
+            data = {
+                'html': template.render(context, request)
+            }
+        else:
+            data = {
+                'html': "<h1>Неудалось определить точку обслуживания.</h1>"
+            }
+
+        return JsonResponse(data=data)
+
+    # return unmanaged_queue(request)
+    return queue_processor(request)
 
 
 @login_required()
@@ -3907,6 +4086,8 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
         content_presence = False
         shashlyk_presence = False
         supplement_presence = False
+        supplement_coffee = False
+        supplement_burger = False
         for item in content:
             item['toppings'] = item.get('toppings', [])
             item['note'] = item.get('note', "")
@@ -3931,6 +4112,10 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
                     shashlyk_presence = True
                 if menu_item.can_be_prepared_by.title == 'Operator':
                     supplement_presence = True
+                if menu_item.can_be_prepared_by.title == 'Barista':
+                    supplement_coffee = True
+                if menu_item.can_be_prepared_by.title == 'Burgerman':
+                    supplement_burger = True
                 total += menu_item.price * item['quantity']
                 for topping in item['toppings']:
                     try:
@@ -3960,6 +4145,10 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
                         shashlyk_presence = True
                     if menu_item.can_be_prepared_by.title == 'Operator':
                         supplement_presence = True
+                    if menu_item.can_be_prepared_by.title == 'Barista':
+                        supplement_coffee = True
+                    if menu_item.can_be_prepared_by.title == 'Burgerman':
+                        supplement_burger = True
 
                     try:
                         new_order_content = OrderContent(order=order, menu_item=menu_item, note=item['note'], qr=item['qr'])
@@ -4001,9 +4190,13 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
         order.total = total
         order.with_shawarma = content_presence
         order.with_shashlyk = shashlyk_presence
+        order.with_coffee = supplement_coffee
+        order.with_burger = supplement_burger
         order.content_completed = not content_presence
         order.shashlyk_completed = not shashlyk_presence
         order.supplement_completed = not supplement_presence
+        order.coffee_completed = not supplement_coffee
+        order.burger_completed = not supplement_burger
         order.save()
         if order.is_paid:
             print("Sending request to " + order.servery.ip_address)

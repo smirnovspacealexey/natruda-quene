@@ -19,7 +19,7 @@
                     {% endif %}
                 {% endif %}">
             №{{ content_item.number }} {{ content_item.item.menu_item.title }} <p style="margin: 0px"><span
-                class="cook-item-comment">{{ content_item.note }}</span></p>
+                class="cook-item-comment">{{ content_item.item.note }}</span></p>
         </div>
     </div>
 {% empty %}
@@ -63,6 +63,21 @@
                 {% endif %}
             {% else %}
                 Соберите шаурму!
+            {% endif %}
+        </div>
+    {% endif %}
+{% elif staff_category.title == 'Burgerman' %}
+    {% if order_content and not selected_order.burger_completed %}
+        <div class="cook-complete-all-button" onclick="
+                {% if selected_order.is_grilling_burger %}
+                    FinishAllContent({{ selected_order.id }})
+                {% else %}
+                    GrillAllContent({{ selected_order.id }})
+                {% endif %}">
+            {% if selected_order.is_grilling_burger %}
+                Завершить всё
+            {% else %}
+                Жарить всё
             {% endif %}
         </div>
     {% endif %}
