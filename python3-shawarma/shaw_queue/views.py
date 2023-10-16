@@ -2705,6 +2705,9 @@ def burger_i_ajax(request):
                 selected_order = order
                 break
 
+        taken_order_content = OrderContent.objects.filter(order=selected_order,
+                                                          menu_item__can_be_prepared_by__title__iexact='Burgerman').order_by(
+            'id')
         taken_order_in_grill_content = OrderContent.objects.filter(order=selected_order,
                                                                    grill_timestamp__isnull=False,
                                                                    menu_item__can_be_prepared_by__title__iexact='Burgerman').order_by(
@@ -2732,12 +2735,12 @@ def burger_i_ajax(request):
 
         result = define_service_point(device_ip)
         if result['success']:
-            regular_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
-                                                  close_time__isnull=True,
-                                                  with_burger=True, is_canceled=False, is_grilling_burger=True,
-                                                  is_ready=False,
-                                                  servery__service_point=result['service_point'],
-                                                  is_delivery=False).order_by('open_time')
+            # regular_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
+            #                                       close_time__isnull=True,
+            #                                       with_burger=True, is_canceled=False, is_grilling_burger=True,
+            #                                       is_ready=False,
+            #                                       servery__service_point=result['service_point'],
+            #                                       is_delivery=False).order_by('open_time')
 
             regular_orders = Order.objects.filter(open_time__isnull=False,
                                                   open_time__contains=timezone.now().date(), is_canceled=False,
