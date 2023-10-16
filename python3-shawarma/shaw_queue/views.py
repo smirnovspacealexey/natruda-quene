@@ -2705,9 +2705,6 @@ def burger_i_ajax(request):
                 selected_order = order
                 break
 
-        taken_order_content = OrderContent.objects.filter(order=selected_order,
-                                                          menu_item__can_be_prepared_by__title__iexact='Burgerman').order_by(
-            'id')
         taken_order_in_grill_content = OrderContent.objects.filter(order=selected_order,
                                                                    grill_timestamp__isnull=False,
                                                                    menu_item__can_be_prepared_by__title__iexact='Burgerman').order_by(
