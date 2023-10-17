@@ -1,4 +1,10 @@
 {% load static %}
+<style>
+    .order-operator-part {
+        font-size: 250%; /
+    }
+</style>
+
 <div class="order-block-container clickable" onclick="FinishAllContent({{ open_order.order.id }})">
     <div class="order-block shadowed">
         <div class="order-block-header">
@@ -26,7 +32,7 @@
             {% for oper_content in open_order.burgerman_part %}
                 <div class="order-item">
 
-                        {{ oper_content.menu_item__title }}
+                    {{ oper_content.menu_item__title }}
 
                     <span class="quantity-multiplyer">x{{ oper_content.count_titles }}</span>
                     <p class="order-item-note">
