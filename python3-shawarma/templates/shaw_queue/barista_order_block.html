@@ -1,4 +1,9 @@
 {% load static %}
+<style>
+    .order-operator-part {
+        font-size: 150%; /
+    }
+</style>
 <div class="order-block-container clickable" onclick="FinishAllContent({{ open_order.order.id }})">
     <div class="order-block shadowed">
         <div class="order-block-header">
@@ -18,7 +23,7 @@
                                                 inGrill
                                             {% endif %}
                                         {% endif %}">
-                {{ open_order.order.prepared_by.user.first_name }} ({{ open_order.cook_part_ready_count.count }}/{{ open_order.cook_part_count.count }})
+{#                {{ open_order.order.prepared_by.user.first_name }} ({{ open_order.cook_part_ready_count.count }}/{{ open_order.cook_part_count.count }})#}
             </div>
         </div>
 

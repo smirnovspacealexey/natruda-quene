@@ -2659,7 +2659,7 @@ def barista_interface(request):
                 'open_time')
             context = {
                 'open_orders': [{'order': open_order,
-                                 'burgerman_part': OrderContent.objects.filter(order=open_order).filter(
+                                 'barista_part': OrderContent.objects.filter(order=open_order).filter(
                                      menu_item__can_be_prepared_by__title__iexact='Barista').values(
                                      'menu_item__title', 'note').annotate(count_titles=Count('menu_item__title'))
                                  } for open_order in open_orders],
@@ -2821,18 +2821,18 @@ def burger_i_ajax(request):
 
         result = define_service_point(device_ip)
         if result['success']:
-            regular_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
-                                                  close_time__isnull=True,
-                                                  with_burger=True, is_canceled=False, is_grilling_burger=True,
-                                                  is_ready=False,
-                                                  # servery__service_point=result['service_point'],
-                                                  is_delivery=False).order_by('open_time')
+            # regular_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
+            #                                       close_time__isnull=True,
+            #                                       with_burger=True, is_canceled=False, is_grilling_burger=True,
+            #                                       is_ready=False,
+            #                                       servery__service_point=result['service_point'],
+            #                                       is_delivery=False).order_by('open_time')
 
             regular_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
                                                   close_time__isnull=True,
                                                   with_burger=True, is_canceled=False,
                                                   is_ready=False,
-                                                  # servery__service_point=result['service_point'],
+                                                  servery__service_point=result['service_point'],
                                                   is_delivery=False).order_by('open_time')
 
             today_delivery_orders = Order.objects.filter(is_delivery=True,
@@ -2841,7 +2841,7 @@ def burger_i_ajax(request):
                                                          close_time__isnull=True,
                                                          with_burger=True, is_canceled=False, is_grilling_burger=True,
                                                          is_ready=False,
-                                                         # servery__service_point=result['service_point']
+                                                         servery__service_point=result['service_point']
                                                          ).order_by(
                 'open_time')
             open_orders = regular_orders | today_delivery_orders
@@ -2928,7 +2928,7 @@ def coffee_i_ajax(request):
                                                   close_time__isnull=True,
                                                   with_coffee=True, is_canceled=False,
                                                   is_ready=False,
-                                                  # servery__service_point=result['service_point'],
+                                                  servery__service_point=result['service_point'],
                                                   is_delivery=False).order_by('open_time')
 
             today_delivery_orders = Order.objects.filter(is_delivery=True,
@@ -2937,7 +2937,7 @@ def coffee_i_ajax(request):
                                                          close_time__isnull=True,
                                                          with_coffee=True, is_canceled=False, is_preparing_coffee=True,
                                                          is_ready=False,
-                                                         # servery__service_point=result['service_point']
+                                                         servery__service_point=result['service_point']
                                                          ).order_by(
                 'open_time')
             open_orders = regular_orders | today_delivery_orders
