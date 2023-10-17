@@ -11,7 +11,7 @@
 <div class="dropdown">
     <button id="clps-btn-{{ index }}" class="collapsible-btn"
             onclick="ToggleCollapsible('clps-btn-{{ index }}', 'clps-content-{{ index }}')">
-        <span>№{{ delivery_info.delivery.daily_number }} {{ delivery_info.delivery.car_driver.user.first_name }} {{ delivery_info.departure_time }}</span>
+        <span>№-----{{ delivery_info.delivery.daily_number }} {{ delivery_info.delivery.car_driver.user.first_name }} {{ delivery_info.departure_time }}</span>
         {#        <span class="badge">{{ delivery_info.delivery_orders_number }}</span>#}
         <button style="position: absolute;right: 10px;background-color: Transparent;border: darkgreen;top: 13px;"
                 onclick="ToggleCollapsible('', 'delivery-controls-{{ index }}')">

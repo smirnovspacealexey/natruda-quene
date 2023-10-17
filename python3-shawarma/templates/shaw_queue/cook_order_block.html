@@ -20,7 +20,7 @@
                 {% endif %}
             {% endif %}"
                  onclick="SelectOrder({{ cooks_order.order.id }})">
-                {% if cooks_order.order.delivery_daily_number %}<span style="font-size: 70%">№ Д{{ cooks_order.order.delivery_daily_number }}</span>{% else %}№{{ cooks_order.display_number }}{% endif %}
+                {% if cooks_order.order.delivery_daily_number %}<span style="font-size: 70%">№--- Д{{ cooks_order.order.delivery_daily_number }}</span>{% else %}№----{{ cooks_order.display_number }}{% endif %}
             </div>
             <div class="cook-order-cook-part
                 {% if cooks_order.order.is_preorder %}
