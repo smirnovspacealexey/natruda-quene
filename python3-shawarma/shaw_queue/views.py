@@ -2556,6 +2556,7 @@ def burgerman_interface(request):
                                  enumerate(taken_order_in_grill_content, start=1)],
             'cooks_orders': [{'order': cooks_order,
                               'cook_content_count': len(OrderContent.objects.filter(order=cooks_order,
+                                                                                    staff_maker=staff,
                                                                                     menu_item__can_be_prepared_by__title__iexact='Burgerman'))}
                              for cooks_order in other_orders if len(OrderContent.objects.filter(order=cooks_order,
                                                                                                 menu_item__can_be_prepared_by__title__iexact='Burgerman')) > 0],
@@ -2650,6 +2651,7 @@ def barista_interface(request):
                                  enumerate(taken_order_in_grill_content, start=1)],
             'cooks_orders': [{'order': cooks_order,
                               'cook_content_count': len(OrderContent.objects.filter(order=cooks_order,
+                                                                                    staff_maker=staff,
                                                                                     menu_item__can_be_prepared_by__title__iexact='Barista'))}
                              for cooks_order in other_orders if len(OrderContent.objects.filter(order=cooks_order,
                                                                                                 menu_item__can_be_prepared_by__title__iexact='Barista')) > 0],
