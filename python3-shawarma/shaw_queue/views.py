@@ -2506,6 +2506,13 @@ def shashlychnik_interface(request):
 
 def burgerman_interface(request):
     def new_processor_with_queue(request):
+        device_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
+        if DEBUG_SERVERY:
+            device_ip = '127.0.0.1'
+
+        result = define_service_point(device_ip)
+
+
         user = request.user
         staff = Staff.objects.get(user=user)
         # if not staff.available:
@@ -2516,10 +2523,12 @@ def burgerman_interface(request):
         new_orders = Order.objects.filter(open_time__isnull=False,
                                           open_time__contains=timezone.now().date(), is_canceled=False,
                                           burger_completed=False, is_grilling_burger=False,
-                                          close_time__isnull=True).order_by('open_time')
+                                          close_time__isnull=True,
+                                          servery__service_point=result['service_point']).order_by('open_time')
         other_orders = Order.objects.filter(open_time__isnull=False,
                                             open_time__contains=timezone.now().date(), is_canceled=False,
-                                            close_time__isnull=True).order_by('open_time')
+                                            close_time__isnull=True,
+                                            servery__service_point=result['service_point']).order_by('open_time')
         has_order = False
         selected_order = None
         for order in new_orders:
@@ -2592,6 +2601,12 @@ def burgerman_interface(request):
 
 def barista_interface(request):
     def new_processor_with_queue(request):
+        device_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
+        if DEBUG_SERVERY:
+            device_ip = '127.0.0.1'
+
+        result = define_service_point(device_ip)
+
         user = request.user
         staff = Staff.objects.get(user=user)
         # if not staff.available:
@@ -2602,10 +2617,12 @@ def barista_interface(request):
         new_orders = Order.objects.filter(open_time__isnull=False,
                                           open_time__contains=timezone.now().date(), is_canceled=False,
                                           coffee_completed=False, is_preparing_coffee=False,
-                                          close_time__isnull=True).order_by('open_time')
+                                          close_time__isnull=True,
+                                          servery__service_point=result['service_point']).order_by('open_time')
         other_orders = Order.objects.filter(open_time__isnull=False,
                                             open_time__contains=timezone.now().date(), is_canceled=False,
-                                            close_time__isnull=True).order_by('open_time')
+                                            close_time__isnull=True,
+                                            servery__service_point=result['service_point']).order_by('open_time')
         has_order = False
         selected_order = None
         for order in new_orders:
