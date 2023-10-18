@@ -49,7 +49,7 @@ testdelivery.short_description = 'сделать тестовый заказ'
 @admin.register(Menu)
 class MenuAdmin(admin.ModelAdmin):
     list_display = ['title', 'customer_title', 'note', 'price', 'guid_1c', 'category', 'can_be_prepared_by', 'get_cooking_time', 'QR_required']
-    search_fields = ['title', 'guid_1c', 'can_be_prepared_by']
+    search_fields = ['title', 'guid_1c', 'can_be_prepared_by__title']
     list_editable = ('customer_title', 'category', 'QR_required', 'can_be_prepared_by')
 
     Menu.get_cooking_time.short_description = 'время готовки'
