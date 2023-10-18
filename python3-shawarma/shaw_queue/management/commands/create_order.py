@@ -22,7 +22,7 @@ class Command(BaseCommand):
            is_paid=True,
            pickup=False,
            # is_delivery=True,
-           from_site=True,
+           from_site=False,
            # is_grilling=True,
            servery=Servery.objects.first(),
 
