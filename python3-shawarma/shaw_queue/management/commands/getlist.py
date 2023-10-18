@@ -15,14 +15,15 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         print('--------START---------')
         orders = Order.objects.filter(open_time__contains=timezone.now().date(),
-                                      close_time__isnull=True,
-                                      is_canceled=False, is_delivery=False,
-                                      is_ready=False, servery__service_point__subnetwork='24').order_by('open_time')
+                                      servery__service_point__subnetwork='24').order_by('open_time')
 
+        total = ''
         for order in orders:
+            print(order)
             content = order.ordercontent_set.filter(menu_item__can_be_prepared_by__title__in=['Barista', 'Burgerman']).first()
             if content:
-                print(f'{content.menu_item.title} - #{order.pk}')
+                total += f'\n{content.menu_item.title} - #{order.pk}\n'
+                print(f'\n\n{content.menu_item.title} - #{order.pk}\n\n')
         print('--------END---------')
 
 
