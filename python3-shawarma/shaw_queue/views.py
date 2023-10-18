@@ -1702,7 +1702,7 @@ def current_queue(request):
                                                                                 is_canceled=False).filter(
                              menu_item__can_be_prepared_by__title__iexact='shashlychnik').aggregate(count=Count('id')),
                          'operator_part': OrderContent.objects.filter(order=open_order, is_canceled=False).filter(
-                             menu_item__can_be_prepared_by__title__iexact='operator').values('menu_item__title',
+                             menu_item__can_be_prepared_by__title__in=['Operator', 'Barista', 'Burgerman']).values('menu_item__title',
                                                                                              'note').annotate(
                              count_titles=Count('menu_item__title'))
                          } for open_order in open_orders],
@@ -1722,7 +1722,7 @@ def current_queue(request):
                                                                                  is_canceled=False).filter(
                               menu_item__can_be_prepared_by__title__iexact='shashlychnik').aggregate(count=Count('id')),
                           'operator_part': OrderContent.objects.filter(order=open_order, is_canceled=False).filter(
-                              menu_item__can_be_prepared_by__title__iexact='operator').values('menu_item__title',
+                              menu_item__can_be_prepared_by__title__in=['Operator', 'Barista', 'Burgerman']).values('menu_item__title',
                                                                                               'note').annotate(
                               count_titles=Count('menu_item__title'))
 
@@ -1780,7 +1780,7 @@ def order_history(request):
                              'cook_part_count': OrderContent.objects.filter(order=open_order).filter(
                                  menu_item__can_be_prepared_by__title__iexact='cook').aggregate(count=Count('id')),
                              'operator_part': OrderContent.objects.filter(order=open_order, is_canceled=False).filter(
-                                 menu_item__can_be_prepared_by__title__iexact='operator').values('menu_item__title',
+                                 menu_item__can_be_prepared_by__title__in=['Operator', 'Barista', 'Burgerman']).values('menu_item__title',
                                                                                                  'note').annotate(
                                  count_titles=Count('menu_item__title')),
                              'shashlychnik_part_ready_count': OrderContent.objects.filter(order=open_order,
@@ -1994,7 +1994,7 @@ def current_queue_ajax(request):
                                  menu_item__can_be_prepared_by__title__iexact='shashlychnik').aggregate(
                                  count=Count('id')),
                              'operator_part': OrderContent.objects.filter(order=open_order, is_canceled=False).filter(
-                                 menu_item__can_be_prepared_by__title__iexact='operator').values('menu_item__title',
+                                 menu_item__can_be_prepared_by__title__in=['Operator', 'Barista', 'Burgerman']).values('menu_item__title',
                                                                                                  'note').annotate(
                                  count_titles=Count('menu_item__title'))
                              } for open_order in open_orders],
@@ -2016,7 +2016,7 @@ def current_queue_ajax(request):
                                   menu_item__can_be_prepared_by__title__iexact='shashlychnik').aggregate(
                                   count=Count('id')),
                               'operator_part': OrderContent.objects.filter(order=open_order, is_canceled=False).filter(
-                                  menu_item__can_be_prepared_by__title__iexact='operator').values('menu_item__title',
+                                  menu_item__can_be_prepared_by__title__in=['Operator', 'Barista', 'Burgerman']).values('menu_item__title',
                                                                                                   'note').annotate(
                                   count_titles=Count('menu_item__title'))
 
@@ -5119,10 +5119,10 @@ def finish_all_content(request):
         cook_products = OrderContent.objects.filter(order=order,
                                                     menu_item__can_be_prepared_by__title__iexact='Cook')
         operator_products = OrderContent.objects.filter(order=order,
-                                                        menu_item__can_be_prepared_by__title__iexact='Operator')
+                                                        menu_item__can_be_prepared_by__title__in=['Operator', 'Barista', 'Burgerman'])
         if staff.staff_category.title == 'Operator' or staff.staff_category.title == 'Cashier' or staff.staff_category.title == 'DeliveryOperator' or staff.staff_category.title == 'DeliveryAdmin':
             products = OrderContent.objects.filter(Q(menu_item__can_be_prepared_by__title__iexact='Shashlychnik') | Q(
-                menu_item__can_be_prepared_by__title__iexact='Operator'), order=order)
+                menu_item__can_be_prepared_by__title__in=['Operator', 'Barista', 'Burgerman']), order=order)
         else:
             products = OrderContent.objects.filter(order=order,
                                                    menu_item__can_be_prepared_by__title__iexact=staff.staff_category.title)
