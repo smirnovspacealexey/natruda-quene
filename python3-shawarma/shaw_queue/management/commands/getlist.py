@@ -24,6 +24,7 @@ class Command(BaseCommand):
             if content:
                 total += f'\n{content.menu_item.title} - #{order.pk}\n'
                 print(f'\n\n{content.menu_item.title} - #{order.pk}\n\n')
+        print(total)
         print('--------END---------')
 
 

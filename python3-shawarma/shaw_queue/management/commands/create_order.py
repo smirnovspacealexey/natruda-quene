@@ -28,9 +28,11 @@ class Command(BaseCommand):
 
        )
 
-       new_order_content = OrderContent(order=order, menu_item_id=425, note='444',
-                                        quantity=1)
+       new_order_content = OrderContent(order=order, menu_item_id=425, note='444', quantity=1)
        new_order_content.save()
+       new_order_content = OrderContent(order=order, menu_item_id=325, note='325', quantity=1)
+       new_order_content.save()
+
        print('---------END----------')
 
 
