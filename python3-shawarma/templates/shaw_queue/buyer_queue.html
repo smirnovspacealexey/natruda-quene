@@ -5,6 +5,15 @@
 <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/buyer_queue_handlers.js' %}"></script>
 <script type="text/javascript">
+    {% if reload %}
+        function reloadPage() {
+            location.reload()
+        }
+        let reload = {{ reload }}
+        reload = reload * 60000
+        setTimeout(reloadPage, reload);
+    {% endif %}
+
     {% if is_voicing %}
         var is_voicing_page = true;
     {% else %}
