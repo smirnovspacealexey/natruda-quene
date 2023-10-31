@@ -1002,8 +1002,8 @@ def new_menu(request):
                                         'item': size_option,
                                         'id': unidecode(
                                             macro_product.title + "_" + content_option.title + "_" + size_option.title),
-                                        'product_variant': ProductVariant.objects.get(
-                                            macro_product_content=content_option, size_option=size_option),
+                                        # 'product_variant': ProductVariant.objects.get(
+                                        #     macro_product_content=content_option, size_option=size_option),
                                         'product_options': [{'item': product_option} for product_option in
                                                             ProductOption.objects.filter(
                                                                 product_variants__macro_product_content=content_option,
