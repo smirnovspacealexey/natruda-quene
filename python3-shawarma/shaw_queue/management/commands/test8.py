@@ -25,9 +25,10 @@ class Command(BaseCommand):
                         ProductVariant.objects.get(macro_product_content=content_option, size_option=size_option)
                     except:
                         print(macro_product, content_option, size_option)
-                        print(traceback.format_exc())
-                        print()
-                        print( ProductVariant.objects.filter(macro_product_content=content_option, size_option=size_option))
+                        # print(traceback.format_exc())
+                        print(ProductVariant.objects.filter(macro_product_content=content_option, size_option=size_option))
+                        print('-\n')
+
 
 
 
