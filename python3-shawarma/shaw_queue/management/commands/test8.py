@@ -15,19 +15,19 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         print('--------START---------')
 
-        try:
-            macro_products = MacroProduct.objects.all().order_by('title')
 
-            for macro_product in macro_products:
-                for content_option in MacroProductContent.objects.filter(macro_product=macro_product).distinct():
-                    for size_option in SizeOption.objects.filter(productvariant__macro_product_content=content_option).distinct():
-                        try:
-                            ProductVariant.objects.get(macro_product_content=content_option, size_option=size_option)
-                        except:
-                            print(macro_product, content_option, size_option)
-                            print(traceback.format_exc())
-                            print()
-                            print(ProductVariant.objects.filter(macro_product_content=content_option, size_option=size_option))
+        macro_products = MacroProduct.objects.all().order_by('title')
+
+        for macro_product in macro_products:
+            for content_option in MacroProductContent.objects.filter(macro_product=macro_product).distinct():
+                for size_option in SizeOption.objects.filter(productvariant__macro_product_content=content_option).distinct():
+                    try:
+                        ProductVariant.objects.get(macro_product_content=content_option, size_option=size_option)
+                    except:
+                        print(macro_product, content_option, size_option)
+                        print(traceback.format_exc())
+                        print()
+                        print( ProductVariant.objects.filter(macro_product_content=content_option, size_option=size_option))
 
 
 
