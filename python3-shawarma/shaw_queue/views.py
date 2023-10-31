@@ -981,43 +981,43 @@ def new_menu(request):
     if result['success']:
         # try:
         macro_products = MacroProduct.objects.all().order_by('title')
-        context = {
-            'user': request.user,
-            'available_cookers': Staff.objects.filter(available=True, staff_category__title__iexact='Cook',
-                                                      service_point=result['service_point']),
-            'staff_category': StaffCategory.objects.get(staff__user=request.user),
-            'macro_products':
-                [
-                    {
-                        'item': macro_product,
-                        'id': unidecode(macro_product.title),
-                        'content_options': [
-                            {
-                                'item': content_option,
-                                'id': unidecode(macro_product.title + "_" + content_option.title),
-                                'display_title': content_option.menu_title if content_option.menu_title
-                                else content_option.title,
-                                'size_options': [
-                                    {
-                                        'item': size_option,
-                                        'id': unidecode(
-                                            macro_product.title + "_" + content_option.title + "_" + size_option.title),
-                                        # 'product_variant': ProductVariant.objects.get(
-                                        #     macro_product_content=content_option, size_option=size_option),
-                                        'product_options': [{'item': product_option} for product_option in
-                                                            ProductOption.objects.filter(
-                                                                product_variants__macro_product_content=content_option,
-                                                                product_variants__size_option=size_option)],
-                                    } for size_option in
-                                    SizeOption.objects.filter(
-                                        productvariant__macro_product_content=content_option).distinct()]
-                            }
-                            for content_option in
-                            MacroProductContent.objects.filter(macro_product=macro_product).distinct()],
-                    }
-                    for macro_product in macro_products
-                ]
-        }
+        # context = {
+        #     'user': request.user,
+        #     'available_cookers': Staff.objects.filter(available=True, staff_category__title__iexact='Cook',
+        #                                               service_point=result['service_point']),
+        #     'staff_category': StaffCategory.objects.get(staff__user=request.user),
+        #     'macro_products':
+        #         [
+        #             {
+        #                 'item': macro_product,
+        #                 'id': unidecode(macro_product.title),
+        #                 'content_options': [
+        #                     {
+        #                         'item': content_option,
+        #                         'id': unidecode(macro_product.title + "_" + content_option.title),
+        #                         'display_title': content_option.menu_title if content_option.menu_title
+        #                         else content_option.title,
+        #                         'size_options': [
+        #                             {
+        #                                 'item': size_option,
+        #                                 'id': unidecode(
+        #                                     macro_product.title + "_" + content_option.title + "_" + size_option.title),
+        #                                 'product_variant': ProductVariant.objects.get(
+        #                                     macro_product_content=content_option, size_option=size_option),
+        #                                 'product_options': [{'item': product_option} for product_option in
+        #                                                     ProductOption.objects.filter(
+        #                                                         product_variants__macro_product_content=content_option,
+        #                                                         product_variants__size_option=size_option)],
+        #                             } for size_option in
+        #                             SizeOption.objects.filter(
+        #                                 productvariant__macro_product_content=content_option).distinct()]
+        #                     }
+        #                     for content_option in
+        #                     MacroProductContent.objects.filter(macro_product=macro_product).distinct()],
+        #             }
+        #             for macro_product in macro_products
+        #         ]
+        # }
 
         context = {
             'user': request.user,
@@ -2421,6 +2421,7 @@ def c_i_a(request):
     return queue_processor(request)
 
 
+# @login_required()
 def shashlychnik_interface(request):
     def new_processor_with_queue(request):
         user = request.user
@@ -2505,7 +2506,7 @@ def shashlychnik_interface(request):
 
     return unmanaged_queue(request)
 
-
+@login_required()
 def burgerman_interface(request):
     def new_processor_with_queue(request):
         device_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
@@ -2602,6 +2603,7 @@ def burgerman_interface(request):
     return unmanaged_queue(request)
 
 
+@login_required()
 def barista_interface(request):
     def new_processor_with_queue(request):
         device_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
