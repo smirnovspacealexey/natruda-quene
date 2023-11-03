@@ -59,12 +59,38 @@ class ProductVariantInline(admin.TabularInline):
     readonly_fields = ('title',)
 
 
+class SizeOptionInline(admin.TabularInline):
+    model = SizeOption
+    extra = 0
+
+    # fieldsets = (
+    #     (None, {
+    #         # 'fields': ('menu_item', 'note', 'quantity', 'info'),
+    #         'fields': ('title', ),
+    #     }),
+    # )
+    readonly_fields = ('title',)
+
+
+class ProductOptionInline(admin.TabularInline):
+    model = ProductOption
+    extra = 0
+
+    # fieldsets = (
+    #     (None, {
+    #         # 'fields': ('menu_item', 'note', 'quantity', 'info'),
+    #         'fields': ('title', ),
+    #     }),
+    # )
+    readonly_fields = ('title',)
+
+
 @admin.register(Menu)
 class MenuAdmin(admin.ModelAdmin):
     list_display = ['title', 'customer_title', 'note', 'price', 'guid_1c', 'category', 'can_be_prepared_by', 'get_cooking_time', 'QR_required']
     search_fields = ['title', 'guid_1c', 'can_be_prepared_by__title', 'category__title']
     list_editable = ('customer_title', 'category', 'QR_required', 'can_be_prepared_by')
-    inlines = [ProductVariantInline, ]
+    inlines = [ProductVariantInline, ProductOptionInline]
 
     Menu.get_cooking_time.short_description = 'время готовки'
 
@@ -190,7 +216,7 @@ class ProductVariantAdmin(admin.ModelAdmin):
     list_display = ['pk', 'title', 'customer_title', 'menu_item', 'size_option', 'macro_product_content']
     list_editable = ('title', 'customer_title', 'size_option', )
     search_fields = ['title', 'customer_title', ]
-
+    inlines = [SizeOptionInline]
 
 
 @admin.register(MenuCategory)
