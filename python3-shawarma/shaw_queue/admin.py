@@ -164,7 +164,7 @@ admin.site.register(Delivery)
 admin.site.register(ServiceAreaPolygon)
 admin.site.register(ServiceAreaPolyCoord)
 admin.site.register(MacroProduct)
-admin.site.register(ProductVariant)
+# admin.site.register(ProductVariant)
 admin.site.register(SizeOption)
 admin.site.register(ContentOption)
 admin.site.register(Server1C)
@@ -184,6 +184,11 @@ class MenuInline(admin.TabularInline):
     # )
     readonly_fields = ('title',)
 
+
+@admin.register(ProductVariant)
+class ProductVariantAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'title', 'customer_title', 'menu_item', 'size_option', 'macro_product_content']
+    list_editable = ('title', 'customer_title', 'size_option', )
 
 
 @admin.register(MenuCategory)
