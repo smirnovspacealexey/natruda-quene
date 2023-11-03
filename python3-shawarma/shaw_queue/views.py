@@ -1060,7 +1060,7 @@ def new_menu(request):
                             aux_str += error_item.title + '\n'
                         data = {
                             'success': False,
-                            'message': 'По запросу {} {} найдено более одного товара: {}'.format(content_option,
+                            'message': 'По запросу {} {} найдено более одного варианта: {}'.format(content_option,
                                                                                                  size_option, aux_str)
                         }
                         client.captureException()

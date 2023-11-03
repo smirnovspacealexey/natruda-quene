@@ -189,6 +189,8 @@ class MenuInline(admin.TabularInline):
 class ProductVariantAdmin(admin.ModelAdmin):
     list_display = ['pk', 'title', 'customer_title', 'menu_item', 'size_option', 'macro_product_content']
     list_editable = ('title', 'customer_title', 'size_option', )
+    search_fields = ['title', 'menu_item', 'macro_product_content']
+
 
 
 @admin.register(MenuCategory)
