@@ -46,11 +46,25 @@ testdelivery.short_description = 'сделать тестовый заказ'
 
 
 # Register your models here.
+class ProductVariantInline(admin.TabularInline):
+    model = ProductVariant
+    extra = 0
+
+    # fieldsets = (
+    #     (None, {
+    #         # 'fields': ('menu_item', 'note', 'quantity', 'info'),
+    #         'fields': ('title', ),
+    #     }),
+    # )
+    readonly_fields = ('title',)
+
+
 @admin.register(Menu)
 class MenuAdmin(admin.ModelAdmin):
     list_display = ['title', 'customer_title', 'note', 'price', 'guid_1c', 'category', 'can_be_prepared_by', 'get_cooking_time', 'QR_required']
     search_fields = ['title', 'guid_1c', 'can_be_prepared_by__title', 'category__title']
     list_editable = ('customer_title', 'category', 'QR_required', 'can_be_prepared_by')
+    inlines = [ProductVariantInline, ]
 
     Menu.get_cooking_time.short_description = 'время готовки'
 
@@ -169,6 +183,7 @@ class MenuInline(admin.TabularInline):
     #     }),
     # )
     readonly_fields = ('title',)
+
 
 
 @admin.register(MenuCategory)
