@@ -18,12 +18,12 @@
                 {% if item.item.menu_item.icon %}
                     <img src="{{ item.item.menu_item.icon.url }}" alt="{{ item.item.menu_item.icon.url }}"/>
                 {% else %}
-                    <span>{% if item.item.menu_title != '' %}{{ item.item.menu_title }}{% else %}{{ item.item.title }}{% endif %}</span>
+                    <span>{% if item.item.menu_title %}{{ item.item.menu_title }}{% else %}{{ item.item.title }}{% endif %}</span>
                 {% endif %} </div>
         {% else %}
             <a class="pad-menu__button"
                href="#{{ item.id|slugify }}"{% comment %}onclick="GoToSubmenu('{{ item.id|slugify }}')"{% endcomment %}>
-                <span>{% if item.item.menu_title != '' %}{{ item.item.menu_title }}{% else %}{{ item.item.title }}{% endif %}</span></a>
+                <span>{% if item.item.menu_title %}{{ item.item.menu_title }}{% else %}{{ item.item.title }}{% endif %}</span></a>
         {% endif %}
         {% comment %}{% endif %}{% endcomment %}
     {% endfor %}
