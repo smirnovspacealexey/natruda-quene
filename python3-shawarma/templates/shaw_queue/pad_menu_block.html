@@ -1,7 +1,7 @@
 <div class="pad-menu__block" id="{{ current|slugify }}">
     {% if current != "top" %}
-        <div style="margin: 10px"><span>http://shawarma.natruda{{ obj.item.get_admin_url }}<br><br></span><br><br></div>
-        <br><br>
+        <div style="margin: 10px"><span>http://shawarma.natruda{{ obj.item.get_admin_url }}</span></div>
+
         <a class="pad-menu__button"
            href="#{{ top|slugify }}" {% comment %}onclick="GoToSubmenu('{{ top|slugify }}')"{% endcomment %}
            onclick="ClearToppings()">Наверх</a>

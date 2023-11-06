@@ -145,7 +145,7 @@
                     {% for content_option in macro_product.content_options %}
                         {% include "shaw_queue/pad_menu_block.html" with collection=content_option.size_options top="top" previous=macro_product.id current=content_option.id obj=content_option %}
                         {% for size_option in content_option.size_options %}
-                            {% include "shaw_queue/pad_menu_block.html" with collection=size_option.product_options top="top" previous=content_option.id current=size_option.id product_variant=size_option.product_variant obj=product_variant %}
+                            {% include "shaw_queue/pad_menu_block.html" with collection=size_option.product_options top="top" previous=content_option.id current=size_option.id product_variant=size_option.product_variant obj=size_option %}
                         {% endfor %}
                     {% endfor %}
                 {% endfor %}
