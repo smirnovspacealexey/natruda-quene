@@ -18,12 +18,12 @@
                 {% if item.item.menu_item.icon %}
                     <img src="{{ item.item.menu_item.icon.url }}" alt="{{ item.item.menu_item.icon.url }}"/>
                 {% else %}
-                    <span>{{ item.item.title }}</span>
+                    <span>{{ item.item.customer_title }}</span>
                 {% endif %} </div>
         {% else %}
             <a class="pad-menu__button"
                href="#{{ item.id|slugify }}"{% comment %}onclick="GoToSubmenu('{{ item.id|slugify }}')"{% endcomment %}>
-                <span>{{ item.item.title }}</span></a>
+                <span>{{ item.item.customer_title }}</span></a>
         {% endif %}
         {% comment %}{% endif %}{% endcomment %}
     {% endfor %}
