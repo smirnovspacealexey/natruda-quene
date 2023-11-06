@@ -18,6 +18,7 @@ logger_debug = logging.getLogger('debug_logger')  # del me
 # Create your models here.
 class MenuCategory(models.Model):
     title = models.CharField(max_length=20)
+    menu_title = models.CharField(max_length=200, default="", verbose_name="Название для меню")
     customer_title = models.CharField(max_length=200, default="", verbose_name="Название для покупателя")
     eng_title = models.CharField(max_length=20)
     weight = models.IntegerField(verbose_name="Weight", default=0)
@@ -133,6 +134,7 @@ class Staff(models.Model):
 
 class Menu(models.Model):
     title = models.CharField(max_length=200)
+    menu_title = models.CharField(max_length=200, default="", verbose_name="Название для меню")
     customer_title = models.CharField(max_length=200, default="", verbose_name="Название для покупателя")
     note = models.CharField(max_length=500, null=False)
     price = models.FloatField(default=0, validators=[MinValueValidator(0, "Price can't be negative!")])
@@ -234,6 +236,7 @@ class MacroProductContent(models.Model):
 
 class ProductVariant(models.Model):
     title = models.CharField(max_length=200)
+    menu_title = models.CharField(max_length=200, default="", verbose_name="Название для меню")
     customer_title = models.CharField(max_length=200, default="", verbose_name="Название для покупателя")
     menu_item = models.ForeignKey(Menu, on_delete=models.CASCADE, verbose_name="Товар из меню 1С")
     size_option = models.ForeignKey(SizeOption, on_delete=models.CASCADE, verbose_name="Вариант размера")
@@ -255,6 +258,7 @@ class ProductVariant(models.Model):
 
 class ProductOption(models.Model):
     title = models.CharField(max_length=200)
+    menu_title = models.CharField(max_length=200, default="", verbose_name="Название для меню")
     customer_title = models.CharField(max_length=200, default="", verbose_name="Название для покупателя")
     menu_item = models.ForeignKey(Menu, on_delete=models.CASCADE, verbose_name="Товар из меню 1С")
     product_variants = models.ManyToManyField(ProductVariant, verbose_name="Вариант товара")
