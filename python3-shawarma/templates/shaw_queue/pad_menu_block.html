@@ -34,7 +34,7 @@
         </div>
     {% endif %}
 
-    {% if current != "top"  %}
-        <a href="{{ obj.get_admin_url }}" target="_blank">admin</a>
-    {% endif %}
 </div>
+{% if current != "top"  %}
+    <a href="{{ obj.item.get_admin_url }}" target="_blank">admin</a>
+{% endif %}
