@@ -1,5 +1,6 @@
 <div class="pad-menu__block" id="{{ current|slugify }}">
     {% if current != "top" %}
+        <div><span>{{ obj.item.get_admin_url }}<br></span></div>
         <a class="pad-menu__button"
            href="#{{ top|slugify }}" {% comment %}onclick="GoToSubmenu('{{ top|slugify }}')"{% endcomment %}
            onclick="ClearToppings()">Наверх</a>
@@ -33,9 +34,5 @@
             <span>+</span>
         </div>
     {% endif %}
-
-{% if current != "top"  %}
-    <a href="{{ obj.item.get_admin_url }}" target="_blank">admin</a>
-{% endif %}
 
 </div>
