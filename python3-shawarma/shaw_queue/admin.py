@@ -19,23 +19,23 @@ def testdelivery(modeladmin, request, queryset):
     from apps.delivery.models import YandexSettings
     yandex_settings = YandexSettings.current()
     destination = {
-                    "fullname": "Челябинск, Университетская Набережная 63",
-                    "building": "63",
-                    "building_name": "",
-                    "city": "Челябинск",
-                    "comment": "ТЕСТОВЫЙ ЗАКАЗ НЕ ВЫПОЛНЯТЬ. ТЕСТИРУЕМ АПИ",
-                    "country": "Россия",
-                    "description": "Челябинск, Россия",
-                    "door_code": "",
-                    "door_code_extra": "",
-                    "doorbell_name": "",
-                    "porch": "1",
-                    "sflat": "1",
-                    "sfloor": "1",
+        "fullname": "Челябинск, Университетская Набережная 63",
+        "building": "63",
+        "building_name": "",
+        "city": "Челябинск",
+        "comment": "ТЕСТОВЫЙ ЗАКАЗ НЕ ВЫПОЛНЯТЬ. ТЕСТИРУЕМ АПИ",
+        "country": "Россия",
+        "description": "Челябинск, Россия",
+        "door_code": "",
+        "door_code_extra": "",
+        "doorbell_name": "",
+        "porch": "1",
+        "sflat": "1",
+        "sfloor": "1",
 
-                    "email": '',
-                    "name": 'Alex',
-                    "phone": yandex_settings.test_phone,
+        "email": '',
+        "name": 'Alex',
+        "phone": yandex_settings.test_phone,
 
     }
     order_content = OrderContent.objects.last()
@@ -59,17 +59,23 @@ class ProductVariantInline(admin.TabularInline):
     readonly_fields = ('title',)
 
 
-class SizeOptionInline(admin.TabularInline):
-    model = SizeOption
+class ProductVariantInline(admin.TabularInline):
+    model = ProductVariant
     extra = 0
 
     # fieldsets = (
     #     (None, {
-    #         # 'fields': ('menu_item', 'note', 'quantity', 'info'),
-    #         'fields': ('title', ),
+    #         'fields': ('title', 'customer_title'),
     #     }),
     # )
-    readonly_fields = ('title',)
+    # add_fieldsets = (
+    #     (
+    #         None,
+    #         {"url": ("get_admin_url",), },
+    #     ),
+    # )
+    readonly_fields = ('menu_item', 'size_option', 'macro_product_content',)
+    show_change_link = True
 
 
 class ProductOptionInline(admin.TabularInline):
@@ -191,7 +197,7 @@ admin.site.register(ServiceAreaPolygon)
 admin.site.register(ServiceAreaPolyCoord)
 admin.site.register(MacroProduct)
 # admin.site.register(ProductVariant)
-admin.site.register(SizeOption)
+# admin.site.register(SizeOption)
 admin.site.register(ContentOption)
 admin.site.register(Server1C)
 admin.site.register(CookingTimerOrderContent)
@@ -209,6 +215,14 @@ class MenuInline(admin.TabularInline):
     #     }),
     # )
     readonly_fields = ('title',)
+
+
+@admin.register(SizeOption)
+class SizeOptionAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'title', 'customer_title', ]
+    list_editable = ('title', 'customer_title',)
+    search_fields = ['title', 'customer_title', ]
+    inlines = [ProductVariantInline]
 
 
 @admin.register(ProductVariant)
