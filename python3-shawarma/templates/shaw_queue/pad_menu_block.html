@@ -1,6 +1,8 @@
+{% if current != "top" %}
+    <div><span>http://shawarma.natruda{{ obj.item.get_admin_url }}<br></span></div>
+{% endif %}
 <div class="pad-menu__block" id="{{ current|slugify }}">
     {% if current != "top" %}
-        <div><span>{{ obj.item.get_admin_url }}<br></span></div>
         <a class="pad-menu__button"
            href="#{{ top|slugify }}" {% comment %}onclick="GoToSubmenu('{{ top|slugify }}')"{% endcomment %}
            onclick="ClearToppings()">Наверх</a>
