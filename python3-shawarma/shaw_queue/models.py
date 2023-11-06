@@ -178,6 +178,7 @@ class Menu(models.Model):
 
 class MacroProduct(models.Model):
     title = models.CharField(max_length=200)
+    menu_title = models.CharField(max_length=200, default="", verbose_name="Название для меню")
     customer_title = models.CharField(max_length=200, default="", verbose_name="Название для покупателя")
     icon = models.ImageField(upload_to="img/icons", blank=True, null=True, verbose_name="Иконка")
 
