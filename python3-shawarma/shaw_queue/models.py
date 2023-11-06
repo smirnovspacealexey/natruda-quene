@@ -191,6 +191,7 @@ class MacroProduct(models.Model):
 
 class SizeOption(models.Model):
     title = models.CharField(max_length=200)
+    menu_title = models.CharField(max_length=200, default="", verbose_name="Название для меню")
     customer_title = models.CharField(max_length=200, default="", verbose_name="Название для покупателя")
 
     def get_admin_url(self):
@@ -203,6 +204,7 @@ class SizeOption(models.Model):
 
 class ContentOption(models.Model):
     title = models.CharField(max_length=200)
+    menu_title = models.CharField(max_length=200, default="", verbose_name="Название для меню")
     customer_title = models.CharField(max_length=200, default="", verbose_name="Название для покупателя")
 
     def get_admin_url(self):
