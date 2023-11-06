@@ -1,6 +1,6 @@
 <div class="pad-menu__block" id="{{ current|slugify }}">
     {% if current != "top" %}
-        <div style="margin: 10px"><span>http://shawarma.natruda{{ obj.item.get_admin_url }}</span></div>
+        <div style="margin: 10px; overflow-x: scroll; overflow-y: hidden; white-space: nowrap;"><span>http://shawarma.natruda{{ obj.item.get_admin_url }}</span></div>
 
         <a class="pad-menu__button"
            href="#{{ top|slugify }}" {% comment %}onclick="GoToSubmenu('{{ top|slugify }}')"{% endcomment %}
