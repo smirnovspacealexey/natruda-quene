@@ -33,4 +33,8 @@
             <span>+</span>
         </div>
     {% endif %}
+
+    {% if current != "top"  %}
+        <a href="{{ obj.get_admin_url }}" target="_blank">admin</a>
+    {% endif %}
 </div>
