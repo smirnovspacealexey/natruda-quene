@@ -6582,12 +6582,12 @@ def send_order_to_1c(order, is_return, paid=None):
         # result = requests.post('http://' + SERVER_1C_IP + ':' + SERVER_1C_PORT + ORDER_URL,
         #                        auth=(SERVER_1C_USER.encode('utf8'), SERVER_1C_PASS),
         #                        json=order_dict)
-        # Log.add_new(f"{'http://' + order.servery.service_point.server_1c.ip_address + ':' + order.servery.service_point.server_1c.port + ORDER_URL}\n\n{SERVER_1C_USER.encode('utf8')}\n\n{SERVER_1C_PASS}\n\n{str(order_dict)}", '1C')
+        Log.add_new(f"ТУДА\n{'http://' + order.servery.service_point.server_1c.ip_address + ':' + order.servery.service_point.server_1c.port + ORDER_URL}\n\n{SERVER_1C_USER.encode('utf8')}\n\n{SERVER_1C_PASS}\n\n{str(order_dict)}", '1C')
         result = requests.post(
             'http://' + order.servery.service_point.server_1c.ip_address + ':' + order.servery.service_point.server_1c.port + ORDER_URL,
             auth=(SERVER_1C_USER.encode('utf8'), SERVER_1C_PASS),
             json=order_dict)
-        # Log.add_new(f'{result.status_code} {result.text} {result.json()}', '1C')
+        Log.add_new(f'ОБРАТНО\n{result.status_code} {result.text} {result.json()}', '1C')
 
         print(result)
     except ConnectionError:
