@@ -4204,6 +4204,8 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
     file = open('log/cook_choose.log', 'a')
     logger_debug = logging.getLogger('debug_logger')  # del me
     logger_debug.info(f'-----\n{content}\n\n{servery}\n\n{service_point}\n\n')  # del me
+    Log.add_new(f'Формируется заказ\nservice_point: {service_point}; order_id: {order_id}\n{content}\n{cook_choose}', '1C')
+
     try:
         try:
             order_last_daily_number = Order.objects.filter(open_time__contains=timezone.now().date(),
@@ -6596,8 +6598,11 @@ def send_order_to_1c(order, is_return, paid=None):
             'message': 'Возникла проблема соединения с 1C при отправке информации о заказе! Заказ удалён! Вы можете повторить попытку!'
         }
         client.captureException()
+        Log.add_new(f'Возникла проблема соединения с 1C при отправке информации о заказе! Заказ удалён!', '1C')
         return data
     except:
+        Log.add_new(
+            f'Возникло необработанное исключение при отправке информации о заказе в 1C! Заказ удалён!', '1C')
         data = {
             'success': False,
             'message': 'Возникло необработанное исключение при отправке информации о заказе в 1C! Заказ удалён! Вы можете повторить попытку!'
