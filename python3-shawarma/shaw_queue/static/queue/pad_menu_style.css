@@ -86,7 +86,7 @@
 .sidemenu {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    height: 708px;
+    height: 1000px;
     margin: 10px;
 }
 
@@ -97,7 +97,7 @@
     position: relative;
     /*margin: 2rem 0;*/
     width: 100%;
-    /*max-height: 1000px;*/
+    max-height: 1000px;
     overflow-y: auto;
 }
 
