@@ -978,6 +978,7 @@ def new_menu(request):
         client.captureException()
         return JsonResponse(data)
     result = define_service_point(device_ip)
+
     if result['success']:
         # try:
         macro_products = MacroProduct.objects.filter(hide=False).order_by('ordering')
@@ -1026,6 +1027,9 @@ def new_menu(request):
             'staff_category': StaffCategory.objects.get(staff__user=request.user),
             'macro_products': []
         }
+
+        left_side =True
+
         for macro_product in macro_products:
             content_options = []
             for content_option in MacroProductContent.objects.filter(macro_product=macro_product).distinct():
@@ -1045,8 +1049,8 @@ def new_menu(request):
                             'item': size_option,
                             'id': unidecode(
                                 macro_product.title + "_" + content_option.title + "_" + size_option.title),
-                            'product_variant': ProductVariant.objects.get(
-                                macro_product_content=content_option, size_option=size_option),
+                            'product_variant': ProductVariant.objects.filter(
+                                macro_product_content=content_option, size_option=size_option).first(),   # было .get
                             'product_options': [{'item': product_option} for product_option in
                                                 ProductOption.objects.filter(
                                                     product_variants__macro_product_content=content_option,
@@ -1071,11 +1075,13 @@ def new_menu(request):
                 content_options.append(content_option_item)
 
             macro_product_item = {
+                'left_side': left_side,
                 'item': macro_product,
                 'id': unidecode(macro_product.title),
                 'content_options': content_options
             }
             context['macro_products'].append(macro_product_item)
+            left_side = not left_side
 
         # except:
         #     data = {
@@ -7013,7 +7019,6 @@ def order_1c_payment(request):
         return HttpResponse()
     except:
         return JsonResponse({'status': 'false', 'message': str(traceback.format_exc())}, status=500)
-
 
 
 def define_service_point(ip: str) -> dict:
