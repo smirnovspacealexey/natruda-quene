@@ -10,8 +10,8 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 200%;
-    height: 200%;
+    width: 100%;
+    height: 100%;
     overflow-x: hidden;
     overflow-y: hidden;
 }
@@ -117,7 +117,7 @@
     border: solid 1px #D8D8D8;
     background: white;
     min-height: 50px;
-    max-height: 250px;
+    max-height: 150px;
     max-width: 330px;
     overflow: hidden;
 }
