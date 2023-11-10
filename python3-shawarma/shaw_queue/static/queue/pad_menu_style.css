@@ -43,7 +43,7 @@
     box-shadow: 0px 0px 4px 0px rgba(50, 50, 50, 0.94);
     border: solid 1px #D8D8D8;
     background-color: white;
-    padding: 1rem;
+    padding: 0.7rem;
     margin: 0.1rem;
     display: flex;
     justify-content: center;
@@ -51,6 +51,7 @@
     flex-direction: column;
     cursor: pointer;
     border-radius: 0.5rem;
+    word-wrap: break-word;
 }
 
 .pad-menu__button_enabled {

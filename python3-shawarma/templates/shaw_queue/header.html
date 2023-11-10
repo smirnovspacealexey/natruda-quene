@@ -11,6 +11,12 @@
                     Меню
                 </div>
             </a>
+            <a href="{% url 'new_menu' %}">
+                <div class="header-buttons" id="new_menu">
+                    Новое меню ✨
+                </div>
+            </a>
+
         {% endif %}
         {% if staff_category.title == 'Cashier' or staff_category.title == 'Operator' or staff_category.title == 'DeliveryOperator' or staff_category.title == 'DeliveryAdmin' %}
             <a href="{% url 'current_queue' %}">
