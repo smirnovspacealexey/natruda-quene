@@ -118,7 +118,7 @@
     display: flex;
     border: solid 1px #D8D8D8;
     background: white;
-    min-height: 100px;
+    min-height: 90px;
     /*max-height: 150px;*/
     max-width: 150px;
     overflow: hidden;
