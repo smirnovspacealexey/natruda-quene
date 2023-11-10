@@ -85,7 +85,7 @@
 
 .sidemenu {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     height: 708px;
     margin: 10px;
 }
@@ -118,10 +118,11 @@
     display: flex;
     border: solid 1px #D8D8D8;
     background: white;
-    min-height: 50px;
-    max-height: 150px;
-    max-width: 380px;
+    min-height: 100px;
+    /*max-height: 150px;*/
+    max-width: 150px;
     overflow: hidden;
+    border-radius: 15px;
 }
 
 .sidemenu__icon {
@@ -134,7 +135,8 @@
 }
 
 .sidemenu__title {
-    padding: 0 0.5rem;
+    margin-left: -50px;
+    padding: 0 1rem 0 1rem;
     display: flex;
     flex-direction: column;
     justify-content: space-around;

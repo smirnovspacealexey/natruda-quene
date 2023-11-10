@@ -1028,7 +1028,7 @@ def new_menu(request):
             'macro_products': []
         }
 
-        left_side =True
+        side_number = 1
 
         for macro_product in macro_products:
             content_options = []
@@ -1075,13 +1075,14 @@ def new_menu(request):
                 content_options.append(content_option_item)
 
             macro_product_item = {
-                'left_side': left_side,
+                'sideNumber': side_number,
                 'item': macro_product,
                 'id': unidecode(macro_product.title),
                 'content_options': content_options
             }
             context['macro_products'].append(macro_product_item)
-            left_side = not left_side
+            side_number = side_number + 1 if side_number < 3 else 1
+
 
         # except:
         #     data = {

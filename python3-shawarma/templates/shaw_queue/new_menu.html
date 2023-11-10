@@ -32,19 +32,26 @@
             </p>
         </div>
     </div>
-    <div class="container">
+    <div class="container" style="overflow:auto; overflow-y: scroll;">
         <div class="new-menu__container">
             <div class="sidemenu">
                 <div class="sidemenu__container">
                     {% for macro_product in macro_products %}
-                        {% if macro_product.left_side %}
+                        {% if macro_product.sideNumber == 1 %}
                             {% include "shaw_queue/sidemenu_button.html" %}
                         {% endif %}
                     {% endfor %}
                 </div>
                 <div class="sidemenu__container">
                     {% for macro_product in macro_products %}
-                        {% if not macro_product.left_side %}
+                        {% if macro_product.sideNumber == 2 %}
+                            {% include "shaw_queue/sidemenu_button.html" %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="sidemenu__container">
+                    {% for macro_product in macro_products %}
+                        {% if macro_product.sideNumber == 3 %}
                             {% include "shaw_queue/sidemenu_button.html" %}
                         {% endif %}
                     {% endfor %}
