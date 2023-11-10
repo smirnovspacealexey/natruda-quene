@@ -980,7 +980,7 @@ def new_menu(request):
     result = define_service_point(device_ip)
     if result['success']:
         # try:
-        macro_products = MacroProduct.objects.all().order_by('title')
+        macro_products = MacroProduct.objects.filter(hide=False).order_by('ordering')
         # context = {
         #     'user': request.user,
         #     'available_cookers': Staff.objects.filter(available=True, staff_category__title__iexact='Cook',

@@ -180,6 +180,8 @@ class MacroProduct(models.Model):
     menu_title = models.CharField(max_length=200, default="", verbose_name="Название для меню")
     customer_title = models.CharField(max_length=200, default="", verbose_name="Название для покупателя")
     icon = models.ImageField(upload_to="img/icons", blank=True, null=True, verbose_name="Иконка")
+    hide = models.BooleanField(verbose_name="скрыть", default=False)
+    ordering = models.IntegerField(verbose_name="ordering", default=0)
 
     def get_admin_url(self):
         content_type = ContentType.objects.get_for_model(self.__class__)
@@ -187,6 +189,20 @@ class MacroProduct(models.Model):
 
     def __str__(self):
         return u"{}".format(self.title)
+
+    class Meta:
+        ordering = ('ordering',)
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        same_ordering_macros = MacroProduct.objects.all().exclude(pk=self.pk).filter(ordering=self.ordering)
+        if len(same_ordering_macros) > 0:
+            ordering = self.ordering
+            for same_ordering_macro in same_ordering_macros:
+                ordering += 1
+                same_ordering_macro.ordering = ordering
+                same_ordering_macro.save()
+
+        super().save()
 
 
 class SizeOption(models.Model):

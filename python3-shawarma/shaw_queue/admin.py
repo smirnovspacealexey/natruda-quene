@@ -172,6 +172,21 @@ class MacroProductContentAdmin(admin.ModelAdmin):
     search_fields = ['title', 'menu_title', 'customer_title']
 
 
+class MacroProductContentInline(admin.TabularInline):
+    model = MacroProductContent
+    extra = 0
+
+    readonly_fields = ('content_option',)
+
+
+@admin.register(MacroProduct)
+class MacroProductAdmin(admin.ModelAdmin):
+    list_display = ['__str__', 'title', 'menu_title', 'customer_title', 'hide', 'icon', 'ordering']
+    list_editable = ('title', 'icon', 'hide', 'ordering')
+    search_fields = ['title', 'menu_title', 'customer_title']
+    inlines = [MacroProductContentInline]
+
+
 @admin.register(ServicePoint)
 class ServicePointAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'title', 'fullname', 'latitude', 'longitude', 'subnetwork']
@@ -195,7 +210,6 @@ admin.site.register(Customer)
 admin.site.register(Delivery)
 admin.site.register(ServiceAreaPolygon)
 admin.site.register(ServiceAreaPolyCoord)
-admin.site.register(MacroProduct)
 # admin.site.register(ProductVariant)
 # admin.site.register(SizeOption)
 admin.site.register(ContentOption)
