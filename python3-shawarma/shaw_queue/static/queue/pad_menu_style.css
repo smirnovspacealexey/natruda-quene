@@ -121,7 +121,7 @@
     min-height: 80px;
     /*max-height: 150px;*/
     max-width: 150px;
-    /*overflow: hidden;*/
+    overflow: hidden;
     border-radius: 15px;
 }
 
@@ -246,14 +246,14 @@
 }
 
 .new-menu__basket-title span, .new-menu__basket-topping span {
-    /*overflow: hidden;*/
+    overflow: hidden;
     text-overflow: ellipsis;
     flex: 0 1 100%;
     padding: 0 0.3rem;
 }
 
 .new-menu__basket-title span:not(:first-of-type), .new-menu__basket-topping span:not(:first-of-type) {
-    /*overflow: hidden;*/
+    overflow: hidden;
     text-overflow: ellipsis;
     flex: 0 0 auto;
 }
