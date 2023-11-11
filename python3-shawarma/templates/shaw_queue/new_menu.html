@@ -94,6 +94,17 @@
                             <input type="radio" id="paid_without_cash" value="paid_without_cash" name="payment_choose">
                             <label for="paid_without_cash">Безналичный</label>
                         </p>
+                        <p>
+                            <input type="radio" id="paid_with_sms" value="paid_with_sms" name="payment_choose" onchange="smsPay()">
+                            <label for="paid_with_sms">Оплата по СМС</label>
+                            <br>
+                        <div id="smsPay" hidden="hidden">
+                            <input type="tel" title="Телефон" placeholder="*Телефон" id="phone2">
+                            <button style="padding: 5px" class="form_button" onclick="SMS2()" title="отправить СМС">
+                                📩
+                            </button>
+                        </div>
+                        </p>
                     </div>
                     <div class="shadowed">
                         <p>
@@ -109,6 +120,10 @@
                         {% endfor %}
                     </div>
                     <div class="shadowed">
+                        <p>
+                            <input type="radio" id="discount_5" name="discount" value="5">
+                            <label for="discount_10">Скидка 5%</label>
+                        </p>
                         <p>
                             <input type="radio" id="discount_10" name="discount" value="10">
                             <label for="discount_10">Скидка 10%</label>
