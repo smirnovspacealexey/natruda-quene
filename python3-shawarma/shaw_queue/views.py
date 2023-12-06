@@ -773,6 +773,12 @@ def redirection(request):
         return HttpResponseRedirect('current_queue')
         # if staff_category.title == 'Administration':
         #     return HttpResponseRedirect('statistics')
+    if staff_category.title == 'Burgerman':
+        return HttpResponseRedirect('burgerman_interface')
+    if staff_category.title == 'Barista':
+        return HttpResponseRedirect('barista_interface')
+    if staff_category.title == 'Shashlychnik':
+        return HttpResponseRedirect('shashlychnik_interface')
 
 
 def cook_pause(request):
@@ -2525,11 +2531,18 @@ def burgerman_interface(request):
 
         user = request.user
         staff = Staff.objects.get(user=user)
+
+        if staff.staff_category.title == 'Cook' or staff.staff_category.title == 'Barista' or staff.staff_category.title == 'Shashlychnik':
+            return redirection(request)
+
+
+
         # if not staff.available:
         #     staff.available = True
         #     staff.save()
         context = None
         taken_order_content = None
+
         new_orders = Order.objects.filter(open_time__isnull=False,
                                           open_time__contains=timezone.now().date(), is_canceled=False,
                                           burger_completed=False, is_grilling_burger=False,
