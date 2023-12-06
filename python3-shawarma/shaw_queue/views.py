@@ -2532,7 +2532,7 @@ def burgerman_interface(request):
         user = request.user
         staff = Staff.objects.get(user=user)
 
-        if staff.staff_category.title == 'Cook' or staff.staff_category.title == 'Barista' or staff.staff_category.title == 'Shashlychnik':
+        if staff.staff_category.title != 'Administration' and staff.staff_category.title != 'Burgerman':
             return redirection(request)
 
 
@@ -2634,6 +2634,10 @@ def barista_interface(request):
 
         user = request.user
         staff = Staff.objects.get(user=user)
+
+        if staff.staff_category.title != 'Administration' and staff.staff_category.title != 'Barista':
+            return redirection(request)
+
         # if not staff.available:
         #     staff.available = True
         #     staff.save()
