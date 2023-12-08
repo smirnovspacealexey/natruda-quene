@@ -257,3 +257,4 @@ class MenuCategoryAdmin(admin.ModelAdmin):
 class OrderContentAdmin(admin.ModelAdmin):
     list_display = ['order', 'start_timestamp', 'grill_timestamp', 'finish_timestamp', 'canceled_by']
     list_editable = ('start_timestamp', 'grill_timestamp', 'finish_timestamp', 'canceled_by')
+    raw_id_fields = ['order', 'menu_item']
