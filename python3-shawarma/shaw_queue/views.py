@@ -1813,7 +1813,7 @@ def order_history(request):
     except:
         data = {
             'success': False,
-            'message': 'Что-то пошло не так при подготовке шаблона!'
+            'message': f'Что-то пошло не так при подготовке шаблона!\n {traceback.format_exc()}'
         }
         client.captureException()
         return JsonResponse(data)
