@@ -1769,8 +1769,8 @@ def order_history(request):
             open_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
                                                close_time__isnull=False,
                                                is_canceled=False, is_ready=True,
-                                               servery__service_point=ServicePoint.objects.filter(pk=2).first()).order_by('-open_time')
-                                               # servery__service_point=result['service_point']).order_by('-open_time')
+                                               # servery__service_point=ServicePoint.objects.filter(pk=2).first()).order_by('-open_time')  #  del me
+                                               servery__service_point=result['service_point']).order_by('-open_time')
         except:
             data = {
                 'success': False,
