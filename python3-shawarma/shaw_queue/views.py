@@ -4229,7 +4229,7 @@ def make_order_func(content, cook_choose, is_paid, order_id, paid_with_cash, ser
     file = open('log/cook_choose.log', 'a')
     logger_debug = logging.getLogger('debug_logger')  # del me
     logger_debug.info(f'-----\n{content}\n\n{servery}\n\n{service_point}\n\n')  # del me
-    Log.add_new(f'Формируется заказ\nservice_point: {service_point}; order_id: {order_id}\n{content}\n{cook_choose}', '1C')
+    Log.add_new(f'Формируется заказ\nservice_point: {service_point}; order_id: {order_id}\n{content}\n{cook_choose}', '1C', order_id, str(service_point))
 
     try:
         try:
@@ -6609,12 +6609,12 @@ def send_order_to_1c(order, is_return, paid=None):
         # result = requests.post('http://' + SERVER_1C_IP + ':' + SERVER_1C_PORT + ORDER_URL,
         #                        auth=(SERVER_1C_USER.encode('utf8'), SERVER_1C_PASS),
         #                        json=order_dict)
-        Log.add_new(f"ТУДА\n{'http://' + order.servery.service_point.server_1c.ip_address + ':' + order.servery.service_point.server_1c.port + ORDER_URL}\n\n{SERVER_1C_USER.encode('utf8')}\n\n{SERVER_1C_PASS}\n\n{str(order_dict)}", '1C')
+        Log.add_new(f"ТУДА\n{'http://' + order.servery.service_point.server_1c.ip_address + ':' + order.servery.service_point.server_1c.port + ORDER_URL}\n\n{SERVER_1C_USER.encode('utf8')}\n\n{SERVER_1C_PASS}\n\n{str(order_dict)}", '1C', order.id, str(order.servery.service_point))
         result = requests.post(
             'http://' + order.servery.service_point.server_1c.ip_address + ':' + order.servery.service_point.server_1c.port + ORDER_URL,
             auth=(SERVER_1C_USER.encode('utf8'), SERVER_1C_PASS),
             json=order_dict)
-        Log.add_new(f'ОБРАТНО\n{result.status_code} {result.text} {result.json()}', '1C')
+        Log.add_new(f'ОБРАТНО\n{result.status_code} {result.text} {result.json()}', '1C', result.json()['GUID'] if 'GUID' in result.json() else 'нет giud!', result.status_code)
 
         print(result)
     except ConnectionError:
@@ -6770,6 +6770,8 @@ def recive_1c_order_status(request):
     order_guid = result['GUID']
     status = result['Order_status']
     # print("{0} {1}".format(order_guid, status))
+
+    Log.add_new(f'recive_1c_order_status {result}', '1C', order_guid, status)
     if order_guid is not None and status is not None:
         try:
             order = Order.objects.get(guid_1c=order_guid)
