@@ -2714,7 +2714,7 @@ def barista_interface(request):
                 'open_length': len(open_orders)
             }
 
-            template = loader.get_template('shaw_queue/burgerman_queue.html')
+            template = loader.get_template('shaw_queue/barista_queue.html')
         else:
             return Http404("Неудалось определить точку обслуживания.")
 

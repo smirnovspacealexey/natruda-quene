@@ -58,6 +58,7 @@ function Refresher() {
             $('#selected-order-content').html(data['html']);
         },
         complete: function () {
+            console.log('refresh')
             setTimeout(Refresher, 30000);
         }
     }).fail(function (jQXHR, textStatus, errorThrown) {
