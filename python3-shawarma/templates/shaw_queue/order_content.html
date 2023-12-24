@@ -128,6 +128,8 @@
     {% empty %}
         Места выдачи внесены.
     {% endfor %}
+    <br>
+    <br>
     <button class="small-btn success" onclick="ReadyOrder({{ order_info.id }})" {% if not ready %}disabled{% endif %}>
         Заказ готов
     </button>
