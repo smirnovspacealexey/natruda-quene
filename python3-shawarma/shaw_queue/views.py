@@ -1830,7 +1830,8 @@ def order_history_new(request):
         device_ip = '127.0.0.1'
 
     result = define_service_point(device_ip)
-    if result['success']:
+    # if result['success']:
+    if True:
         try:
             open_orders = Order.objects.filter(
                                                # open_time__contains=timezone.now().date(),
