@@ -1830,17 +1830,17 @@ def order_history_new(request):
         device_ip = '127.0.0.1'
 
     result = define_service_point(device_ip)
-    # if result['success']:
-    if True:
+    if result['success']:
         try:
             open_orders = Order.objects.filter(
                                                # open_time__contains=timezone.now().date(),
                                                # close_time__isnull=False,
                                                is_canceled=False, is_ready=True,
-                                               servery__service_point=ServicePoint.objects.filter(pk=2).first()).order_by('-open_time')[:20]  #  del me
-                                               # servery__service_point=result['service_point']).order_by('-open_time')
+                                               # servery__service_point=ServicePoint.objects.filter(pk=2).first()).order_by('-open_time')[:20]  #  del me
+                                               servery__service_point=result['service_point']).order_by('-open_time')[:20]
 
-            open_orders = Order.objects.all()[:20]
+            # open_orders = Order.objects.all()
+            print(open_orders)
         except:
             data = {
                 'success': False,

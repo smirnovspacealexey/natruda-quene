@@ -86,7 +86,6 @@ urlpatterns = [
     url(r'^current_queue', views.current_queue, name="current_queue"),
     url(r'^production_queue', views.production_queue, name="production_queue"),
     url(r'^order_history', views.order_history, name="order_history"),
-    url(r'^order_history_new', views.order_history_new, name="order_history_new"),
     url(r'^cook_interface', views.cook_interface, name="cook_interface"),
     url(r'^c_i_a', views.c_i_a, name="cook_interface_ajax"),
     url(r'^shashlychnik_interface', views.shashlychnik_interface, name="shashlychnik_interface"),
@@ -98,6 +97,8 @@ urlpatterns = [
     url(r'^burger_i_ajax', views.burger_i_ajax, name="burgerman_interface_ajax"),
     url(r'^coffee_i_ajax', views.coffee_i_ajax, name="barista_interface_ajax"),
     url(r'^redirection', views.redirection, name="redirection"),
+
+    path('new_order_history/', views.order_history_new, name='order_history_new'),
 
     path('buyer_queue/black/vertical/', views.buyer_queue_black_vertical, name='buyer_queue_black_vertical'),
     path('buyer_queue/black/', views.buyer_queue_black, name='buyer_queue_black'),
