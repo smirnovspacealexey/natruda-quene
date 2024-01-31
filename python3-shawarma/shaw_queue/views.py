@@ -1834,7 +1834,7 @@ def order_history_new(request):
         try:
             open_orders = Order.objects.filter(
                                                # open_time__contains=timezone.now().date(),
-                                               close_time__isnull=False,
+                                               # close_time__isnull=False,
                                                is_canceled=False, is_ready=True,
                                                servery__service_point=ServicePoint.objects.filter(pk=2).first()).order_by('-open_time')  #  del me
                                                # servery__service_point=result['service_point']).order_by('-open_time')
