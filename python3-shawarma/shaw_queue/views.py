@@ -1839,6 +1839,8 @@ def order_history_new(request):
                                                is_canceled=False, is_ready=True,
                                                servery__service_point=ServicePoint.objects.filter(pk=2).first()).order_by('-open_time')[:20]  #  del me
                                                # servery__service_point=result['service_point']).order_by('-open_time')
+
+            open_orders = Order.objects.all()[:20]
         except:
             data = {
                 'success': False,
