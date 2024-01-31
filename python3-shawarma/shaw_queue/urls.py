@@ -86,6 +86,7 @@ urlpatterns = [
     url(r'^current_queue', views.current_queue, name="current_queue"),
     url(r'^production_queue', views.production_queue, name="production_queue"),
     url(r'^order_history', views.order_history, name="order_history"),
+    url(r'^order_history_new', views.order_history_new, name="order_history_new"),
     url(r'^cook_interface', views.cook_interface, name="cook_interface"),
     url(r'^c_i_a', views.c_i_a, name="cook_interface_ajax"),
     url(r'^shashlychnik_interface', views.shashlychnik_interface, name="shashlychnik_interface"),

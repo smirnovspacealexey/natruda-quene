@@ -1822,6 +1822,72 @@ def order_history(request):
     return HttpResponse(template.render(context, request))
 
 
+
+@login_required()
+def order_history_new(request):
+    device_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
+    if DEBUG_SERVERY:
+        device_ip = '127.0.0.1'
+
+    result = define_service_point(device_ip)
+    if result['success']:
+        try:
+            open_orders = Order.objects.filter(open_time__contains=timezone.now().date(),
+                                               close_time__isnull=False,
+                                               is_canceled=False, is_ready=True,
+                                               servery__service_point=ServicePoint.objects.filter(pk=2).first()).order_by('-open_time')  #  del me
+                                               # servery__service_point=result['service_point']).order_by('-open_time')
+        except:
+            data = {
+                'success': False,
+                'message': 'Что-то пошло не так при поиске последней паузы!'
+            }
+            client.captureException()
+            return JsonResponse(data)
+    else:
+        return JsonResponse(result)
+
+    # print open_orders
+    # print ready_orders
+
+    template = loader.get_template('shaw_queue/order_history.html')
+    try:
+        context = {
+            'open_orders': [{'order': open_order,
+                             'display_number': open_order.display_number,
+                             'printed': open_order.printed,
+                             'cook_part_ready_count': OrderContent.objects.filter(order=open_order).filter(
+                                 menu_item__can_be_prepared_by__title__iexact='cook').filter(
+                                 finish_timestamp__isnull=False).aggregate(count=Count('id')),
+                             'cook_part_count': OrderContent.objects.filter(order=open_order).filter(
+                                 menu_item__can_be_prepared_by__title__iexact='cook').aggregate(count=Count('id')),
+                             'operator_part': OrderContent.objects.filter(order=open_order, is_canceled=False).filter(
+                                 menu_item__can_be_prepared_by__title__in=['Operator', 'Barista', 'Burgerman']).values('menu_item__title',
+                                                                                                 'note').annotate(
+                                 count_titles=Count('menu_item__title')),
+                             'shashlychnik_part_ready_count': OrderContent.objects.filter(order=open_order,
+                                                                                          is_canceled=False).filter(
+                                 menu_item__can_be_prepared_by__title__iexact='shashlychnik').filter(
+                                 finish_timestamp__isnull=False).aggregate(count=Count('id')),
+                             'shashlychnik_part_count': OrderContent.objects.filter(order=open_order,
+                                                                                    is_canceled=False).filter(
+                                 menu_item__can_be_prepared_by__title__iexact='shashlychnik').aggregate(
+                                 count=Count('id'))
+                             } for open_order in open_orders],
+            'open_length': len(open_orders),
+            'staff_category': StaffCategory.objects.get(staff__user=request.user),
+        }
+    except:
+        data = {
+            'success': False,
+            'message': f'Что-то пошло не так при подготовке шаблона!\n {traceback.format_exc()}'
+        }
+        client.captureException()
+        return JsonResponse(data)
+    # print context
+    return HttpResponse(template.render(context, request))
+
+
 @login_required()
 def current_queue_ajax(request):
     device_ip = request.META.get('HTTP_X_REAL_IP', '') or request.META.get('HTTP_X_FORWARDED_FOR', '')
