@@ -7711,3 +7711,7 @@ def api_sms_pay(request):
         print(traceback.format_exc())
         delivery_logger.info(f'ERROR: {traceback.format_exc()}')
         raise ConnectionError
+
+
+def fuckint(request):
+    return HttpResponseRedirect('/admin/')

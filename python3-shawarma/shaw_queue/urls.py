@@ -6,7 +6,6 @@ urlpatterns = [
 
     path('test/test', views.test, name='test_test'),
 
-
     path('buyer_queue/new', views.buyer_queue_new, name='buyer_queue_new'),
     path('ajax/buyer_queue/new', views.buyer_queue_ajax_new, name='buyer_queue_ajax_new'),  # del me after, Im copy
 
@@ -145,4 +144,5 @@ urlpatterns = [
 
     path('order-from-site/', views.order_from_site, name='order_from_site'),  # not use
     path('excel/', views.excel, name='excel'),
+
 ]
