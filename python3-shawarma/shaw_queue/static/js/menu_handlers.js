@@ -6,6 +6,10 @@ var pickup_checkbox;
 const channel = new BroadcastChannel('app-data');
 
 $(document).ready(function () {
+        initiate()
+});
+
+function initiate() {
     $('#menu').addClass('header-active');
     $('.menu-item').hide();
     $('.subm').prop('disabled', false);
@@ -43,7 +47,7 @@ $(document).ready(function () {
         //     }
         // }
     }
-});
+}
 
 var currOrder = [];
 var current_retries = 0;

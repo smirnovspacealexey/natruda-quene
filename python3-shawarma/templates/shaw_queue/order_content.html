@@ -146,14 +146,14 @@
         </button>
     {% endif %}
 {#{% if not order_info.is_grilling and not order_info.content_completed %}#}
-{% if not order_info.content_completed %}
+{#{% if not order_info.content_completed %}#}
 {#    отменил для любого редактирования#}
 {#{% if staff_category.title == 'Cashier' or staff_category.title == 'DeliveryAdmin' or staff_category.title == 'DeliveryOperator' %}#}
         <button class="small-btn info" onclick="EditOrder({{ order_info.id }})"
                 {% if order_info.is_paid %}disabled{% endif %}>Редактировать
         </button>
 {#    {% endif %}#}
-{% endif %}
+{#{% endif %}#}
     {% if not order_info.shashlyk_completed %}
         {#        {% if staff_category.title == 'Operator' or staff_category.title == 'DeliveryOperator' %}#}
         {% if order_info.with_shashlyk and not order_info.is_grilling_shash %}
