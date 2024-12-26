@@ -129,10 +129,22 @@
                 }
 
                 draw() {
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.strokeStyle = "white";
+                    ctx.lineWidth = 1;
                     ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = "white";
-                    ctx.fill();
+                    for (let i = 0; i < 6; i++) { // Шесть "лучей" снежинки
+                        ctx.moveTo(0, 0);
+                        ctx.lineTo(0, -this.radius);
+                        ctx.translate(0, -this.radius / 2);
+                        ctx.moveTo(-this.radius / 4, 0);
+                        ctx.lineTo(this.radius / 4, 0);
+                        ctx.translate(0, this.radius / 2);
+                        ctx.rotate(Math.PI / 3); // Угол 60° между лучами
+                    }
+                    ctx.stroke();
+                    ctx.restore();
                 }
             }
 
